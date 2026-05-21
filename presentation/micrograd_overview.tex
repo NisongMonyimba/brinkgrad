@@ -1,0 +1,123 @@
+% presentation/micrograd_overview.tex
+% Compile with: pdflatex micrograd_overview; pdflatex micrograd_overview
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usepackage{graphicx,booktabs}
+\title{Topology‑optimised microfluidic gradient generators}
+\author{Nisong Monyimba}
+\institute{Arizona State University}
+\date{2025}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{The problem: fixed‑tree gradient generators}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{itemize}
+\item Classic ``Christmas tree'' (Jeon \textit{et al.}, 2005)
+\item 5 inlets, 4 mixing stages
+\item Binomial concentration profile only
+\item Manual design – no guarantee of optimality
+\end{itemize}
+\column{0.5\textwidth}
+\includegraphics[width=\textwidth]{../docs/si/S6_christmas_tree_density.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Our approach: topology optimisation}
+\begin{center}
+\includegraphics[width=0.9\textwidth]{../docs/si/S12_gallery.pdf}
+\end{center}
+\begin{itemize}
+\item Start from a blank rectangle
+\item Evolve material distribution to match a \textbf{user‑specified} concentration profile
+\item Coupled Brinkman flow + convection‑diffusion + adjoint sensitivity
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Key result – linear gradient generator}
+\begin{columns}
+\column{0.5\textwidth}
+\includegraphics[width=\textwidth]{../figures/outlet_profile.pdf}
+\column{0.5\textwidth}
+\includegraphics[width=\textwidth]{../figures/bar_chart_resistance.pdf}
+\end{columns}
+\begin{itemize}
+\item Topology‑optimised design \textbf{matches} the target profile
+\item \textbf{~50\% lower} hydraulic resistance than the Christmas tree
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Generality – arbitrary target profiles}
+\begin{center}
+\includegraphics[width=0.85\textwidth]{../figures/gallery_target_profiles.pdf}
+\end{center}
+\begin{itemize}
+\item Linear, sigmoid, double‑peak, stair‑step – all generated automatically
+\item No pre‑prescribed architecture
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Validation}
+\begin{columns}
+\column{0.5\textwidth}
+\begin{itemize}
+\item Full Navier–Stokes simulation (body‑fitted mesh)
+\item 3D extrusion validated
+\item Uncertainty quantification (polynomial chaos)
+\item Fabrication checks (min feature size $\ge$ 10 µm)
+\end{itemize}
+\column{0.5\textwidth}
+\includegraphics[width=\textwidth]{../figures/3d_channel_render.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Why this matters for Ghana \& Africa}
+\begin{itemize}
+\item Point‑of‑care diagnostics: malaria, sickle cell, water quality
+\item No cleanroom needed for \textbf{design} – only for final fabrication
+\item Open‑source Python pipeline – zero license cost
+\item Summer 2025: workshops at UG \& Ashesi University
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Collaboration model}
+\begin{table}
+\begin{tabular}{p{0.2\textwidth} p{0.3\textwidth} p{0.2\textwidth} p{0.2\textwidth}}
+\toprule
+\textbf{Model} & \textbf{Description} & \textbf{Timeline} & \textbf{Funding} \\
+\midrule
+Co‑supervision & UG/Ashesi student project & 6–12 months & UG, DAAD \\
+Visiting researcher & Summer 2025 in Ghana & 3 months & Self‑funded \\
+Joint publication & Ghana‑specific application & 2025 & In‑kind \\
+FLAIR grant & Royal Society Africa scheme & 2025–2027 & £150k/yr \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Open‑source package – \texttt{micrograd}}
+\begin{itemize}
+\item Full Python code on GitHub
+\item Pip‑installable: \texttt{pip install micrograd}
+\item Reproduce all results with one script: \texttt{.\textbackslash run\_all.ps1}
+\item Documentation: \texttt{https://micrograd.readthedocs.io}
+\item Supplementary Information: \texttt{https://<user>.github.io/micrograd/si/}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Thank you}
+\begin{center}
+\Large
+Nisong Monyimba\\
+nmonyimb@asu.edu\\
+\vspace{1cm}
+GitHub: \texttt{https://github.com/<username>/micrograd}
+\end{center}
+\end{frame}
+
+\end{document}

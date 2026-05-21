@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash -l {0}   # ensures conda environment is used
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: "3.10"
+          miniforge-variant: Mambaforge
+          use-mamba: true
+
+      - name: Create conda environment
+        run: |
+          mamba create -n micrograd-env -c conda-forge \
+            python=3.10 fenics-dolfinx=0.6.0 pyvista matplotlib scipy numpy meshio pytest pip -y
+          mamba activate micrograd-env
+          pip install gcma
+
+      - name: Install micrograd
+        run: |
+          mamba activate micrograd-env
+          pip install -e .
+
+      - name: Run unit tests
+        run: |
+          mamba activate micrograd-env
+          pytest tests/test_core.py -v
+
+      - name: Run mini optimisation test
+        run: |
+          mamba activate micrograd-env
+          python tests/test_mini_optim.py
