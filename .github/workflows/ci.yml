@@ -25,21 +25,17 @@ jobs:
       - name: Create conda environment
         shell: bash -l {0}
         run: |
-          mamba env update -f environment.yaml -n micrograd-env
-          conda init bash
-          source ~/.bashrc
+          mamba env create -f environment.yaml
           conda activate micrograd-env
 
       - name: Install micrograd
         shell: bash -l {0}
         run: |
-          source ~/.bashrc
           conda activate micrograd-env
           pip install -e .
 
       - name: Run tests
         shell: bash -l {0}
         run: |
-          source ~/.bashrc
           conda activate micrograd-env
           python -m pytest tests/
