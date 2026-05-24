@@ -6,10 +6,10 @@ from dolfinx import fem
 import ufl
 def main():
     os.makedirs('figures', exist_ok=True)
-    opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, nx=40, ny=10,
+    opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, nx=20, ny=5,
                                      target_expr=lambda x: x[1] / 500e-6,
                                      V_star=0.5)
-    rho_phys = opt.run(max_iter=40, beta_continuation=[1,2,4,8,16])
+    rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16,32,64], move=0.05)
     c_h = opt.c_h
     x = opt.msh.geometry.x
     outlet_facets = opt.boundary_data["outlet"]

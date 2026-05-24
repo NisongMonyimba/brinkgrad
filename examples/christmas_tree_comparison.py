@@ -5,9 +5,9 @@ from micrograd import GradientGeneratorOptimizer
 def main():
     os.makedirs('figures', exist_ok=True)
     # Topology-optimised
-    opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, nx=40, ny=10,
+    opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, nx=20, ny=5,
                                      target_expr=lambda x: x[1]/500e-6, V_star=0.5)
-    rho_opt = opt.run(max_iter=40, beta_continuation=[1,2,4,8,16])
+    rho_opt = opt.run(max_iter=150, beta_continuation=[1,2,4,8,16])
     c_opt = opt.c_h; x = opt.msh.geometry.x
     nodes_opt = np.where(np.isclose(x[:,0], opt.Lx))[0]
     y_opt = x[nodes_opt,1]; c_opt_vals = c_opt.x.array[nodes_opt]

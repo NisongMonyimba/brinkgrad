@@ -22,9 +22,6 @@ def adjoint_and_sensitivity(msh, boundary_data, rho_phys, u_h, c_h, target_expr,
     ft  = boundary_data["facet_tag"]; fd = msh.topology.dim - 1
     ds_out = ufl.Measure("ds", domain=msh, subdomain_data=ft, subdomain_id=3)
 
-    gamma = fem.Constant(msh, PETSc.ScalarType(1e12))
-    ds_walls = ufl.Measure("ds", domain=msh, subdomain_data=ft, subdomain_id=4)
-
     # ---- Concentration adjoint ----
     lam, phi = ufl.TrialFunction(Vc), ufl.TestFunction(Vc)
     D = D_eff(rho_phys, D_fluid); uv = u_h
@@ -50,21 +47,31 @@ def adjoint_and_sensitivity(msh, boundary_data, rho_phys, u_h, c_h, target_expr,
              + alpha(rho_phys) * ufl.inner(v_a, w_s) * ufl.dx
              - q_a * ufl.div(w_s) * ufl.dx
              - s_t * ufl.div(v_a) * ufl.dx)
-    a_adj += gamma * ufl.inner(v_a, w_s) * ds_walls          # no‑slip on walls
+    # Dirichlet no-slip on walls
+    W0, _ = W.sub(0).collapse()
+    zero_fn = fem.Function(W0)
+    zero_fn.x.array[:] = 0.0
+    dofs_walls = fem.locate_dofs_topological((W.sub(0), W0), fd, walls)
+    bc_walls_adj = fem.dirichletbc(zero_fn, dofs_walls, W.sub(0))
+    # Pin adjoint pressure at outlet to remove nullspace
+    W1, _ = W.sub(1).collapse()
+    dofs_p = fem.locate_dofs_topological((W.sub(1), W1), fd, out)
+    zero_p = fem.Function(W1); zero_p.x.array[:] = 0.0
+    bc_p_adj = fem.dirichletbc(zero_p, dofs_p, W.sub(1))
 
     rhs_expr = lam_h * ufl.grad(c_h)
     rhs_func = fem.Function(Vv)
-    rhs_func.interpolate(fem.Expression(rhs_expr, Vv.element.interpolation_points()))
+    rhs_func.interpolate(fem.Expression(rhs_expr, Vv.element.interpolation_points))
     L_adj = - ufl.inner(rhs_func, w_s) * ufl.dx
 
-    w_adj = LinearProblem(a_adj, L_adj, bcs=[],
+    w_adj = LinearProblem(a_adj, L_adj, bcs=[bc_walls_adj, bc_p_adj],
                           petsc_options={"ksp_type":"preonly","pc_type":"lu"}, petsc_options_prefix="lp2_").solve()
     vh = w_adj.sub(0).collapse(); qh = w_adj.sub(1).collapse()
 
     # ---- Objective ----
     Jf = fem.assemble_scalar(fem.form(0.5*mu*ufl.inner(ufl.grad(u_h), ufl.grad(u_h))*ufl.dx
                                       + 0.5*alpha(rho_phys)*ufl.inner(u_h, u_h)*ufl.dx))
-    Jc = fem.assemble_scalar(fem.form(0.5*(c_h - delta)**2 * ds_out))
+    Jc = fem.assemble_scalar(fem.form(0.5*ufl.inner(delta, delta) * ds_out))
     J = float(w_f*Jf + w_c*Jc)
 
     drho_dalpha = -(alpha_max-alpha_min)*2.0/(1.0+rho_phys)**2

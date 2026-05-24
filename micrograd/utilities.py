@@ -15,5 +15,7 @@ def helmholtz_filter(rin, rout, V, rf):
     res = LinearProblem(a, L, bcs=[], petsc_options={"ksp_type":"cg","pc_type":"jacobi"}, petsc_options_prefix="helm_").solve()
     rout.x.array[:] = res.x.array[:]; rout.x.scatter_forward()
 
-def heaviside_projection(r, b, e=0.5):
-    return (ufl.tanh(b*e)+ufl.tanh(b*(r-e)))/(ufl.tanh(b*e)+ufl.tanh(b*(1.0-e)))
+def heaviside_projection(r, rout, b, e=0.5):
+    expr = (ufl.tanh(b*e)+ufl.tanh(b*(r-e)))/(ufl.tanh(b*e)+ufl.tanh(b*(1.0-e)))
+    rout.interpolate(fem.Expression(expr, rout.function_space.element.interpolation_points))
+    rout.x.scatter_forward()

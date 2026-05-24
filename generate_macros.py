@@ -1,31 +1,28 @@
 import numpy as np, sys, os
-sys.path.insert(0, '/root/micrograd')
-os.makedirs('/root/micrograd/figures', exist_ok=True)
-os.makedirs('/root/micrograd/manuscript', exist_ok=True)
+sys.path.insert(0, '/mnt/c/Users/nison/OneDrive/Desktop/micrograd')
+os.makedirs('figures', exist_ok=True)
+os.makedirs('manuscript', exist_ok=True)
 
 from dolfinx import fem
 import ufl
 from micrograd import GradientGeneratorOptimizer
 
 Lx, Ly = 2000e-6, 500e-6
-opt = GradientGeneratorOptimizer(Lx=Lx, Ly=Ly, nx=40, ny=10,
+opt = GradientGeneratorOptimizer(Lx=Lx, Ly=Ly, nx=20, ny=5,
                                  target_expr=lambda x: x[1]/Ly, V_star=0.5)
-opt.run(max_iter=40, beta_continuation=[1,2,4,8,16])
+opt.run(max_iter=150, beta_continuation=[1,2,4,8,16])
 
 # Outlet RMSE
 fd = opt.msh.topology.dim - 1
+ft = opt.boundary_data["facet_tag"]
+out_facets = opt.boundary_data["outlet"]
 Vc = opt.c_h.function_space
-dofs = fem.locate_dofs_topological(Vc, fd, opt.boundary_data["outlet"])
+dofs = fem.locate_dofs_topological(Vc, fd, out_facets)
 y_out = opt.msh.geometry.x[dofs, 1]
-    f"\newcommand{{\rmseTree}}{{{rmse_tree:.4f}}}",
-    f"\newcommand{{\Rtree}}{{{R_tree:.3e}}}",
-    f"\newcommand{{\reductionPercent}}{{{reduction:.1f}}}",
-]
 c_out = opt.c_h.x.array[dofs]
 rmse = float(np.sqrt(np.mean((np.clip(c_out, 0, 1) - y_out/Ly)**2)))
 
 # Hydraulic resistance
-ft = opt.boundary_data["facet_tag"]
 ds_out = ufl.Measure("ds", domain=opt.msh, subdomain_data=ft, subdomain_id=3)
 n = ufl.FacetNormal(opt.msh)
 Q = float(abs(fem.assemble_scalar(fem.form(ufl.dot(opt.u_h, n) * ds_out))))
@@ -36,16 +33,16 @@ u_arr = opt.u_h.x.array
 U_max = float(np.max(np.sqrt(u_arr[::2]**2 + u_arr[1::2]**2)))
 
 # Final objective and iterations
-final_J   = float(opt.history[-1, 2])
-n_iter    = int(opt.history[-1, 0]) + 1
-vol_frac  = float(opt.V_star_final)
+final_J  = float(opt.history[-1, 2])
+n_iter   = int(opt.history[-1, 0]) + 1
+vol_frac = float(opt.V_star_final)
 
-# --- Christmas tree metrics ---
+# Christmas tree metrics
 from micrograd.christmas_tree import create_christmas_tree_density, simulate_christmas_tree
 rho_tree = create_christmas_tree_density(opt.msh, Lx=opt.Lx, Ly=opt.Ly)
 tree_res = simulate_christmas_tree(opt.msh, opt.boundary_data, rho_tree, opt.target_expr)
 c_tree = tree_res["concentration"]
-dofs_tree = fem.locate_dofs_topological(c_tree.function_space, fd, out)
+dofs_tree = fem.locate_dofs_topological(c_tree.function_space, fd, out_facets)
 y_tree = opt.msh.geometry.x[dofs_tree, 1]
 c_tree_vals = c_tree.x.array[dofs_tree]
 rmse_tree = float(np.sqrt(np.mean((np.clip(c_tree_vals, 0, 1) - y_tree/Ly)**2)))
@@ -60,9 +57,9 @@ print(f"Max velocity = {U_max:.4e} m/s")
 print(f"Final J      = {final_J:.4e}")
 print(f"Iterations   = {n_iter}")
 print(f"Vol fraction = {vol_frac:.4f}")
-    print(f"Tree RMSE    = {rmse_tree:.4e}")
-    print(f"Tree Hyd R   = {R_tree:.4e} Pa.s/m^3")
-    print(f"Reduction    = {reduction:.1f}%")
+print(f"Tree RMSE    = {rmse_tree:.4e}")
+print(f"Tree Hyd R   = {R_tree:.4e} Pa.s/m^3")
+print(f"Reduction    = {reduction:.1f}%")
 
 # Write macros.tex
 lines = [
@@ -78,10 +75,11 @@ lines = [
     f"\\newcommand{{\\meshNy}}{{10}}",
     f"\\newcommand{{\\domainLx}}{{2000}}",
     f"\\newcommand{{\\domainLy}}{{500}}",
+    f"\\newcommand{{\\rmseTree}}{{{rmse_tree:.4f}}}",
+    f"\\newcommand{{\\Rtree}}{{{R_tree:.3e}}}",
+    f"\\newcommand{{\\reductionPercent}}{{{reduction:.1f}}}",
 ]
 out = '\n'.join(lines) + '\n'
-path = '/root/micrograd/manuscript/macros.tex'
+path = 'manuscript/macros.tex'
 open(path, 'w').write(out)
 print(f"\nmacros.tex written to {path}")
-print("Add this line near the top of manuscript.tex:")
-print("  \\input{macros}")
