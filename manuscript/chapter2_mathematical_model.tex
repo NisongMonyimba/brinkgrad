@@ -15,6 +15,7 @@ The two inlets supply fluids of different concentrations; the mixing pattern ins
 The design is represented by a continuous material density field \(\rho(\mathbf{x}) \in [0,1]\), where \(\rho=1\) denotes pure fluid and \(\rho=0\) pure solid.
 
 \subsection{Brinkman--Darcy flow}
+\label{sec:brinkman}
 The steady, incompressible flow of a Newtonian fluid through the design domain is modelled by the Brinkman equations~\cite{borrvall2003}:
 \begin{subequations}
 \label{eq:brinkman}
@@ -38,6 +39,7 @@ Boundary conditions for the velocity are no-slip on the walls (\(\mathbf{u}=\mat
 \end{equation}
 
 \subsection{Convection--diffusion transport}
+\label{sec:convdiff}
 The steady-state concentration \(c\) of the solute is governed by
 \begin{equation}
     \mathbf{u}\cdot\nabla c - \nabla\cdot\bigl(D(\rho)\,\nabla c\bigr) = 0,
@@ -70,7 +72,7 @@ we nondimensionalise the governing equations.
 Let the domain height $L_c = L_y = 500\,\mu\mathrm{m}$ be the
 characteristic length and $U_c = Q/L_y$ the mean inlet velocity
 (where $Q$ is the volumetric flow rate per unit depth obtained from
-the optimised design; Table~\ref{tab:performance} gives
+the optimised design; Table~\ref{tab:metrics} gives
 $Q = 2.23\times10^{-6}\,\mathrm{m^2/s}$, hence
 $U_c \approx 4.46\,\mathrm{mm/s}$).
 Pressure is scaled by the viscous scale $\mu U_c/L_c$, and
@@ -84,7 +86,7 @@ Defining dimensionless variables
   D^{*}(\rho)    = \frac{D(\rho)}{D_{\mathrm{fluid}}},
   \label{eq:nd_vars}
 \end{equation}
-the Brinkman equations~\eqref{eq:brinkman_momentum}--\eqref{eq:brinkman_cont}
+the Brinkman equations~\eqref{eq:brinkman_momentum}--\eqref{eq:brinkman_continuity}
 and the convection--diffusion equation~\eqref{eq:convdiff} become
 \begin{align}
   \nabla p^{*} - \nabla^2\mathbf{u}^{*}
@@ -273,6 +275,7 @@ In the present implementation with \(\beta\le 64\) and a coarse \(20\times5\) me
 Equation~\eqref{eq:sensitivity} is evaluated by first solving the forward problem~\eqref{eq:brinkman}--\eqref{eq:convdiff} to obtain \((\mathbf{u},p,c)\), then solving the adjoint problems~\eqref{eq:adj_flow_mom}--\eqref{eq:adj_conc_bc} for \((\mathbf{v},q,\lambda)\), and finally assembling the volume integral via Eq.~\eqref{eq:chain_rule}.
 
 \subsection{Numerical stabilisation}
+\label{sec:supg}
 At high Péclet numbers, the convection-diffusion equation~\eqref{eq:convdiff} can suffer from spurious oscillations.
 To suppress them, we employ the Streamline Upwind Petrov--Galerkin (SUPG) method~\cite{brooks1982}.
 The stabilisation parameter \(\tau\) is computed element-wise as

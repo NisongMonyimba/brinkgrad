@@ -83,6 +83,7 @@ This ramping ensures that fluid can flow through intermediate-density regions ea
 The \(\alpha_{\max}\) ramping described in Eq.~\eqref{eq:alpha_cont} is recommended for finer meshes where the uniform-density starting point is more likely to stall.
 
 \subsection{Post-processing and validation pipeline}
+\label{sec:ns_validation}
 After optimisation, the final physical density field \(\bar\rho\) is thresholded at \(\bar\rho = 0.5\) to obtain a binary fluid--solid distribution.
 The fluid region is extracted using \texttt{pyvista} and remeshed with a body-fitted grid using \texttt{Gmsh}~\cite{geuzaine2009} to eliminate the Brinkman penalty approximation.
 On this body-fitted mesh we solve the full incompressible Navier--Stokes equations (including the convective term) with a Picard iteration (five steps) to validate the design under real fluid physics.
