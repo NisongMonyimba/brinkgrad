@@ -6,6 +6,7 @@ from .solver import forward_solve
 from .adjoint import adjoint_and_sensitivity
 from .optimizer import oc_update, mma_update, MMAUpdater
 from .utilities import helmholtz_filter, heaviside_projection, alpha
+from . import utilities as _ut  # for alpha_max continuation
 from .compatibility import fallback_to_oc
 
 class GradientGeneratorOptimizer:
@@ -49,6 +50,8 @@ class GradientGeneratorOptimizer:
             current_V = V_seq[step]
             beta_idx = min(step // iters_per_beta, n_betas - 1)
             beta = beta_continuation[beta_idx]
+            # Alpha-max continuation: ramp from 1e3 to 1e9 over first 60%
+            _ut.alpha_max = 1e3 + (1e9 - 1e3) * min(1.0, step / (0.6 * max_iter))
 
             helmholtz_filter(self.rho, self.rho_filt, self.V_rho, self.r_filter)
             heaviside_projection(self.rho_filt, self.rho_phys, beta)

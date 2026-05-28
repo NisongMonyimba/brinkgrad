@@ -5,7 +5,8 @@ from dolfinx.fem.petsc import LinearProblem
 import ufl
 import basix.ufl
 from petsc4py import PETSc
-from .utilities import alpha, D_eff, alpha_max, alpha_min, D_min, p_simp
+from .utilities import alpha, D_eff, D_min, p_simp
+from . import utilities as _ut  # read alpha_max dynamically for continuation
 
 def adjoint_and_sensitivity(msh, boundary_data, rho_phys, u_h, c_h, target_expr,
                             mu=1e-3, D_fluid=1e-9, w_f=1e-7, w_c=1.0):
@@ -74,7 +75,7 @@ def adjoint_and_sensitivity(msh, boundary_data, rho_phys, u_h, c_h, target_expr,
     Jc = fem.assemble_scalar(fem.form(0.5*ufl.inner(delta, delta) * ds_out))
     J = float(w_f*Jf + w_c*Jc)
 
-    drho_dalpha = -(alpha_max-alpha_min)*2.0/(1.0+rho_phys)**2
+    drho_dalpha = -(_ut.alpha_max - _ut.alpha_min)*2.0/(1.0+rho_phys)**2
     drho_dD = p_simp*(D_fluid-D_min)*rho_phys**(p_simp-1)
     test_rho = ufl.TestFunction(V_rho)
     sens_form = (drho_dalpha * ufl.inner(u_h, vh) * test_rho
