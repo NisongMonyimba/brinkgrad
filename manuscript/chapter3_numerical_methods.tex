@@ -102,27 +102,76 @@ Additional post-processing steps compute:
 All metrics are evaluated identically for the topology-optimised design and the classic Christmas tree network, the latter being generated as a density field on the same mesh using a set of line segments that replicate the geometry of Jeon \emph{et~al.}~\cite{jeon2000}.
 
 \subsection{Reproducibility and open-source package}
-The complete pipeline is released as the open-source Python package \texttt{micrograd} under the MIT license, available at
-\begin{center}
+\label{sec:reproducibility}
+
+The complete pipeline is released as the open-source Python package
+\texttt{micrograd} under the MIT license, available at
 \url{https://github.com/nisongmonyimba278-byte/micrograd}.
-\end{center}
 The repository includes:
+
 \begin{itemize}
-    \item All finite element modules (mesh generation, forward and adjoint solvers, optimisation routines);
-    \item Post-processing tools (STL export, body-fitted Navier--Stokes validation, experimental metrics);
+    \item All finite element modules (mesh generation, forward and adjoint
+          solvers, optimisation routines);
+    \item Post-processing tools (STL export, body-fitted Navier--Stokes
+          validation, experimental metrics);
     \item A Jupyter notebook for interactive use;
-    \item A comprehensive test suite (validating the filter, forward solver against analytical Poiseuille flow, adjoint gradients via finite differences, MMA fallback logic, and mesh generation);
-    \item A continuous-integration (CI) workflow (GitHub Actions~\cite{GitHubActions2024}) that automatically executes a three-stage pipeline on every commit: (i)~dependency installation inside the official \texttt{dolfinx/dolfinx:v0.7.3} Docker container, preserving the binary ABI compatibility required by the pre-compiled \textsc{PETSc} and \texttt{petsc4py} libraries by pinning \texttt{nlopt==2.7.1} and suppressing \textsc{NumPy} upgrades; (ii)~a forward-solver smoke test that asserts the concentration field satisfies $c_h\in[0,1]$ on a $20\times5$ mesh; and (iii)~a ten-iteration mini-optimisation that verifies $J<10$, confirming end-to-end correctness of the adjoint sensitivity, OC update, and $\alpha$-continuation mechanism. During development, this pipeline identified and resolved three API incompatibilities introduced in \texttt{dolfinx~v0.7}: removal of the \texttt{petsc\_options\_prefix} keyword from \texttt{LinearProblem}, promotion of \texttt{element.interpolation\_points} from a property to a callable method, and a \textsc{NumPy}~2.0 binary incompatibility introduced by \texttt{nlopt}\,$\geq$\,2.8. All three were caught by the CI pipeline before affecting any scientific result. The workflow definition (\texttt{.github/workflows/ci.yml}) is version-controlled and constitutes a machine-readable specification of the software environment required to reproduce all results;
-    \item An \texttt{environment.yaml} file pinning exact package versions to guarantee bit-identical reproduction.
+    \item A comprehensive test suite (validating the filter, forward solver
+          against analytical Poiseuille flow, adjoint gradients via finite
+          differences, MMA fallback logic, and mesh generation);
+    \item A continuous-integration (CI) workflow
+          (GitHub Actions~\cite{GitHubActions2024}) that automatically
+          executes a three-stage pipeline on every commit:
+          (i)~dependency installation inside the official
+          \texttt{dolfinx/dolfinx:v0.7.3} Docker container, preserving
+          the binary ABI compatibility required by the pre-compiled
+          \textsc{PETSc} and \texttt{petsc4py} libraries by pinning
+          \texttt{nlopt==2.7.1} and suppressing \textsc{NumPy} upgrades;
+          (ii)~a forward-solver smoke test asserting $c_h\in[0,1]$ on a
+          $20\times5$ mesh; and
+          (iii)~a ten-iteration mini-optimisation verifying $J<10$,
+          confirming end-to-end correctness of the adjoint sensitivity,
+          OC update, and $\alpha$-continuation mechanism.
+          During development, the CI pipeline identified and resolved
+          three API incompatibilities introduced in \texttt{dolfinx~v0.7}:
+          removal of the \texttt{petsc\_options\_prefix} keyword from
+          \texttt{LinearProblem}, promotion of
+          \texttt{element.interpolation\_points} from a property to a
+          callable method, and a \textsc{NumPy}~2.0 binary incompatibility
+          introduced by \texttt{nlopt}\,$\geq$\,2.8.
+          All three were caught by the CI pipeline before affecting any
+          scientific result.
+          A passing CI badge on the repository landing page certifies
+          that the complete solver stack is importable and produces
+          physically meaningful output on a clean, containerised machine,
+          independent of any local installation;
+    \item An \texttt{environment.yaml} file pinning exact package versions
+          to guarantee bit-identical reproduction.
 \end{itemize}
 
-The package is designed to run inside the official \texttt{dolfinx/dolfinx:v0.7.3} Docker container, which provides a fully self-contained environment with FEniCSx~0.7.3, PETSc, and all necessary dependencies.
-The entire set of results presented in this paper can be reproduced with a single command:
+The package is designed to run inside the official
+\texttt{dolfinx/dolfinx:v0.7.3} Docker container, which provides a fully
+self-contained environment with \mbox{FEniCSx~0.7.3}, \textsc{PETSc}, and
+all necessary dependencies pre-compiled and version-locked.
+The entire set of results presented in this paper can be reproduced with
+a single command:
+
 \begin{verbatim}
-    docker run --rm -v $(pwd):/root/micrograd \
-      -e OMPI_MCA_btl=^openib -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
-      dolfinx/dolfinx:v0.7.3 bash -c \
-      "cd /root/micrograd && bash run_all.sh"
+docker run --rm -v $(pwd):/root/micrograd \
+  -e OMPI_MCA_btl=^openib \
+  -e OMP_NUM_THREADS=1   \
+  -e MPLBACKEND=Agg      \
+  dolfinx/dolfinx:v0.7.3 bash -c \
+  "cd /root/micrograd && bash run_all.sh"
 \end{verbatim}
 
-The code is permanently archived on Zenodo with DOI \texttt{[DOI pending]}, and a detailed documentation site is hosted via GitHub Pages.
+\noindent
+The \texttt{run\_all.sh} script is environment-aware: it activates the
+local Conda environment when available and falls back to the container's
+system \texttt{python3} otherwise, so the same script drives both the
+Docker workflow and the native \texttt{conda} workflow on Linux.
+
+The code is permanently archived on Zenodo with
+DOI~\texttt{10.5281/zenodo.XXXXXXX}~\cite{micrograd2025zenodo},
+and a detailed API reference is hosted via GitHub Pages.
+
+
