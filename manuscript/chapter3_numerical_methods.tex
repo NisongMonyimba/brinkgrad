@@ -46,6 +46,24 @@ To avoid premature trapping in poor local minima and to promote connected fluid 
 The target fluid volume fraction \(V^*\) is linearly decreased from \(0.7\) to \(0.5\) over the first 40 iterations.
 This initially relaxed constraint allows the optimiser to establish a well-connected channel network before removing excess fluid.
 
+\paragraph{Sinusoidal initialisation.}
+To break the symmetry of the uniform initial design---which would otherwise yield a vanishing sensitivity---the density field is initialised with a sinusoidal channel pattern:
+\begin{equation}
+  \rho(\mathbf{x})\big|_{t=0} = 0.7 + 0.25\sin\!\left(\frac{8\pi y}{L_y}\right),
+  \label{eq:sinusoidal_init}
+\end{equation}
+clipped to \([0.01,\,0.99]\).
+This creates four sinusoidal bands of alternating high and low density across the channel height, providing a non-zero sensitivity signal from the first iteration.
+
+\paragraph{Concentration clamping.}
+At high P\'{e}clet numbers, the SUPG-stabilised concentration field can still exhibit small non-physical oscillations (negative values or values slightly above 1) on coarse meshes.
+After each forward solve, the concentration field is clipped to the physical range:
+\begin{equation}
+  c_h \leftarrow \max(0,\,\min(1,\,c_h)).
+  \label{eq:clamping}
+\end{equation}
+This prevents oscillations from propagating into the adjoint right-hand side \(-\lambda\nabla c\), where they would otherwise cancel the sensitivity and stall convergence.
+
 \paragraph{Heaviside sharpening.}
 The projection parameter \(\beta\) (Eq.~\eqref{eq:heaviside}) is increased through the sequence
 \[
@@ -60,7 +78,9 @@ The value is ramped linearly from \(10^3\) to \(10^8\) over the first 60\% of th
     \alpha_{\max} = 10^3 + (10^8 - 10^3)\cdot\min\!\left(1,\; \frac{\text{step}}{0.6\times \text{max\_iter}}\right).
     \label{eq:alpha_cont}
 \end{equation}
-This ramping ensures that fluid can flow through intermediate-density regions early in the optimisation, allowing the concentration field to develop and provide non-zero adjoint forcing; without it, the initial design (\(\rho=0.5\)) would be impermeable, yielding zero velocity everywhere and a vanishing sensitivity (see Section~\ref{sec:results}).
+This ramping ensures that fluid can flow through intermediate-density regions early in the optimisation, allowing the concentration field to develop and provide non-zero adjoint forcing.
+\emph{Note:} in the coarse-mesh (\(20\times5\)) runs reported here, \(\alpha_{\max}\) is held constant at \(10^{9}\,\text{Pa}\cdot\text{s}/\text{m}^2\) and symmetry breaking is instead achieved by the sinusoidal initialisation described above (Eq.~\eqref{eq:sinusoidal_init}).
+The \(\alpha_{\max}\) ramping described in Eq.~\eqref{eq:alpha_ramp} is recommended for finer meshes where the uniform-density starting point is more likely to stall.
 
 \subsection{Post-processing and validation pipeline}
 After optimisation, the final physical density field \(\bar\rho\) is thresholded at \(\bar\rho = 0.5\) to obtain a binary fluid--solid distribution.

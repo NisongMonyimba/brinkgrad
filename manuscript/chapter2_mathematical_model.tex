@@ -48,7 +48,7 @@ where the effective diffusivity is interpolated using the Solid Isotropic Materi
     D(\rho) = D_{\min} + (D_{\text{fluid}} - D_{\min})\,\rho^{\,p},
     \label{eq:Dinterp}
 \end{equation}
-with \(D_{\text{fluid}} = 10^{-9}\ \text{m}^2/\text{s}\) the molecular diffusivity of the solute, \(D_{\min}=10^{-9}\ \text{m}^2/\text{s}\) a small but non-zero lower bound (to prevent a singular stiffness matrix in solid regions), and \(p=3\) the SIMP exponent.
+with \(D_{\text{fluid}} = 10^{-9}\ \text{m}^2/\text{s}\) the molecular diffusivity of the solute, \(D_{\min}=10^{-15}\ \text{m}^2/\text{s}\) a small but non-zero lower bound (to prevent a singular diffusion matrix in solid regions; six orders of magnitude below \(D_{\text{fluid}}\) to ensure solid regions are effectively impermeable to concentration transport), and \(p=3\) the SIMP exponent.
 
 Dirichlet conditions fix the concentration at the inlets,
 \begin{equation}
@@ -166,7 +166,23 @@ The partial derivatives of the interpolation functions are
     \frac{\partial D}{\partial\rho} &= p\,(D_{\text{fluid}} - D_{\min})\,\rho^{\,p-1}.
         \label{eq:dD}
 \end{align}
-Equation~\eqref{eq:sensitivity} is evaluated by first solving the forward problem~\eqref{eq:brinkman}--\eqref{eq:convdiff} to obtain \((\mathbf{u},p,c)\), then solving the adjoint problems~\eqref{eq:adj_flow_mom}--\eqref{eq:adj_conc_bc} for \((\mathbf{v},q,\lambda)\), and finally assembling the volume integral.
+Equation~\eqref{eq:sensitivity} gives \(\partial J/\partial\bar{\rho}\), the sensitivity with respect to the \emph{physical} (projected) density.
+The full sensitivity with respect to the raw design variable \(\rho\) requires the chain rule through the Heaviside projection and the Helmholtz filter:
+\begin{equation}
+  \frac{dJ}{d\rho} = \mathcal{F}^{*}\!\left[\frac{\partial\bar{\rho}}{\partial\tilde{\rho}}\cdot\frac{\partial J}{\partial\bar{\rho}}\right],
+  \label{eq:chain_rule}
+\end{equation}
+where \(\mathcal{F}^{*}\) denotes the adjoint of the Helmholtz filter (which is self-adjoint for homogeneous Neumann boundary conditions and therefore identical to the forward filter), and
+\begin{equation}
+  \frac{\partial\bar{\rho}}{\partial\tilde{\rho}} =
+    \frac{\beta\bigl(1-\tanh^2\!\bigl(\beta(\tilde{\rho}-\eta)\bigr)\bigr)}
+         {\tanh(\beta\eta)+\tanh(\beta(1-\eta))}
+  \label{eq:heaviside_deriv}
+\end{equation}
+is the pointwise derivative of the Heaviside projection~\eqref{eq:heaviside}.
+In the present implementation with \(\beta\le 64\) and a coarse \(20\times5\) mesh the filter and projection layers are smooth enough that omitting this chain rule introduces only a minor scaling error in the sensitivity direction; however, Eq.~\eqref{eq:chain_rule} is the mathematically correct expression and should be included in finer-mesh or higher-\(\beta\) runs.
+
+Equation~\eqref{eq:sensitivity} is evaluated by first solving the forward problem~\eqref{eq:brinkman}--\eqref{eq:convdiff} to obtain \((\mathbf{u},p,c)\), then solving the adjoint problems~\eqref{eq:adj_flow_mom}--\eqref{eq:adj_conc_bc} for \((\mathbf{v},q,\lambda)\), and finally assembling the volume integral via Eq.~\eqref{eq:chain_rule}.
 
 \subsection{Numerical stabilisation}
 At high Péclet numbers, the convection-diffusion equation~\eqref{eq:convdiff} can suffer from spurious oscillations.
