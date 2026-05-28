@@ -3,9 +3,9 @@
 
 \subsection{Linear gradient generator and comparison with the Christmas tree}
 The topology optimisation was run for a linear target profile \(c_{\text{target}}(y) = y/L_y\) on a domain of \(2000\times500\ \mu\text{m}\).
-After 400 iterations with the continuation strategy described in Section~\ref{sec:methods}, the optimised design achieves a root‑mean‑square error of \(\rmseTopOpt\) (9.8\%) at the outlet and a hydraulic resistance of \(\hydResTopOpt\)~Pa\(\cdot\)s/m\(^3\).
+After 400 iterations with the continuation strategy described in Section~\ref{sec:methods}, the optimised design achieves a root-mean-square error of \(\rmseTopOpt\) (9.8\%) at the outlet and a hydraulic resistance of \(\hydResTopOpt\)~Pa\(\cdot\)s/m\(^3\).
 
-Figure~\ref{fig:comparison} compares the outlet concentration profile of the topology‑optimised device with the target linear profile and with that of the classic Christmas‑tree network~\cite{jeon2000}, which was simulated on the same mesh.
+Figure~\ref{fig:comparison} compares the outlet concentration profile of the topology-optimised device with the target linear profile and with that of the classic Christmas-tree network~\cite{jeon2000}, which was simulated on the same mesh.
 The Christmas tree produces a smooth profile but at a hydraulic cost of \(\treeHydRes\)~Pa\(\cdot\)s/m\(^3\).
 The optimised design therefore reduces the hydraulic resistance by \reduction\ \% while maintaining equivalent outlet linearity.
 
@@ -13,11 +13,11 @@ The optimised design therefore reduces the hydraulic resistance by \reduction\ \
     \centering
     \includegraphics[width=0.85\textwidth]{../figures/comparison.pdf}
     \caption{Outlet concentration profiles for the linear target.
-             The topology‑optimised design closely follows the target \(c=y/L_y\) (red dashed line), while the Christmas‑tree network (blue dashed) shows a similar linear trend but at a significantly higher pressure drop.}
+             The topology-optimised design closely follows the target \(c=y/L_y\) (red dashed line), while the Christmas-tree network (blue dashed) shows a similar linear trend but at a significantly higher pressure drop.}
     \label{fig:comparison}
 \end{figure}
 
-The objective function history (Figure~\ref{fig:convergence}) shows the characteristic three‑phase behaviour of density‑based topology optimisation:
+The objective function history (Figure~\ref{fig:convergence}) shows the characteristic three-phase behaviour of density-based topology optimisation:
 an initial plateau at \(J\approx 4.17\) during which the volume fraction is reduced and the Heaviside projection remains mild (\(\beta\le 8\));
 a sharp drop once \(\beta\) reaches 16, indicating the emergence of a functional channel network;
 and a final stabilisation around \(J\sim 0.03\)--0.12 at \(\beta=64\), where the design oscillates between competing topologies.
@@ -35,11 +35,11 @@ Table~\ref{tab:metrics} summarises the key performance metrics for both designs.
 
 \begin{table}[htbp]
     \centering
-    \caption{Performance comparison between the topology‑optimised design and the Christmas‑tree network.}
+    \caption{Performance comparison between the topology-optimised design and the Christmas-tree network.}
     \label{tab:metrics}
     \begin{tabular}{@{}lcc@{}}
         \toprule
-        \textbf{Metric} & \textbf{Topology‑optimised} & \textbf{Christmas tree} \\
+        \textbf{Metric} & \textbf{Topology-optimised} & \textbf{Christmas tree} \\
         \midrule
         RMSE               & \(\rmseTopOpt\) & 0.605 \\
         Hydraulic resistance (Pa\(\cdot\)s/m\(^3\)) & \(\hydResTopOpt\) & \(\treeHydRes\) \\
@@ -51,18 +51,18 @@ Table~\ref{tab:metrics} summarises the key performance metrics for both designs.
 \end{table}
 
 \subsection{Generality: arbitrary target profiles}
-To demonstrate the flexibility of the framework, we prescribed four distinct target profiles at the outlet: linear (\(c=y/L_y\)), sigmoid (\(c = 1/(1+e^{-10(y/L_y-0.5)})\)), double‑peak (\(c = \sin^2(\pi y/L_y)\)), and stair‑step (\(c = \text{clamp}(\lfloor 3y/L_y\rfloor/3)\)).
+To demonstrate the flexibility of the framework, we prescribed four distinct target profiles at the outlet: linear (\(c=y/L_y\)), sigmoid (\(c = 1/(1+e^{-10(y/L_y-0.5)})\)), double-peak (\(c = \sin^2(\pi y/L_y)\)), and stair-step (\(c = \text{clamp}(\lfloor 3y/L_y\rfloor/3)\)).
 The same optimisation parameters were used for all cases.
 
 Figure~\ref{fig:gallery} shows the resulting outlet profiles for each target.
 The linear and sigmoid targets converge to RMSE values below 0.1, while the staircase target reaches RMSE \(\approx 0.13\).
-The double‑peak target converges to a higher RMSE (\(\approx 0.66\)), reflecting the inherent difficulty of the zero‑slope boundary condition at both walls; this is a known challenge for gradient‑based optimisation and can be mitigated by initialising from a pre‑optimised linear design (see Supplementary Information S12).
+The double-peak target converges to a higher RMSE (\(\approx 0.66\)), reflecting the inherent difficulty of the zero-slope boundary condition at both walls; this is a known challenge for gradient-based optimisation and can be mitigated by initialising from a pre-optimised linear design (see Supplementary Information S12).
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=\textwidth]{../figures/gallery_profiles.pdf}
     \caption{Gallery of outlet concentration profiles for four different target functions.
-             The topology‑optimised design (blue solid) closely follows the target (red dashed) for linear, sigmoid, and stair‑step profiles.}
+             The topology-optimised design (blue solid) closely follows the target (red dashed) for linear, sigmoid, and stair-step profiles.}
     \label{fig:gallery}
 \end{figure}
 
@@ -82,5 +82,5 @@ The design exhibits a branching network that divides the incoming flow from the 
 \subsection{Convergence and sensitivity analysis}
 Mesh convergence and filter radius sensitivity studies were performed and are presented in full in the Supplementary Information (S1, S2).
 The optimal topology and RMSE were found to be stable over a range of filter radii (\(r_f\) between \(0.03\) and \(0.08\)) and to converge as the mesh is refined from \(40\times10\) to \(160\times40\) elements, indicating that the results are not artefacts of the coarse discretisation.
-Stabilisation validation (S3) confirms that SUPG eliminates non‑physical oscillations without over‑diffusing the concentration field.
-Adjoint gradient accuracy was verified by finite‑difference testing (S10), showing agreement to within \(10^{-5}\).
+Stabilisation validation (S3) confirms that SUPG eliminates non-physical oscillations without over-diffusing the concentration field.
+Adjoint gradient accuracy was verified by finite-difference testing (S10), showing agreement to within \(10^{-5}\).

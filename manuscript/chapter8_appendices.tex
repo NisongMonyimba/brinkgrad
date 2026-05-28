@@ -5,15 +5,15 @@ This appendix collates every equation, numerical choice, and implementation deta
 
 \subsection{Design domain and boundary conditions}
 \begin{itemize}
-    \item Two‑dimensional rectangular domain \(\Omega = (0,L_x) \times (0,L_y)\) with \(L_x = 2000\ \mu\text{m}\), \(L_y = 500\ \mu\text{m}\).
+    \item Two-dimensional rectangular domain \(\Omega = (0,L_x) \times (0,L_y)\) with \(L_x = 2000\ \mu\text{m}\), \(L_y = 500\ \mu\text{m}\).
     \item \textbf{Inlet~1} (\(\Gamma_{\text{in},1}\), \(y\in[0,\,L_y/2]\)): pressure \(p = p_{\text{in}}\), concentration \(c = 0\).
     \item \textbf{Inlet~2} (\(\Gamma_{\text{in},2}\), \(y\in[L_y/2,\,L_y]\)): pressure \(p = p_{\text{in}}\), concentration \(c = 1\).
     \item \textbf{Outlet} (\(\Gamma_{\text{out}}\), \(x = L_x\)): pressure \(p = 0\), zero diffusive flux \(\mathbf{n}\cdot D\nabla c = 0\).
-    \item \textbf{Walls}: no‑slip \(\mathbf{u} = \mathbf{0}\), zero flux for \(c\).
+    \item \textbf{Walls}: no-slip \(\mathbf{u} = \mathbf{0}\), zero flux for \(c\).
 \end{itemize}
 
 \subsection{Governing equations (forward problem)}
-\textbf{Brinkman–Darcy flow}
+\textbf{Brinkman--Darcy flow}
 \begin{align}
     \nabla p - \mu \nabla^2 \mathbf{u} + \alpha(\rho)\,\mathbf{u} &= \mathbf{0}, \label{app:brinkman_mom}\\
     \nabla\cdot\mathbf{u} &= 0, \label{app:brinkman_div}
@@ -27,7 +27,7 @@ with \(\mu = 10^{-3}\ \text{Pa·s}\).
 \end{equation}
 where \(\alpha_{\min}=10^{-3}\), \(\alpha_{\max}=10^{8}\) (ramped from \(10^{3}\) to \(10^{8}\) during continuation).
 
-\textbf{Convection–diffusion transport}
+\textbf{Convection--diffusion transport}
 \begin{equation}
     \mathbf{u}\cdot\nabla c - \nabla\cdot\bigl(D(\rho)\,\nabla c\bigr) = 0,
     \label{app:convdiff}
@@ -96,7 +96,7 @@ with
 
 \subsection{Finite element discretisation}
 \begin{itemize}
-    \item Flow: Taylor–Hood P2/P1.
+    \item Flow: Taylor--Hood P2/P1.
     \item Concentration: P1 with SUPG stabilisation.
     \item SUPG parameter:
     \begin{equation}
@@ -115,7 +115,7 @@ with
                                       \rho^{\text{old}} \cdot B^\eta)\bigr),
     \qquad B = -\frac{\mathrm{d}J/\mathrm{d}\rho}{\Lambda},
 \end{equation}
-\(\eta=0.5\), move limit \(0.02\)–\(0.2\).
+\(\eta=0.5\), move limit \(0.02\)--\(0.2\).
 
 \subsection{Continuation strategies}
 \begin{enumerate}
@@ -124,7 +124,7 @@ with
     \item Brinkman penalty \(\alpha_{\max}\): \(10^3 \to 10^8\) over first 60\% of iterations.
 \end{enumerate}
 
-\subsection{Post‑processing metrics}
+\subsection{Post-processing metrics}
 \begin{itemize}
     \item RMSE, hydraulic resistance \(R = \Delta p / Q\), Reynolds number, Péclet number.
 \end{itemize}
@@ -148,7 +148,7 @@ basix & (bundled) \\
 \end{tabular}
 \end{center}
 
-\subsection{Mesh Generation \& Post‑processing}
+\subsection{Mesh Generation \& Post-processing}
 \begin{center}
 \begin{tabular}{@{}ll@{}}
 \toprule
@@ -175,7 +175,7 @@ MMA & \texttt{gcma}/\texttt{nlopt} \\
 Helmholtz PDE filter & FEniCSx linear solve \\
 Heaviside projection & Analytical \\
 Adjoint sensitivity & Custom FEniCSx solver \\
-SUPG stabilisation & Hand‑coded UFL \\
+SUPG stabilisation & Hand-coded UFL \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -186,7 +186,7 @@ SUPG stabilisation & Hand‑coded UFL \\
 \toprule
 \textbf{Tool} & \textbf{Purpose} \\
 \midrule
-Docker (dolfinx/dolfinx:v0.7.3) & Bit‑identical environment \\
+Docker (dolfinx/dolfinx:v0.7.3) & Bit-identical environment \\
 Git \& GitHub & Version control \\
 CI (GitHub Actions) & Automated testing \\
 conda (environment.yaml) & Package management \\

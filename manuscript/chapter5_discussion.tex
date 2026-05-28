@@ -2,12 +2,12 @@
 \label{sec:discussion}
 
 \subsection{Summary of key findings}
-We have presented a density‑based topology optimisation framework for the inverse design of a microfluidic concentration gradient generator.
-Using a coarse mesh ($20\times5$ elements) and a three‑stage continuation strategy (volume fraction, Heaviside sharpness $\beta$, Brinkman penalty $\alpha_{\max}$), the optimised device achieves a linear concentration profile at the outlet with a root‑mean‑square error of $\rmseTopOpt$ ($\approx 9.8\%$ relative error).
-The objective function (weighted sum of flow dissipation and concentration mismatch) decreased from $\sim 4.17$ to $\finalJ$, while the hydraulic resistance of the optimised design ($\hydResTopOpt$~Pa$\cdot$s/m$^3$) is \reduction\% lower than that of the classic Christmas‑tree network ($\treeHydRes$~Pa$\cdot$s/m$^3$).
+We have presented a density-based topology optimisation framework for the inverse design of a microfluidic concentration gradient generator.
+Using a coarse mesh ($20\times5$ elements) and a three-stage continuation strategy (volume fraction, Heaviside sharpness $\beta$, Brinkman penalty $\alpha_{\max}$), the optimised device achieves a linear concentration profile at the outlet with a root-mean-square error of $\rmseTopOpt$ ($\approx 9.8\%$ relative error).
+The objective function (weighted sum of flow dissipation and concentration mismatch) decreased from $\sim 4.17$ to $\finalJ$, while the hydraulic resistance of the optimised design ($\hydResTopOpt$~Pa$\cdot$s/m$^3$) is \reduction\% lower than that of the classic Christmas-tree network ($\treeHydRes$~Pa$\cdot$s/m$^3$).
 The final fluid volume fraction reached the prescribed target of $50\%$.
 
-The framework also successfully produced non‑monotonic profiles that are impossible to generate with a fixed tree‑shaped generator, demonstrating that the method is not limited to a single family of outlet gradients.
+The framework also successfully produced non-monotonic profiles that are impossible to generate with a fixed tree-shaped generator, demonstrating that the method is not limited to a single family of outlet gradients.
 These results establish topology optimisation as a viable, efficient, and general tool for the computational design of microfluidic gradient generators.
 
 \subsection{Comparison with published experimental and numerical studies}
@@ -22,7 +22,7 @@ To contextualise our result, we compare it with quantitative data from recent mi
     \textbf{Study / Method} & \textbf{Metric} & \textbf{Value} \\
     \midrule
     This work (topology optimisation, coarse mesh) & RMSE (error) & \rmseTopOpt\ (9.8\%) \\
-    Deep learning inverse design~\cite{yang2020} & Average error (6‑dim) & $<4$\,\% \\
+    Deep learning inverse design~\cite{yang2020} & Average error (6-dim) & $<4$\,\% \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -33,39 +33,39 @@ Our numerical error of 9.8\,\% falls comfortably inside this experimental scatte
 This is expected because we deliberately used a very coarse mesh ($20\times5$ elements) to demonstrate rapid prototyping.
 The same algorithm on a finer mesh (e.g., $80\times20$) would likely reduce the error to $\leq 5$\,\%, matching the best reported numerical accuracies.
 
-That design, however, relies on a pre‑defined network of channels, whereas our topology‑optimised geometry is free‑form and can be easily adapted to different target profiles (e.g., non‑linear or user‑defined) without changing the algorithmic framework.
+That design, however, relies on a pre-defined network of channels, whereas our topology-optimised geometry is free-form and can be easily adapted to different target profiles (e.g., non-linear or user-defined) without changing the algorithmic framework.
 This flexibility is a key advantage of the proposed method.
 
 \subsection{Role of the coarse mesh and computational efficiency}
-A distinctive feature of our work is the use of an extremely coarse finite‑element mesh (only 5 elements across the channel height).
+A distinctive feature of our work is the use of an extremely coarse finite-element mesh (only 5 elements across the channel height).
 Despite this, the optimiser successfully learned a functional topology and achieved a 10\,\% error.
-This highlights the robustness of the density‑based approach combined with Helmholtz filtering and Heaviside projection.
-The coarse mesh also makes the optimisation very fast: the entire 400‑iteration run with $\beta$‑continuation completes in minutes on a standard laptop, enabling rapid design cycles.
+This highlights the robustness of the density-based approach combined with Helmholtz filtering and Heaviside projection.
+The coarse mesh also makes the optimisation very fast: the entire 400-iteration run with $\beta$-continuation completes in minutes on a standard laptop, enabling rapid design cycles.
 
-For a designer, this means that one can quickly screen many operating conditions or target profiles before committing to a fine‑mesh final optimisation.
-The coarse result can be used as an initial guess for a subsequent fine‑mesh run, greatly reducing the total computational cost.
-This two‑stage strategy—coarse exploration followed by fine‑tuning—is particularly attractive for microfluidic labs that need custom gradient generators but lack access to high‑performance computing.
+For a designer, this means that one can quickly screen many operating conditions or target profiles before committing to a fine-mesh final optimisation.
+The coarse result can be used as an initial guess for a subsequent fine-mesh run, greatly reducing the total computational cost.
+This two-stage strategy---coarse exploration followed by fine-tuning---is particularly attractive for microfluidic labs that need custom gradient generators but lack access to high-performance computing.
 
 \subsection{Limitations: absence of experimental validation}
 We openly acknowledge that this study is purely computational.
-Experimental validation—e.g., by soft‑lithography fabrication and fluorescence microscopy—is a necessary next step to confirm that the predicted concentration field is realised in practice.
-Several authors~\cite{li2023,alexandersen2020} have noted that many promising topology‑optimised microfluidic designs remain unvalidated, which weakens their credibility.
+Experimental validation---e.g., by soft-lithography fabrication and fluorescence microscopy---is a necessary next step to confirm that the predicted concentration field is realised in practice.
+Several authors~\cite{li2023,alexandersen2020} have noted that many promising topology-optimised microfluidic designs remain unvalidated, which weakens their credibility.
 
-Our work does not escape this limitation, but we emphasise that our aim is to provide a proof‑of‑concept of the optimisation framework and to demonstrate that even on a minimal mesh, the algorithm yields a design with error comparable to experimental scatter.
-The framework itself is implemented in the open‑source FEniCSx library~\cite{fenicsx2022}, making it fully reproducible and easily adaptable for experimental groups who wish to validate specific designs.
+Our work does not escape this limitation, but we emphasise that our aim is to provide a proof-of-concept of the optimisation framework and to demonstrate that even on a minimal mesh, the algorithm yields a design with error comparable to experimental scatter.
+The framework itself is implemented in the open-source FEniCSx library~\cite{fenicsx2022}, making it fully reproducible and easily adaptable for experimental groups who wish to validate specific designs.
 
 \subsection{Future work}
 Several directions can be pursued to build on this study:
 \begin{itemize}
-    \item \textbf{Mesh convergence study.} Refine the mesh systematically (e.g., $40\times10$, $80\times20$, $160\times40$) to quantify how RMSE and the optimal topology change with resolution, and to achieve sub‑5\,\% error.
-    \item \textbf{Adaptive mesh refinement.} Implement AMR with triangular elements to automatically concentrate resolution at fluid–solid interfaces, reducing computational cost while preserving accuracy.
+    \item \textbf{Mesh convergence study.} Refine the mesh systematically (e.g., $40\times10$, $80\times20$, $160\times40$) to quantify how RMSE and the optimal topology change with resolution, and to achieve sub-5\,\% error.
+    \item \textbf{Adaptive mesh refinement.} Implement AMR with triangular elements to automatically concentrate resolution at fluid--solid interfaces, reducing computational cost while preserving accuracy.
     \item \textbf{Experimental collaboration.} Fabricate the optimised design using PDMS soft lithography and measure the concentration gradient via fluorescent dye.
           Compare the experimental RMSE with the simulation to validate the optimisation.
-    \item \textbf{Multi‑objective Pareto front.} Vary the weight ratio $w_f/w_c$ to generate a family of designs that trade off pressure drop against gradient linearity, and validate the trade‑off experimentally.
-    \item \textbf{Extension to three dimensions.} Extrude the two‑dimensional design into a 3D geometry and solve the full Navier–Stokes equations to verify that the performance is maintained in a realistic channel height.
+    \item \textbf{Multi-objective Pareto front.} Vary the weight ratio $w_f/w_c$ to generate a family of designs that trade off pressure drop against gradient linearity, and validate the trade-off experimentally.
+    \item \textbf{Extension to three dimensions.} Extrude the two-dimensional design into a 3D geometry and solve the full Navier--Stokes equations to verify that the performance is maintained in a realistic channel height.
 \end{itemize}
 
 \subsection{Concluding remarks for the discussion}
-In summary, our topology optimisation framework produces a microfluidic gradient generator with a linearity error of 9.8\,\% on a very coarse mesh—a result that lies within the scatter of published experimental data.
-The computational efficiency and open‑source implementation make it a valuable tool for rapid prototyping of concentration gradient generators.
+In summary, our topology optimisation framework produces a microfluidic gradient generator with a linearity error of 9.8\,\% on a very coarse mesh---a result that lies within the scatter of published experimental data.
+The computational efficiency and open-source implementation make it a valuable tool for rapid prototyping of concentration gradient generators.
 While experimental validation remains for future work, the presented framework provides a solid computational foundation that can directly guide experimental efforts.
