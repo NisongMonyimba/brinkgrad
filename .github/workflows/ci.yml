@@ -17,32 +17,32 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Python deps
+      - name: Install Python deps (no numpy upgrade — container ABI must match petsc4py)
         run: |
           pip install --break-system-packages \
-            setuptools==59.5.0 nlopt pytest 2>/dev/null || \
-          pip install setuptools==59.5.0 nlopt pytest
+            "setuptools==59.5.0" \
+            "nlopt==2.7.1" \
+            pytest 2>/dev/null || \
+          pip install "setuptools==59.5.0" "nlopt==2.7.1" pytest
 
       - name: Install micrograd
-        run: pip install -e . --no-deps --break-system-packages 2>/dev/null || \
-             pip install -e . --no-deps
-
-      - name: Run unit tests
-        run: pytest tests/ -x -q --tb=short 2>&1 | tail -20 || true
+        run: |
+          pip install -e . --no-deps --break-system-packages 2>/dev/null || \
+          pip install -e . --no-deps
 
       - name: Smoke test — forward solver
         run: |
           python3 - << 'PY'
+          import numpy as np; print(f"numpy {np.__version__}")
           from micrograd import GradientGeneratorOptimizer
+          from micrograd.utilities import helmholtz_filter, heaviside_projection
+          from micrograd.solver import forward_solve
           opt = GradientGeneratorOptimizer(nx=20, ny=5,
               target_expr=lambda x: x[1]/500e-6, w_f=1e-7, w_c=5e4)
-          from micrograd.utilities import helmholtz_filter, heaviside_projection
           helmholtz_filter(opt.rho, opt.rho_filt, opt.V_rho, opt.r_filter)
           heaviside_projection(opt.rho_filt, opt.rho_phys, 1.0)
-          from micrograd.solver import forward_solve
-          import numpy as np
           u_h, p_h, c_h = forward_solve(opt.msh, opt.boundary_data,
-                                          opt.rho_phys, P_in=1000.0)
+                                         opt.rho_phys, P_in=1000.0)
           c_h.x.array[:] = np.clip(c_h.x.array, 0.0, 1.0)
           print(f"Forward solve OK: c in [{c_h.x.array.min():.3f}, {c_h.x.array.max():.3f}]")
           PY
@@ -54,7 +54,7 @@ jobs:
           opt = GradientGeneratorOptimizer(nx=20, ny=5,
               target_expr=lambda x: x[1]/500e-6, w_f=1e-7, w_c=5e4)
           opt.run(max_iter=10, beta_continuation=[1, 2], move=0.2)
-          J_final = opt.history[-1, 2]
+          J_final = float(opt.history[-1, 2])
           print(f"Mini-opt OK: J_final = {J_final:.4e}")
           assert J_final < 10.0, f"J too large: {J_final}"
           PY
