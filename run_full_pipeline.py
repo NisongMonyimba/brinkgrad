@@ -14,9 +14,10 @@ examples = {}
 examples["linear_target.py"] = r"""
 from micrograd import GradientGeneratorOptimizer
 import matplotlib; matplotlib.use('Agg')
-import matplotlib.pyplot as plt; import numpy as np, os, csv
-from dolfinx import fem
+import matplotlib.pyplot as plt
 import numpy as np
+import os, csv
+from dolfinx import fem
 
 def main():
     os.makedirs('figures', exist_ok=True)
@@ -34,20 +35,20 @@ def main():
     ax.plot(y_s*1e6, y_s/500e-6, 'r--', label='target')
     ax.set_xlabel('y (µm)'); ax.set_ylabel('c'); ax.legend()
     fig.savefig('figures/linear_outlet.pdf')
+    rmse = np.sqrt(np.mean((c_s - y_s / 500e-6) ** 2))
     with open('figures/linear_metrics.csv','w',newline='') as f:
         w=csv.writer(f); w.writerow(['Metric','Value']); w.writerow(['RMSE',rmse])
-        w.writerow(['Hydraulic R (Pa.s/m^3)',R]); w.writerow(['Flow rate (m^3/s)',Q])
-    print(f"RMSE = {rmse:.6f}"); print(f"Hydraulic R = {R:.4e} Pa.s/m³")
-    print(f"Flow rate Q = {Q:.4e} m³/s")
+    print(f"RMSE = {rmse:.6f}")
 if __name__=='__main__': main()
 """
 
 examples["double_peak_target.py"] = r"""
 from micrograd import GradientGeneratorOptimizer
 import matplotlib; matplotlib.use('Agg')
-import matplotlib.pyplot as plt; import numpy as np, os, csv
-from dolfinx import fem
+import matplotlib.pyplot as plt
 import numpy as np
+import os, csv
+from dolfinx import fem
 
 def main():
     os.makedirs('figures', exist_ok=True)
@@ -72,9 +73,10 @@ if __name__=='__main__': main()
 examples["gallery_targets.py"] = r"""
 from micrograd import GradientGeneratorOptimizer
 import matplotlib; matplotlib.use('Agg')
-import matplotlib.pyplot as plt; import numpy as np, os, csv
-from dolfinx import fem
+import matplotlib.pyplot as plt
 import numpy as np
+import os, csv
+from dolfinx import fem
 
 targets = {
     'linear': lambda x: x[1]/500e-6,
@@ -107,9 +109,10 @@ if __name__=='__main__': main()
 examples["christmas_tree_comparison.py"] = r"""
 from micrograd import GradientGeneratorOptimizer, ChristmasTree
 import matplotlib; matplotlib.use('Agg')
-import matplotlib.pyplot as plt; import numpy as np, os, csv
-from dolfinx import fem
+import matplotlib.pyplot as plt
 import numpy as np
+import os, csv
+from dolfinx import fem
 
 def main():
     os.makedirs('figures', exist_ok=True)
