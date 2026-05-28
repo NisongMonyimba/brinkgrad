@@ -80,7 +80,7 @@ The value is ramped linearly from \(10^3\) to \(10^8\) over the first 60\% of th
 \end{equation}
 This ramping ensures that fluid can flow through intermediate-density regions early in the optimisation, allowing the concentration field to develop and provide non-zero adjoint forcing.
 \emph{Note:} in the coarse-mesh (\(20\times5\)) runs reported here, \(\alpha_{\max}\) is held constant at \(10^{9}\,\text{Pa}\cdot\text{s}/\text{m}^2\) and symmetry breaking is instead achieved by the sinusoidal initialisation described above (Eq.~\eqref{eq:sinusoidal_init}).
-The \(\alpha_{\max}\) ramping described in Eq.~\eqref{eq:alpha_ramp} is recommended for finer meshes where the uniform-density starting point is more likely to stall.
+The \(\alpha_{\max}\) ramping described in Eq.~\eqref{eq:alpha_cont} is recommended for finer meshes where the uniform-density starting point is more likely to stall.
 
 \subsection{Post-processing and validation pipeline}
 After optimisation, the final physical density field \(\bar\rho\) is thresholded at \(\bar\rho = 0.5\) to obtain a binary fluid--solid distribution.
