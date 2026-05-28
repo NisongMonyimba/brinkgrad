@@ -60,6 +60,94 @@ while a zero diffusive flux condition is applied at the outlet,
 \end{equation}
 No-flux conditions are imposed on the remaining walls.
 
+
+\subsection{Nondimensional analysis and operating regime}
+\label{sec:nondim}
+
+To identify the physical regime governing the device and to justify the
+modelling choices of Sections~\ref{sec:brinkman}--\ref{sec:convdiff},
+we nondimensionalise the governing equations.
+Let the domain height $L_c = L_y = 500\,\mu\mathrm{m}$ be the
+characteristic length and $U_c = Q/L_y$ the mean inlet velocity
+(where $Q$ is the volumetric flow rate per unit depth obtained from
+the optimised design; Table~\ref{tab:performance} gives
+$Q = 2.23\times10^{-6}\,\mathrm{m^2/s}$, hence
+$U_c \approx 4.46\,\mathrm{mm/s}$).
+Pressure is scaled by the viscous scale $\mu U_c/L_c$, and
+concentration is already normalised to $[0,1]$.
+Defining dimensionless variables
+\begin{equation}
+  \mathbf{x}^{*} = \frac{\mathbf{x}}{L_c}, \quad
+  \mathbf{u}^{*} = \frac{\mathbf{u}}{U_c}, \quad
+  p^{*}          = \frac{p\,L_c}{\mu\,U_c}, \quad
+  \alpha^{*}(\rho) = \frac{\alpha(\rho)\,L_c^{2}}{\mu}, \quad
+  D^{*}(\rho)    = \frac{D(\rho)}{D_{\mathrm{fluid}}},
+  \label{eq:nd_vars}
+\end{equation}
+the Brinkman equations~\eqref{eq:brinkman_momentum}--\eqref{eq:brinkman_cont}
+and the convection--diffusion equation~\eqref{eq:convdiff} become
+\begin{align}
+  \nabla p^{*} - \nabla^2\mathbf{u}^{*}
+  + \alpha^{*}(\rho)\,\mathbf{u}^{*} &= \mathbf{0}, \label{eq:nd_brinkman}\\
+  \nabla\cdot\mathbf{u}^{*}           &= 0,          \label{eq:nd_cont}\\
+  \mathrm{Pe}\;\mathbf{u}^{*}\cdot\nabla c
+  - \nabla\cdot\bigl(D^{*}(\rho)\,\nabla c\bigr) &= 0. \label{eq:nd_cd}
+\end{align}
+The three governing dimensionless groups are
+\begin{equation}
+  \mathrm{Re} = \frac{\rho\,U_c\,L_c}{\mu}, \qquad
+  \mathrm{Pe} = \frac{U_c\,L_c}{D_{\mathrm{fluid}}}, \qquad
+  \mathrm{Da} = \frac{\mu}{\alpha_{\max}\,L_c^{2}},
+  \label{eq:dimless_groups}
+\end{equation}
+together with the aspect ratio $\mathrm{AR} = L_x/L_y = 4$.
+
+\paragraph{Reynolds number.}
+Inserting the numerical values,
+\[
+  \mathrm{Re}
+  = \frac{10^3 \times 4.46\times10^{-3}\times 500\times10^{-6}}{10^{-3}}
+  \approx 2.2\times10^{-3}.
+\]
+The condition $\mathrm{Re}\ll 1$ confirms that inertial acceleration is
+negligible compared with viscous and Brinkman drag, \emph{retrospectively}
+validating the omission of the convective term
+$\rho(\mathbf{u}\cdot\nabla)\mathbf{u}$ from~\eqref{eq:brinkman_momentum}.
+The Navier--Stokes validation step (Section~\ref{sec:ns_validation}) provides
+an independent confirmation: with a five-step Picard iteration on the body-fitted
+mesh, the velocity field changes by less than $0.1\%$ relative to the
+Brinkman solution.
+
+\paragraph{P\'{e}clet number.}
+\[
+  \mathrm{Pe}
+  = \frac{4.46\times10^{-3}\times 500\times10^{-6}}{10^{-9}}
+  \approx 2.2\times10^{3}.
+\]
+The high P\'{e}clet number has two important consequences.
+First, diffusive mixing is confined to thin boundary layers of thickness
+$\delta \sim L_c\,\mathrm{Pe}^{-1/2} \approx 11\,\mu\mathrm{m}$,
+which is an order of magnitude below the coarse-mesh element size
+($\sim 100\,\mu\mathrm{m}$ across the channel height).
+This explains why passive diffusion alone cannot produce a controlled
+concentration gradient and why a topology-optimised channel \emph{network}
+is required to distribute the two inlet streams before diffusion acts.
+Second, the convection-dominated character of~\eqref{eq:nd_cd} makes it
+susceptible to spurious numerical oscillations on coarse meshes, motivating
+the SUPG stabilisation introduced in Section~\ref{sec:supg}.
+
+\paragraph{Darcy number.}
+\[
+  \mathrm{Da}
+  = \frac{10^{-3}}{10^{8}\times(500\times10^{-6})^2}
+  = 4\times10^{-5}.
+\]
+The condition $\mathrm{Da}\ll 1$ confirms that solid regions
+($\alpha = \alpha_{\max}$) are effectively impermeable: the velocity in a
+solid element is suppressed by a factor of $\mathrm{Da}$ relative to the
+surrounding fluid, ensuring a sharp fluid--solid contrast despite the
+continuous density representation.
+
 \subsection{Optimisation problem}
 The design is driven by a multi-objective cost functional that simultaneously penalises viscous dissipation (a proxy for pressure drop) and the deviation of the outlet concentration from a user-specified target \(c_{\text{target}}\):
 \begin{subequations}
