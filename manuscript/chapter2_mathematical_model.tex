@@ -1,0 +1,183 @@
+\section{Mathematical Model}
+\label{sec:model}
+
+\subsection{Design domain and boundary conditions}
+We consider a two‑dimensional rectangular domain \(\Omega = (0,L_x) \times (0,L_y)\) with \(L_x = 2000\ \mu\text{m}\) and \(L_y = 500\ \mu\text{m}\).
+The left boundary is split into two inlets of equal height:
+\begin{itemize}
+    \item \textbf{Inlet~1} (\(\Gamma_{\text{in},1}\), \(y\in[0,\,L_y/2]\)): pressure \(p = p_{\text{in}}\), concentration \(c = 0\) (pure solvent).
+    \item \textbf{Inlet~2} (\(\Gamma_{\text{in},2}\), \(y\in[L_y/2,\,L_y]\)): pressure \(p = p_{\text{in}}\), concentration \(c = 1\) (solute).
+\end{itemize}
+The right boundary is the outlet (\(\Gamma_{\text{out}}\), \(x = L_x\)): pressure \(p = 0\), zero diffusive flux \(\mathbf{n}\cdot D\nabla c = 0\).
+All remaining boundaries are impermeable solid walls with no‑slip for the velocity (\(\mathbf{u}=\mathbf{0}\)) and zero flux for the concentration.
+
+The two inlets supply fluids of different concentrations; the mixing pattern inside \(\Omega\) determines the concentration profile at the outlet.
+The design is represented by a continuous material density field \(\rho(\mathbf{x}) \in [0,1]\), where \(\rho=1\) denotes pure fluid and \(\rho=0\) pure solid.
+
+\subsection{Brinkman--Darcy flow}
+The steady, incompressible flow of a Newtonian fluid through the design domain is modelled by the Brinkman equations~\cite{borrvall2003}:
+\begin{subequations}
+\label{eq:brinkman}
+\begin{align}
+    \nabla p - \mu \nabla^2 \mathbf{u} + \alpha(\rho)\,\mathbf{u} &= \mathbf{0}, \label{eq:brinkman_momentum}\\
+    \nabla\cdot\mathbf{u} &= 0. \label{eq:brinkman_continuity}
+\end{align}
+\end{subequations}
+Here \(\mathbf{u}\) is the velocity, \(p\) the pressure, \(\mu = 10^{-3}\ \text{Pa·s}\) the dynamic viscosity, and \(\alpha(\rho)\) an inverse permeability that interpolates between a fluid (\(\alpha\approx 0\)) and a solid (\(\alpha\gg 1\)).
+Following Borrvall \& Petersson~\cite{borrvall2003}, we use the convex interpolation
+\begin{equation}
+    \alpha(\rho) = \alpha_{\min} + (\alpha_{\max} - \alpha_{\min})\,\frac{1-\rho}{1+\rho},
+    \label{eq:alpha}
+\end{equation}
+with \(\alpha_{\min}=10^{-3}\) (residual permeability to keep the problem well‑posed) and \(\alpha_{\max}=10^{8}\) (penalising solid regions).
+In practice, \(\alpha_{\max}\) is ramped from \(10^{3}\) to \(10^{8}\) during the optimisation (a continuation strategy) to avoid early stagnation in an all‑solid local minimum.
+
+Boundary conditions for the velocity are no‑slip on the walls (\(\mathbf{u}=\mathbf{0}\)) and a prescribed pressure on the inlets and outlet:
+\begin{equation}
+    p = p_{\text{in}} \;\; \text{on } \Gamma_{\text{in},1}\cup\Gamma_{\text{in},2}, \qquad p = 0 \;\; \text{on } \Gamma_{\text{out}}.
+\end{equation}
+
+\subsection{Convection--diffusion transport}
+The steady‑state concentration \(c\) of the solute is governed by
+\begin{equation}
+    \mathbf{u}\cdot\nabla c - \nabla\cdot\bigl(D(\rho)\,\nabla c\bigr) = 0,
+    \label{eq:convdiff}
+\end{equation}
+where the effective diffusivity is interpolated using the Solid Isotropic Material with Penalisation (SIMP) scheme:
+\begin{equation}
+    D(\rho) = D_{\min} + (D_{\text{fluid}} - D_{\min})\,\rho^{\,p},
+    \label{eq:Dinterp}
+\end{equation}
+with \(D_{\text{fluid}} = 10^{-9}\ \text{m}^2/\text{s}\) the molecular diffusivity of the solute, \(D_{\min}=10^{-9}\ \text{m}^2/\text{s}\) a small but non‑zero lower bound (to prevent a singular stiffness matrix in solid regions), and \(p=3\) the SIMP exponent.
+
+Dirichlet conditions fix the concentration at the inlets,
+\begin{equation}
+    c = 1 \;\; \text{on } \Gamma_{\text{in},2}, \qquad c = 0 \;\; \text{on } \Gamma_{\text{in},1},
+\end{equation}
+while a zero diffusive flux condition is applied at the outlet,
+\begin{equation}
+    \mathbf{n}\cdot D\nabla c = 0 \;\; \text{on } \Gamma_{\text{out}}.
+\end{equation}
+No‑flux conditions are imposed on the remaining walls.
+
+\subsection{Optimisation problem}
+The design is driven by a multi‑objective cost functional that simultaneously penalises viscous dissipation (a proxy for pressure drop) and the deviation of the outlet concentration from a user‑specified target \(c_{\text{target}}\):
+\begin{subequations}
+\label{eq:objective}
+\begin{align}
+    J_f &= \int_{\Omega} \left( \frac{\mu}{2}\|\nabla\mathbf{u}\|^2 + \frac12 \alpha(\rho)\|\mathbf{u}\|^2 \right) \mathrm{d}\Omega, \label{eq:Jf} \\
+    J_c &= \frac12 \int_{\Gamma_{\text{out}}} \bigl(c - c_{\text{target}}\bigr)^2 \,\mathrm{d}s, \label{eq:Jc} \\
+    J   &= w_f J_f + w_c J_c. \label{eq:J}
+\end{align}
+\end{subequations}
+The weights are chosen to balance the disparate magnitudes of the two terms; in this work we use \(w_f = 10^{-7}\) and \(w_c = 5\times 10^{4}\).
+
+The optimisation problem reads
+\begin{equation}
+    \min_{\rho(\mathbf{x})}\; J(\rho,\mathbf{u},p,c)
+    \quad\text{subject to}\quad
+    \begin{cases}
+        \text{Eqs.~\eqref{eq:brinkman} and \eqref{eq:convdiff}} & \text{(PDE constraints)},\\[2pt]
+        \displaystyle \frac{1}{|\Omega|}\int_\Omega \rho\,\mathrm{d}\Omega \le V^* & \text{(volume constraint)},\\[2pt]
+        0 \le \rho(\mathbf{x}) \le 1 & \text{(box constraints)},
+    \end{cases}
+    \label{eq:opt}
+\end{equation}
+where \(V^* = 0.5\) is the target fluid volume fraction.
+
+\subsection{Design regularisation}
+To avoid mesh‑dependent solutions and promote black‑and‑white designs, we apply two regularisation steps.
+
+\paragraph{Helmholtz PDE filter.}
+The design variable \(\rho\) is first smoothed by solving
+\begin{equation}
+    -r_f^{\,2}\,\nabla^2 \tilde{\rho} + \tilde{\rho} = \rho \quad\text{in } \Omega,
+    \label{eq:helmholtz}
+\end{equation}
+with homogeneous Neumann boundary conditions.
+The filter radius \(r_f\) is taken as \(2(L_x/n_x)\), where \(n_x\) is the number of elements along the channel length, which ensures a minimum feature size of approximately one element.
+
+\paragraph{Smoothed Heaviside projection.}
+The filtered density \(\tilde{\rho}\) is then projected towards 0 or 1 using a smooth approximation of the Heaviside function:
+\begin{equation}
+    \bar{\rho} = \frac{\tanh(\beta\eta) + \tanh\!\bigl(\beta(\tilde{\rho} - \eta)\bigr)}
+                    {\tanh(\beta\eta) + \tanh\!\bigl(\beta(1 - \eta)\bigr)},
+    \qquad \eta = 0.5.
+    \label{eq:heaviside}
+\end{equation}
+The sharpness parameter \(\beta\) is increased during the optimisation (typically from 1 to 64) to gradually drive the design from a grey intermediate state to a near‑binary fluid/solid distribution.
+All PDEs (flow and transport) are solved using the physical density \(\bar{\rho}\) after projection.
+
+\subsection{Adjoint sensitivity analysis}
+To use gradient‑based optimisation, the total derivative \(\mathrm{d}J/\mathrm{d}\rho\) must be evaluated efficiently.
+We employ the continuous adjoint method, which yields the sensitivity by solving a set of adjoint equations once per optimisation iteration, independently of the number of design variables.
+
+\subsubsection{Lagrangian and adjoint equations}
+Introduce the adjoint velocity \(\mathbf{v}\), adjoint pressure \(q\), and concentration adjoint \(\lambda\).
+The Lagrangian of the optimisation problem, after integrating by parts and assuming the boundary terms cancel with the adjoint boundary conditions, is
+\begin{equation}
+    \begin{aligned}
+        \mathcal{L} &= J_f + J_c \\
+        &\quad + \int_\Omega \bigl[ \mu\nabla\mathbf{u}:\nabla\mathbf{v} + \alpha(\rho)\,\mathbf{u}\cdot\mathbf{v} - p\,\nabla\cdot\mathbf{v} - q\,\nabla\cdot\mathbf{u} \bigr] \mathrm{d}\Omega \\
+        &\quad + \int_\Omega \bigl[ \lambda\,\mathbf{u}\cdot\nabla c + D(\rho)\,\nabla\lambda\cdot\nabla c \bigr] \mathrm{d}\Omega .
+    \end{aligned}
+    \label{eq:lagrangian}
+\end{equation}
+Taking the variation of \(\mathcal{L}\) with respect to the state variables \((\mathbf{u},p,c)\) and setting each variation to zero yields the adjoint equations.
+
+\paragraph{Flow adjoint.}
+Varying with respect to \(\mathbf{u}\) and \(p\) gives the adjoint Brinkman system
+\begin{subequations}
+\begin{align}
+    -\mu\nabla^2\mathbf{v} + \alpha(\rho)\,\mathbf{v} + \nabla q &= -\lambda\nabla c, \label{eq:adj_flow_mom}\\
+    \nabla\cdot\mathbf{v} &= 0. \label{eq:adj_flow_div}
+\end{align}
+\end{subequations}
+The right‑hand side \(-\lambda\nabla c\) arises from the term \(\lambda\mathbf{u}\cdot\nabla c\) in the Lagrangian and couples the flow adjoint to the concentration adjoint.
+Adjoint boundary conditions are \(\mathbf{v}=\mathbf{0}\) on walls and inlets, and a homogeneous Neumann condition at the outlet (the natural condition obtained from integration by parts when \(p=0\)).
+
+\paragraph{Concentration adjoint.}
+Varying with respect to \(c\) yields the adjoint convection‑diffusion equation
+\begin{equation}
+    -\mathbf{u}\cdot\nabla\lambda - \nabla\cdot\bigl(D(\rho)\nabla\lambda\bigr) = 0 \quad\text{in } \Omega,
+    \label{eq:adj_conc}
+\end{equation}
+with Dirichlet conditions \(\lambda = 0\) on both inlets (where the forward concentration is fixed) and the boundary condition obtained from the outlet misfit term \(J_c\):
+\begin{equation}
+    \lambda = c_{\text{target}} - c \quad\text{on } \Gamma_{\text{out}}.
+    \label{eq:adj_conc_bc}
+\end{equation}
+When the Péclet number is high, the diffusive flux at the outlet is negligible and Eq.~\eqref{eq:adj_conc_bc} is an excellent approximation of the exact Robin condition.
+
+\subsubsection{Sensitivity expression}
+Finally, differentiating the Lagrangian with respect to \(\rho\) while holding the state and adjoint variables fixed yields the sensitivity:
+\begin{equation}
+    \boxed{\,
+    \frac{\mathrm{d}J}{\mathrm{d}\rho} = \int_\Omega
+        \left[ \frac{\partial\alpha}{\partial\rho}\,\mathbf{u}\cdot\mathbf{v}
+             + \frac{\partial D}{\partial\rho}\,\nabla c\cdot\nabla\lambda \right] \mathrm{d}\Omega
+    \,}.
+    \label{eq:sensitivity}
+\end{equation}
+The partial derivatives of the interpolation functions are
+\begin{align}
+    \frac{\partial\alpha}{\partial\rho} &= -(\alpha_{\max} - \alpha_{\min})\,\frac{2}{(1+\rho)^2},
+        \label{eq:dalpha} \\[4pt]
+    \frac{\partial D}{\partial\rho} &= p\,(D_{\text{fluid}} - D_{\min})\,\rho^{\,p-1}.
+        \label{eq:dD}
+\end{align}
+Equation~\eqref{eq:sensitivity} is evaluated by first solving the forward problem~\eqref{eq:brinkman}--\eqref{eq:convdiff} to obtain \((\mathbf{u},p,c)\), then solving the adjoint problems~\eqref{eq:adj_flow_mom}--\eqref{eq:adj_conc_bc} for \((\mathbf{v},q,\lambda)\), and finally assembling the volume integral.
+
+\subsection{Numerical stabilisation}
+At high Péclet numbers, the convection‑diffusion equation~\eqref{eq:convdiff} can suffer from spurious oscillations.
+To suppress them, we employ the Streamline Upwind Petrov--Galerkin (SUPG) method~\cite{brooks1982}.
+The stabilisation parameter \(\tau\) is computed element‑wise as
+\begin{equation}
+    \tau = \frac{h}{2\|\mathbf{u}\|}\,
+           \left( \frac{1}{\tanh(\text{Pe})} - \frac{1}{\text{Pe}} \right),
+    \qquad
+    \text{Pe} = \frac{\|\mathbf{u}\|\,h}{2\,D(\rho)},
+    \label{eq:supg}
+\end{equation}
+where \(h\) is the local cell diameter and \(\|\mathbf{u}\|\) is the local velocity magnitude.
+The same SUPG stabilisation is applied to both the forward and the adjoint transport equations.

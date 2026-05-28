@@ -1,0 +1,107 @@
+\section{Numerical Methods}
+\label{sec:methods}
+
+\subsection{Finite element discretisation}
+All partial differential equations are solved using the open‑source finite element library \texttt{FEniCSx} (dolfinx)~\cite{fenicsx2022}.
+The computational domain is the rectangle \([0,2000]\times[0,500]\ \mu\text{m}\), discretised with an \(80\times20\) structured grid of triangular elements.
+A coarse mesh of \(20\times5\) elements is used for rapid prototyping and proof‑of‑concept runs; mesh convergence is verified in the Supplementary Information (S1).
+
+The Brinkman equations~\eqref{eq:brinkman} are discretised with the inf–sup stable Taylor–Hood element pair: continuous piecewise quadratic velocities (P2) and continuous piecewise linear pressure (P1).
+This gives approximately \(20\,000\) degrees of freedom for the velocity block on the \(80\times20\) mesh.
+The convection–diffusion equation~\eqref{eq:convdiff} is discretised with continuous piecewise linear elements (P1) and stabilised using the Streamline‑Upwind Petrov–Galerkin (SUPG) method~\cite{brooks1982}.
+The SUPG parameter \(\tau\) is evaluated element‑wise using Eq.~\eqref{eq:supg}.
+The design variable \(\rho\) and the filtered fields \(\tilde\rho,\bar\rho\) are also discretised with P1 elements on the same mesh.
+
+The weak forms are assembled using the Unified Form Language (UFL) embedded in \texttt{FEniCSx}.
+All volume integrals are evaluated with exact quadrature appropriate for the polynomial order; boundary integrals are evaluated over the tagged facets.
+
+\subsection{Solver configuration}
+During optimisation, the linear systems arising from the forward and adjoint Brinkman problems are solved with a direct LU factorisation (MUMPS) via PETSc’s \texttt{preonly}/\texttt{lu} combination.
+This choice provides robust, parameter‑free solutions for the moderate meshes used here (up to \(\sim 30\,000\) degrees of freedom).
+
+For the scalability study presented in the Supplementary Information (S1), we additionally implement an iterative solver strategy: the Brinkman system is preconditioned with a block‑triangular field‑split preconditioner, using algebraic multigrid (HYPRE) for the velocity block and the pressure Schur complement~\cite{elman2014}.
+The convection–diffusion system is preconditioned with HYPRE alone.
+The scalability study confirms that the iterative approach maintains near‑optimal convergence rates as the mesh is refined, enabling the pipeline to handle larger domains if needed.
+
+\subsection{Optimisation algorithm}
+The design is updated using the Optimality Criteria (OC) method~\cite{bendsoe2003}, which solves the Karush–Kuhn–Tucker conditions for a single volume constraint via bisection on the Lagrange multiplier \(\Lambda\).
+The OC update formula reads
+\begin{equation}
+    \rho^{\text{new}} = \max\bigl(\rho_{\min},\,
+                                 \min(\rho_{\max},\,
+                                      \rho^{\text{old}} \cdot B^\eta)\bigr),
+    \qquad B = -\frac{\mathrm{d}J/\mathrm{d}\rho}{\Lambda},
+    \label{eq:oc}
+\end{equation}
+with damping exponent \(\eta = 0.5\) and a move limit of \(0.02\)–\(0.2\) to prevent divergence.
+The Lagrange multiplier is determined by bisection until the volume constraint is satisfied to a tolerance of \(10^{-4}\).
+
+For comparison, the Method of Moving Asymptotes (MMA)~\cite{svanberg1987} is also implemented via the \texttt{gcma} Python package; both update rules are provided in the code, and a convergence comparison is included in the Supplementary Information (S4).
+The OC method was used for all results in the main paper.
+
+\subsection{Continuation strategies}
+To avoid premature trapping in poor local minima and to promote connected fluid pathways, we employ three nested continuation strategies.
+
+\paragraph{Volume fraction continuation.}
+The target fluid volume fraction \(V^*\) is linearly decreased from \(0.7\) to \(0.5\) over the first 40 iterations.
+This initially relaxed constraint allows the optimiser to establish a well‑connected channel network before removing excess fluid.
+
+\paragraph{Heaviside sharpening.}
+The projection parameter \(\beta\) (Eq.~\eqref{eq:heaviside}) is increased through the sequence
+\[
+\beta \in \{1,\,2,\,4,\,8,\,16,\,32,\,64\}
+\]
+every 20–40 iterations, gradually driving the design from grey to near‑binary while avoiding the ill‑conditioning that a sharp projection would cause early in the optimisation.
+
+\paragraph{Brinkman penalty ramping.}
+A third continuation is applied to the inverse permeability upper bound \(\alpha_{\max}\).
+The value is ramped linearly from \(10^3\) to \(10^8\) over the first 60\% of the total iterations:
+\begin{equation}
+    \alpha_{\max} = 10^3 + (10^8 - 10^3)\cdot\min\!\left(1,\; \frac{\text{step}}{0.6\times \text{max\_iter}}\right).
+    \label{eq:alpha_cont}
+\end{equation}
+This ramping ensures that fluid can flow through intermediate‑density regions early in the optimisation, allowing the concentration field to develop and provide non‑zero adjoint forcing; without it, the initial design (\(\rho=0.5\)) would be impermeable, yielding zero velocity everywhere and a vanishing sensitivity (see Section~\ref{sec:results}).
+
+\subsection{Post‑processing and validation pipeline}
+After optimisation, the final physical density field \(\bar\rho\) is thresholded at \(\bar\rho = 0.5\) to obtain a binary fluid–solid distribution.
+The fluid region is extracted using \texttt{pyvista} and remeshed with a body‑fitted grid using \texttt{Gmsh}~\cite{geuzaine2009} to eliminate the Brinkman penalty approximation.
+On this body‑fitted mesh we solve the full incompressible Navier–Stokes equations (including the convective term) with a Picard iteration (five steps) to validate the design under real fluid physics.
+The concentration field is then re‑computed with SUPG‑stabilised convection–diffusion on the same body‑fitted mesh.
+The outlet concentration profile is compared to the target via the root‑mean‑square error (RMSE).
+
+Additional post‑processing steps compute:
+\begin{itemize}
+    \item \textbf{Pressure drop} (fixed at \(p_{\text{in}}=1000\)~Pa) and total flow rate \(Q\);
+    \item \textbf{Hydraulic resistance} \(R = \Delta p / Q\);
+    \item \textbf{Maximum velocity} and \textbf{characteristic channel width} (via Euclidean distance transform);
+    \item \textbf{Reynolds number} \(\text{Re} = \rho_f U_{\max} L_c / \mu\) and \textbf{Péclet number} \(\text{Pe} = U_{\max} L_c / D_{\text{fluid}}\);
+    \item \textbf{Mixing length} – the distance from the inlet where the concentration error drops below 5\% of the full scale;
+    \item \textbf{Minimum feature size} – the smallest channel width in the binary design, checked against a 10~\(\mu\text{m}\) photolithography limit.
+\end{itemize}
+All metrics are evaluated identically for the topology‑optimised design and the classic Christmas tree network, the latter being generated as a density field on the same mesh using a set of line segments that replicate the geometry of Jeon \emph{et~al.}~\cite{jeon2000}.
+
+\subsection{Reproducibility and open‑source package}
+The complete pipeline is released as the open‑source Python package \texttt{micrograd} under the MIT license, available at
+\begin{center}
+\url{https://github.com/nisongmonyimba278-byte/micrograd}.
+\end{center}
+The repository includes:
+\begin{itemize}
+    \item All finite element modules (mesh generation, forward and adjoint solvers, optimisation routines);
+    \item Post‑processing tools (STL export, body‑fitted Navier–Stokes validation, experimental metrics);
+    \item A Jupyter notebook for interactive use;
+    \item A comprehensive test suite (validating the filter, forward solver against analytical Poiseuille flow, adjoint gradients via finite differences, MMA fallback logic, and mesh generation);
+    \item A continuous‑integration workflow (GitHub Actions) that automatically executes the test suite and a mini‑optimisation on every commit;
+    \item An \texttt{environment.yaml} file pinning exact package versions to guarantee bit‑identical reproduction.
+\end{itemize}
+
+The package is designed to run inside the official \texttt{dolfinx/dolfinx:v0.7.3} Docker container, which provides a fully self‑contained environment with FEniCSx~0.7.3, PETSc, and all necessary dependencies.
+The entire set of results presented in this paper can be reproduced with a single command:
+\begin{verbatim}
+    docker run --rm -v $(pwd):/root/micrograd \
+      -e OMPI_MCA_btl=^openib -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
+      dolfinx/dolfinx:v0.7.3 bash -c \
+      "cd /root/micrograd && bash run_all.sh"
+\end{verbatim}
+
+The code is permanently archived on Zenodo with DOI \texttt{10.5281/zenodo.XXXXXXX}, and a detailed documentation site is hosted via GitHub Pages.
