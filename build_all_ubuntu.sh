@@ -102,7 +102,7 @@ run_optional() {
 if [[ $SKIP_PIPELINE -eq 0 ]]; then
   header "STAGE 3 — Analysis pipeline"
 
-  run_step "[3.1] Unit tests" \
+    run_step "[3.1] Unit tests" \
     python3 -m pytest tests/ -x -q 2>&1 | tail -5 || true
 
   run_step "[3.2] Mesh convergence" \
@@ -117,24 +117,9 @@ from micrograd.filter_sensitivity import run_filter_sensitivity
 run_filter_sensitivity(lambda x: x[1]/500e-6, nx=80, ny=20,
   r_filter_multipliers=[1.0,1.5,2.0,2.5,3.0], output_dir='figures', max_iter=50)"
 
-  run_step "[3.4] Stabilisation" python3 run_stabilization_test.py
-  mv stabilization_outlet.png stabilization_fields.png docs/si/ 2>/dev/null || true
-
-  run_step "[3.5] Gallery profiles" python3 examples/gallery_targets.py
-  cp figures/gallery_target_profiles.pdf docs/si/ 2>/dev/null || true
-
-  run_step "[3.6] Main figures" python3 generate_figures.py
+  run_step "[3.4] Full pipeline (linear + double-peak + gallery + christmas tree + macros)" \
+    python3 run_full_pipeline.py
   cp figures/*.pdf figures/*.png docs/si/ 2>/dev/null || true
-
-  run_step "[3.7] Supplementary Info" python3 generate_si.py
-
-  run_optional "[3.8] OC vs MMA"  "import gcma"    python3 run_optimizer_comparison.py
-  run_optional "[3.9] UQ"         "import chaospy" python3 run_uq.py
-  cp -r uq/* docs/si/ 2>/dev/null || true
-
-  run_step "[3.10] Pareto front" python3 run_pareto.py
-  cp -r pareto/* docs/si/ 2>/dev/null || true
-
   ok "Pipeline complete ($(elapsed))"
 else
   warn "STAGE 3 (pipeline) skipped."
