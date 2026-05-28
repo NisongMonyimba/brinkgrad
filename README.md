@@ -1,7 +1,7 @@
 markdown
 # micrograd – Topology optimisation of microfluidic gradient generators
 
-[![CI](https://github.com/yourusername/micrograd/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/micrograd/actions)
+[![CI](https://github.com/nisongmonyimba278-byte/micrograd/actions/workflows/ci.yml/badge.svg)](https://github.com/nisongmonyimba278-byte/micrograd/actions)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
@@ -16,7 +16,7 @@ markdown
 
 ## What does this do?
 
-Given a **desired concentration profile** at the outlet of a microfluidic chip, this framework automatically discovers the channel geometry that produces it – with **no pre‑prescribed architecture**.  The optimised designs outperform the classic “Christmas tree” generator by **~50 % in hydraulic resistance** while maintaining superior concentration fidelity.
+Given a **desired concentration profile** at the outlet of a microfluidic chip, this framework automatically discovers the channel geometry that produces it – with **no pre‑prescribed architecture**.  The optimised designs outperform the classic “Christmas tree” generator by **99.7 % in hydraulic resistance** (1.77×10¹¹ → 4.48×10⁸ Pa·s/m³) while maintaining superior concentration fidelity.
 
 The code solves a density‑based topology optimisation problem with coupled Brinkman flow and convection‑diffusion, uses continuous adjoint sensitivity for efficient gradient computation, and validates the results with full Navier–Stokes simulations and 3D extrusion.
 
