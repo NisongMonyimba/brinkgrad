@@ -4,27 +4,9 @@ import os, sys, subprocess
 PROJECT = os.path.expanduser("~/micrograd")
 os.chdir(PROJECT)
 
-# ---------- 1. Patch utilities.py ----------
-with open("micrograd/utilities.py") as f:
-    util = f.read()
-util = util.replace("alpha_max = 1e8", "alpha_max = 1e3")
-with open("micrograd/utilities.py", "w") as f:
-    f.write(util)
-print("Patched utilities.py (alpha_max=1e3)")
+# alpha_max patch removed — keep original 1e8 for proper channel formation
 
-# ---------- 2. Patch gradient_optimizer.py – add alpha ramp ----------
-with open("micrograd/gradient_optimizer.py") as f:
-    grad = f.read()
-# Insert alpha ramp after "beta = betas[beta_idx]"
-old = "beta = betas[beta_idx]"
-new = """beta = betas[beta_idx]
-            import micrograd.utilities as ut
-            ramp = min(1.0, step / (0.6 * max_iter))
-            ut.alpha_max = 1e3 + (1e8 - 1e3) * ramp"""
-grad = grad.replace(old, new)
-with open("micrograd/gradient_optimizer.py", "w") as f:
-    f.write(grad)
-print("Patched gradient_optimizer.py (alpha-continuation)")
+# gradient_optimizer patch removed — alpha continuation handled internally
 
 # ---------- 3. Write example scripts ----------
 examples = {}
@@ -33,7 +15,8 @@ examples["linear_target.py"] = r"""
 from micrograd import GradientGeneratorOptimizer
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt; import numpy as np, os, csv
-from dolfinx import fem; import ufl
+from dolfinx import fem
+import numpy as np
 
 def main():
     os.makedirs('figures', exist_ok=True)
@@ -51,8 +34,6 @@ def main():
     ax.plot(y_s*1e6, y_s/500e-6, 'r--', label='target')
     ax.set_xlabel('y (µm)'); ax.set_ylabel('c'); ax.legend()
     fig.savefig('figures/linear_outlet.pdf')
-    u_h=opt.u_h; Q=ufl.assemble(ufl.dot(u_h, ufl.FacetNormal(opt.msh))*ufl.ds(outlet_facets))
-    R=1000.0/Q; rmse=np.sqrt(np.mean((c_s - y_s/500e-6)**2))
     with open('figures/linear_metrics.csv','w',newline='') as f:
         w=csv.writer(f); w.writerow(['Metric','Value']); w.writerow(['RMSE',rmse])
         w.writerow(['Hydraulic R (Pa.s/m^3)',R]); w.writerow(['Flow rate (m^3/s)',Q])
@@ -65,7 +46,8 @@ examples["double_peak_target.py"] = r"""
 from micrograd import GradientGeneratorOptimizer
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt; import numpy as np, os, csv
-from dolfinx import fem; import ufl
+from dolfinx import fem
+import numpy as np
 
 def main():
     os.makedirs('figures', exist_ok=True)
@@ -91,7 +73,8 @@ examples["gallery_targets.py"] = r"""
 from micrograd import GradientGeneratorOptimizer
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt; import numpy as np, os, csv
-from dolfinx import fem; import ufl
+from dolfinx import fem
+import numpy as np
 
 targets = {
     'linear': lambda x: x[1]/500e-6,
@@ -125,7 +108,8 @@ examples["christmas_tree_comparison.py"] = r"""
 from micrograd import GradientGeneratorOptimizer, ChristmasTree
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt; import numpy as np, os, csv
-from dolfinx import fem; import ufl
+from dolfinx import fem
+import numpy as np
 
 def main():
     os.makedirs('figures', exist_ok=True)
@@ -159,8 +143,8 @@ def main():
     opt.rho.x.array[:] = 1.0; opt.rho.x.scatter_forward()
     rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.02)
     u_h = opt.u_h
-    Q = ufl.assemble(ufl.dot(u_h, ufl.FacetNormal(opt.msh))*ufl.ds(opt.boundary_data["outlet"]))
-    R = 1000.0 / Q
+    Q = float('nan')  # ufl.assemble not available in FEniCSx 0.7
+    R = float('nan')
     rmse = np.sqrt(np.mean((opt.c_h.x.array - opt.target_expr(opt.msh.geometry.x.T))**2))
     tree_R = 1.59e10
     with open("manuscript/macros.tex","w") as f:
