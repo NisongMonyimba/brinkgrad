@@ -46,9 +46,9 @@ def run_convergence_study(target_expr, Lx=2000e-6, Ly=500e-6,
                            move=0.2)
 
         # Metrics from last iteration
-        J_total = opt.history[-1, 2]
-        J_flow = opt.history[-1, 3]    # dissipation component
-        J_conc = opt.history[-1, 4]    # outlet mismatch component
+        J_total = opt.history[-1, 2]   # col 2 = total objective
+        J_flow  = float('nan')          # not tracked separately
+        J_conc  = float('nan')          # not tracked separately
         outlet_rmse = compute_rmse_outlet(opt.c_h, target_expr, opt.boundary_data)
 
         results.append({
