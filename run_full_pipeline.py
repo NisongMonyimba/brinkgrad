@@ -23,9 +23,9 @@ def main():
     os.makedirs('figures', exist_ok=True)
     opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
                                      target_expr=lambda x: x[1] / 500e-6,
-                                     w_f=1e-7, w_c=1e3, V_star=0.5)
+                                     w_f=1e-7, w_c=5e4, V_star=0.5)
     # rho initialised internally by optimizer
-    rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.02)
+    rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.2)
     c_h = opt.c_h; x = opt.msh.geometry.x
     outlet_facets = opt.boundary_data["outlet"]
     dofs = fem.locate_dofs_topological(c_h.function_space, 1, outlet_facets)
@@ -54,9 +54,9 @@ def main():
     os.makedirs('figures', exist_ok=True)
     opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
                                      target_expr=lambda x: np.sin(np.pi*x[1]/500e-6)**2,
-                                     w_f=1e-7, w_c=1e3, V_star=0.5)
+                                     w_f=1e-7, w_c=5e4, V_star=0.5)
     # rho initialised internally by optimizer
-    rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.02)
+    rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.2)
     c_h = opt.c_h; x = opt.msh.geometry.x
     outlet_facets = opt.boundary_data["outlet"]
     dofs = fem.locate_dofs_topological(c_h.function_space, 1, outlet_facets)
@@ -90,9 +90,9 @@ def main():
     fig, axes = plt.subplots(2,2,figsize=(10,8))
     for ax,(name,target) in zip(axes.flat, targets.items()):
         opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
-                                         target_expr=target, w_f=1e-7, w_c=1e3, V_star=0.5)
+                                         target_expr=target, w_f=1e-7, w_c=5e4, V_star=0.5)
         # rho initialised internally by optimizer
-        rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.02)
+        rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.2)
         c_h = opt.c_h; x = opt.msh.geometry.x
         outlet_facets = opt.boundary_data["outlet"]
         dofs = fem.locate_dofs_topological(c_h.function_space, 1, outlet_facets)
@@ -118,9 +118,9 @@ def main():
     os.makedirs('figures', exist_ok=True)
     opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
                                      target_expr=lambda x: x[1]/500e-6,
-                                     w_f=1e-7, w_c=1e3, V_star=0.5)
+                                     w_f=1e-7, w_c=5e4, V_star=0.5)
     # rho initialised internally by optimizer
-    rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.02)
+    rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.2)
     c_h = opt.c_h; x = opt.msh.geometry.x
     outlet_facets = opt.boundary_data["outlet"]
     dofs = fem.locate_dofs_topological(c_h.function_space, 1, outlet_facets)
@@ -142,9 +142,9 @@ def main():
     os.makedirs('manuscript', exist_ok=True)
     opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
                                      target_expr=lambda x: x[1]/500e-6,
-                                     w_f=1e-7, w_c=1e3, V_star=0.5)
+                                     w_f=1e-7, w_c=5e4, V_star=0.5)
     # rho initialised internally by optimizer
-    rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.02)
+    rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.2)
     u_h = opt.u_h
     Q = float('nan')  # ufl.assemble not available in FEniCSx 0.7
     R = float('nan')
