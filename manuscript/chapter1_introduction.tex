@@ -44,8 +44,8 @@ In this paper, we address all three gaps by:
     \item Formulating a density-based topology optimisation problem for coupled Brinkman--convection-diffusion transport, with a multi-objective cost function that simultaneously minimises viscous dissipation and outlet concentration profile mismatch.
     \item Deriving the continuous adjoint equations and implementing them in FEniCSx, enabling efficient gradient computation with respect to all design variables simultaneously, independently of their number.
     \item Publishing the complete pipeline as an open-source Python package (\texttt{micrograd}), including mesh generation, forward and adjoint solvers, optimisation routines (OC and MMA), and post-processing tools.
-    \item Demonstrating that the optimised designs outperform the classic Christmas tree generator by \textbf{99.7\%} in hydraulic resistance (from \(1.77\times10^{11}\) to \(4.48\times10^{8}\)~Pa\(\cdot\)s/m\(^3\)) while maintaining equivalent outlet concentration fidelity
-    (RMSE~$=0.098$; dimensionless, concentration normalised to $[0,1]$).
+    \item Demonstrating that the optimised designs outperform the classic Christmas tree generator by \textbf{\reduction\%} in hydraulic resistance (from \(\treeHydRes\) to \(\hydResTopOpt\)~Pa\(\cdot\)s/m\(^3\)) while maintaining equivalent outlet concentration fidelity
+    (RMSE~$=\rmseTopOpt$; dimensionless, concentration normalised to $[0,1]$).
     \item Showing that the framework can generate non-obvious channel topologies for arbitrary target profiles -- linear, sigmoid, double-peak, and stair-step -- that are impossible to produce with fixed tree-shaped generators.
 \end{enumerate}
 

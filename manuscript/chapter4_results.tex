@@ -13,7 +13,7 @@ The optimised design therefore reduces the hydraulic resistance by \reduction\ \
     \centering
     \includegraphics[width=0.85\textwidth]{../figures/comparison.pdf}
     \caption{Outlet concentration profiles for the linear target.
-             The topology-optimised design (blue solid) approximates the linear target $c_\mathrm{target} = y/L_y$ (red dotted; RMSE~$= 0.098$, evaluated on $N_\mathrm{out}=21$ outlet nodes, Eq.~\ref{eq:rmse}). The Christmas-tree network (green dashed) produces a near-uniform profile (RMSE~$= 0.605$) on the same mesh; the fixed tree topology cannot reproduce an arbitrary linear gradient, confirming the need for topology optimisation.}
+             The topology-optimised design (blue solid) approximates the linear target $c_\mathrm{target} = y/L_y$ (red dotted; RMSE~$= \rmseTopOpt$, evaluated on $N_\mathrm{out}=21$ outlet nodes, Eq.~\ref{eq:rmse}). The Christmas-tree network (green dashed) produces a near-uniform profile (RMSE~$= \treeRMSE$) on the same mesh; the fixed tree topology cannot reproduce an arbitrary linear gradient, confirming the need for topology optimisation.}
     \label{fig:comparison}
 \end{figure}
 
@@ -55,7 +55,7 @@ To demonstrate the flexibility of the framework, we prescribed four distinct tar
 The same optimisation parameters were used for all cases.
 
 Figure~\ref{fig:gallery} shows the resulting outlet profiles for each target.
-The linear and sigmoid targets converge to RMSE values below 0.1, while the staircase target reaches RMSE \(\approx 0.13\).
+The linear and sigmoid targets converge to RMSE values of $\rmseTopOpt$ and $\approx 0.18$ respectively, while the staircase target reaches RMSE \(\approx 0.13\).
 The double-peak target converges to a higher RMSE ($\approx 0.66$), a result of two compounding difficulties. First, the target $c_\mathrm{target} = \sin^2(\pi y/L_y)$ imposes a zero-slope condition at both walls ($\partial c/\partial y = 0$ at $y=0$ and $y=L_y$), which directly conflicts with the Dirichlet inflow conditions; the adjoint forcing consequently receives conflicting gradient signals near both wall boundaries throughout the optimisation. Second, the coarse $20\times5$ mesh provides only $N_{\mathrm{out}}=6$ outlet P1 nodes (Eq.~\ref{eq:rmse}), insufficient to resolve the curvature of a double-peak profile, degrading the sensitivity signal. Both issues are substantially mitigated by (i)~warm-starting from a pre-optimised linear-gradient design and (ii)~refining to at least $80\times20$ elements. Supplementary Information~S12 demonstrates that this two-stage strategy reduces the double-peak RMSE to $\approx 0.31$.
 
 \begin{figure}[t]

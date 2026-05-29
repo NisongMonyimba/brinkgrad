@@ -33,7 +33,7 @@ The OC update formula reads
     \qquad B = -\frac{\mathrm{d}J/\mathrm{d}\rho}{\Lambda},
     \label{eq:oc}
 \end{equation}
-with damping exponent \(\eta = 0.5\) and a move limit of \(0.02\)--\(0.2\) to prevent divergence.
+with damping exponent \(\eta = 0.5\) and a move limit of \(0.2\) (all main results) to prevent divergence.
 The Lagrange multiplier is determined by bisection until the volume constraint is satisfied to a tolerance of \(10^{-4}\).
 
 For comparison, the Method of Moving Asymptotes (MMA)~\cite{svanberg1987} is also implemented via the \texttt{gcma} Python package; both update rules are provided in the code, and a convergence comparison is included in the Supplementary Information (S4).
@@ -75,7 +75,7 @@ every 20--40 iterations, gradually driving the design from grey to near-binary w
 A third continuation is applied to the inverse permeability upper bound \(\alpha_{\max}\).
 The value is ramped linearly from \(10^3\) to \(10^8\) over the first 60\% of the total iterations:
 \begin{equation}
-    \alpha_{\max} = 10^3 + (10^8 - 10^3)\cdot\min\!\left(1,\; \frac{\text{step}}{0.6\times \text{max\_iter}}\right).
+    \alpha_{\max}(t) = 10^{\,3+6t}, \qquad t = \min\!\left(1,\;\frac{\text{step}}{\text{max\_iter}}\right),
     \label{eq:alpha_cont}
 \end{equation}
 This ramping ensures that fluid can flow through intermediate-density regions early in the optimisation, allowing the concentration field to develop and provide non-zero adjoint forcing.

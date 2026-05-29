@@ -30,8 +30,8 @@ Following Borrvall \& Petersson~\cite{borrvall2003}, we use the convex interpola
     \alpha(\rho) = \alpha_{\min} + (\alpha_{\max} - \alpha_{\min})\,\frac{1-\rho}{1+\rho},
     \label{eq:alpha}
 \end{equation}
-with \(\alpha_{\min}=10^{-3}\) (residual permeability to keep the problem well-posed) and \(\alpha_{\max}=10^{8}\) (penalising solid regions).
-In practice, \(\alpha_{\max}\) is ramped from \(10^{3}\) to \(10^{8}\) during the optimisation (a continuation strategy) to avoid early stagnation in an all-solid local minimum.
+with \(\alpha_{\min}=10^{-4}\) (residual permeability to keep the problem well-posed) and \(\alpha_{\max}\) ramped from \(10^{3}\) to \(10^{9}\) during optimisation (see Section~\ref{sec:methods}).
+In practice, \(\alpha_{\max}\) is ramped from \(10^{3}\) to \(10^{9}\) during the optimisation (a continuation strategy) to avoid early stagnation in an all-solid local minimum.
 
 Boundary conditions for the velocity are no-slip on the walls (\(\mathbf{u}=\mathbf{0}\)) and a prescribed pressure on the inlets and outlet:
 \begin{equation}
@@ -156,7 +156,7 @@ is
 \end{equation}
 %
 confirming that solid regions are effectively impermeable.
-In fluid regions ($\alpha\!\to\!\alpha_{\min}\!\approx\!10^{-4}$) the
+In fluid regions ($\alpha\!\to\!\alpha_{\min}=10^{-4}$) the
 Darcy number is $\Da\sim\mathcal{O}(1)$, recovering free Stokes flow.
 
 \paragraph{Summary and modelling hierarchy.}
