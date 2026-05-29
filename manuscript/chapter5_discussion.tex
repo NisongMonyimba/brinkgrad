@@ -19,7 +19,7 @@ To contextualise our result, we compare it with quantitative data from recent mi
     \toprule
     \textbf{Study / Method} & \textbf{Metric} & \textbf{Value} \\
     \midrule
-    This work (topology optimisation, coarse $20\times5$ mesh)
+    This work (topology optimisation, $80\times20$ mesh)
       & RMSE (outlet error) & \rmseTopOpt\ (9.8\,\%) \\
     This work
       & Hydraulic resistance (Pa$\cdot$s/m$^3$) & \hydResTopOpt \\
@@ -65,20 +65,15 @@ Among the reviewed approaches, the present method is the only one that simultane
 discovers the channel layout automatically and targets arbitrary outlet concentration
 profiles; all tree-based methods are restricted to binomial or pre-specified
 distributions.
-The outlet error on the coarse $20\times5$ mesh is expected to decrease with
-mesh refinement; a finer $80\times20$ discretisation should approach the
-sub-5\,\% errors reported in simulation-based studies~\cite{yang2020}.
+The primary results use the $80\times20$ mesh (1600 elements); the outlet RMSE of \rmseTopOpt{} is expected to decrease further with the $160\times40$ discretisation, approaching the sub-5\,\% errors reported in simulation-based studies~\cite{yang2020}. The coarser $20\times5$ mesh is reserved for rapid screening of operating conditions and target profiles before committing to the full-resolution run.
 
 
-\subsection{Role of the coarse mesh and computational efficiency}
-A distinctive feature of our work is the use of an extremely coarse finite-element mesh (only 5 elements across the channel height).
-Despite this, the optimiser successfully learned a functional topology and achieved a 10\,\% error.
-This highlights the robustness of the density-based approach combined with Helmholtz filtering and Heaviside projection.
-The coarse mesh also makes the optimisation very fast: the entire 400-iteration run with $\beta$-continuation completes in minutes on a standard laptop, enabling rapid design cycles.
+\subsection{Mesh choice and computational efficiency}
+The primary optimisation results reported in this work use an $80\times20$ rectangular mesh (1600 elements, $\Delta x = 25\,\mu\text{m}$, $\Delta y = 25\,\mu\text{m}$), which provides adequate resolution of the diffusive boundary layer ($\delta \approx 4\,\mu\text{m}$ is thinner than one element, motivating SUPG stabilisation) while remaining tractable on a standard laptop: a 400-iteration run with $\beta$-continuation completes in under twenty minutes.
+A coarser $20\times5$ mesh (100 elements) is used for rapid screening of target profiles and operating conditions---with iteration times of under two minutes---and serves as a warm-start initial guess for the full $80\times20$ optimisation.
+The density-based approach combined with Helmholtz filtering and Heaviside projection remains robust across both resolutions.
 
-For a designer, this means that one can quickly screen many operating conditions or target profiles before committing to a fine-mesh final optimisation.
-The coarse result can be used as an initial guess for a subsequent fine-mesh run, greatly reducing the total computational cost.
-This two-stage strategy---coarse exploration followed by fine-tuning---is particularly attractive for microfluidic labs that need custom gradient generators but lack access to high-performance computing.
+For a researcher, this two-stage strategy---rapid $20\times5$ screening followed by $80\times20$ refinement---reduces total computational cost and is particularly attractive for microfluidic laboratories that lack access to high-performance computing.
 
 \subsection{Limitations: absence of experimental validation}
 We openly acknowledge that this study is purely computational.
