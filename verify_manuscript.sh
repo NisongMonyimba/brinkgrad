@@ -252,7 +252,7 @@ has "docker run\|Docker" manuscript/chapter3_numerical_methods.tex \
   && ok "Docker one-liner in Methods" \
   || fail "Docker one-liner missing from Methods"
 if grep -rq "XXXXXXX" manuscript/*.tex 2>/dev/null; then
-  warn "Zenodo DOI placeholder XXXXXXX — register at zenodo.org before submission"
+  warn "Zenodo: register DOI at zenodo.org before final submission (not a blocker)"
 elif has "zenodo" manuscript/chapter7_data_availability.tex; then
   ok "Zenodo DOI present in data availability"
 else
@@ -277,7 +277,7 @@ hdr "19. Known grammar issues"
 
 # ── 20. OUTPUT ────────────────────────────────────────────────────────────────
 hdr "20. Output"
-WIN=$(wslpath -w "$(pwd)/main.pdf" 2>/dev/null || echo "$(pwd)/main.pdf")
+WIN=$(wslpath -w "$(pwd)/main.pdf" 2>/dev/null | tr -d "\r\n" || echo "$(pwd)/main.pdf")
 ok "PDF: $WIN"
 ok "Last modified: $(date -r main.pdf '+%Y-%m-%d %H:%M' 2>/dev/null)"
 ok "${PAGES:-?} pages, ${KB} KB"
