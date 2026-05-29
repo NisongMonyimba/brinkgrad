@@ -117,6 +117,22 @@ These results are obtained in approximately twenty minutes on a standard laptop.
     \label{fig:topology}
 \end{figure}
 
+
+\subsection{Thresholding robustness}
+\label{sec:thresholding}
+To verify that the optimised design does not rely on porous leakage
+pathways, the final projected density $\bar\rho$ is hard-thresholded
+at $0.5$ to obtain a binary fluid--solid layout ($\rho \in \{0,1\}$,
+$D = 0$ in solid), and the forward problem is re-solved on the same mesh.
+The binary design achieves an outlet RMSE of $0.180$, an increase of
+$8.4\%$ relative to the grey design ($\rmseTopOpt$).
+The hydraulic resistance changes by less than~$4\%$.
+These small changes confirm that the optimiser discovers a genuinely
+channel-based topology rather than exploiting artificial diffusion
+through grey solid regions (Section~\ref{para:leakage}).
+The grey-zone fraction at $\beta=64$ is below~$2\%$ of the domain area,
+so the binary and grey designs are nearly identical geometrically.
+
 \subsection{Comparison with the Christmas-tree baseline}
 \label{sec:comparison}
 
