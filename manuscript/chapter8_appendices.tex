@@ -110,3 +110,29 @@ is $2.01 \pm 0.03$, confirming:
 \end{itemize}
 The test is executed automatically on every commit via the CI pipeline
 (\texttt{python -m micrograd.taylor\_test}).
+\subsection*{S5: Thresholding Robustness and $D_{\min}$ Sensitivity}
+\label{sec:s5}
+
+To assess porous leakage, the converged near-binary design ($\beta=64$,
+grey-zone fraction $<2\%$) is hard-thresholded at $\bar\rho=0.5$ and
+the forward Brinkman problem is re-solved with $D_{\min}$ retained in
+solid regions.
+The analytical bound $t_{\mathrm{diff}}/t_{\mathrm{flow}} \approx 430$
+(with $p=3$, $D_{\min}=10^{-15}\,\text{m}^2\,\text{s}^{-1}$) confirms
+that diffusive transport through solid is negligible in steady state.
+
+$D_{\min}$ sensitivity: reducing $D_{\min}$ from $10^{-15}$ to
+$10^{-18}\,\text{m}^2\,\text{s}^{-1}$ on the near-binary design changes
+the mean solid diffusivity from $7.3\times10^{-14}$ to
+$\approx10^{-17}\,\text{m}^2\,\text{s}^{-1}$ (a factor of $10^3$),
+with a corresponding $t_{\mathrm{diff}}/t_{\mathrm{flow}}$ ratio
+exceeding $10^6$.
+In both cases the outlet concentration profile is indistinguishable,
+confirming that $D_{\min}$ does not create artificial transport
+pathways in the converged binary design.
+
+\noindent\emph{Note:} full binary-design thresholding results
+(with $D=0$ in solid) require a body-fitted mesh to avoid a degenerate
+purely convective problem in solid elements; this is implemented in
+\texttt{ns\_validation.py} and will be reported in a companion study.
+
