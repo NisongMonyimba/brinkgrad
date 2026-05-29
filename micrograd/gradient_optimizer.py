@@ -30,12 +30,11 @@ class GradientGeneratorOptimizer:
         self.V_star_final = V_star
         self.r_filter = 2 * (Lx / nx)
 
-    def run(self, max_iter=400, beta_continuation=(1,2,4,8,16), move=0.05,
+    def run(self, max_iter=400, beta_continuation=(1,2,4,8,16), move=0.2,
             V_star_schedule=None, method='oc', snapshot_iterations=None):
         method = fallback_to_oc(method)
         if V_star_schedule is None:
-            half = max_iter // 2
-            V_star_schedule = [(0, 0.7), (half, self.V_star_final)]
+            V_star_schedule = [(0, self.V_star_final), (max_iter-1, self.V_star_final)]
         sched = np.array(V_star_schedule)
         V_seq = np.interp(np.arange(max_iter), sched[:,0], sched[:,1])
         history = []
