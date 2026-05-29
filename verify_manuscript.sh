@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # verify_manuscript.sh — full manuscript health check
 # Run from ~/micrograd: bash verify_manuscript.sh
-set -euo pipefail
+set -uo pipefail
 cd "$(dirname "$0")"
 
 PASS=0; FAIL=0; WARN=0
@@ -30,7 +30,7 @@ ok "Compile finished"
 
 # ── 2. FATAL ERRORS ──────────────────────────────────────────────────────────
 hdr "2. LaTeX errors  (expect 0)"
-N=$(grep -c "^!" manuscript/main.log 2>/dev/null || echo 0)
+N=$(grep -c "^!" manuscript/main.log 2>/dev/null | awk -F: '{s+=$NF} END{print s+0}')
 [[ "$N" -eq 0 ]] && ok "0 fatal errors" || {
     fail "$N fatal error(s)"
     grep "^!" manuscript/main.log | head -10 | sed 's/^/      /'
@@ -38,7 +38,7 @@ N=$(grep -c "^!" manuscript/main.log 2>/dev/null || echo 0)
 
 # ── 3. UNDEFINED REFERENCES ──────────────────────────────────────────────────
 hdr "3. Undefined citations / labels  (expect 0)"
-N=$(grep -c "LaTeX Warning:.*undefined" manuscript/main.log 2>/dev/null || echo 0)
+N=$(grep "LaTeX Warning:.*undefined" manuscript/main.log 2>/dev/null | wc -l | tr -d " ")
 [[ "$N" -eq 0 ]] && ok "0 undefined references" || {
     fail "$N undefined reference(s)"
     grep "LaTeX Warning:.*undefined" manuscript/main.log | sed 's/^/      /'
@@ -46,7 +46,7 @@ N=$(grep -c "LaTeX Warning:.*undefined" manuscript/main.log 2>/dev/null || echo 
 
 # ── 4. BIBTEX ────────────────────────────────────────────────────────────────
 hdr "4. BibTeX  (expect 0 warnings)"
-N=$(grep -c "^Warning" /tmp/ms_bibtex.log 2>/dev/null || echo 0)
+N=$(grep -c "^Warning" /tmp/ms_bibtex.log 2>/dev/null | awk -F: '{s+=$NF} END{print s+0}')
 [[ "$N" -eq 0 ]] && ok "0 BibTeX warnings" || {
     fail "$N BibTeX warning(s)"
     grep "^Warning" /tmp/ms_bibtex.log | sed 's/^/      /'
@@ -86,7 +86,7 @@ done < <(grep -h "includegraphics" manuscript/chapter*.tex 2>/dev/null \
 # ── 8. REQUIRED SECTIONS ─────────────────────────────────────────────────────
 hdr "8. Required sections"
 declare -A SECTIONS=(
-    ["Abstract"]="abstract.tex"
+    ["Brinkman-penalised"]="abstract.tex"
     ["Mathematical model"]="chapter2_mathematical_model.tex"
     ["Nondimensional analysis"]="chapter2_mathematical_model.tex"
     ["Finite element discretisation"]="chapter3_numerical_methods.tex"
@@ -94,8 +94,8 @@ declare -A SECTIONS=(
     ["Results"]="chapter4_results.tex"
     ["Discussion"]="chapter5_discussion.tex"
     ["Conclusion"]="chapter6_conclusion.tex"
-    ["Data availability"]="chapter7_data_availability.tex"
-    ["CI workflow"]="chapter3_numerical_methods.tex"
+    ["micrograd"]="chapter7_data_availability.tex"
+    ["GitHub Actions"]="chapter3_numerical_methods.tex"
 )
 for section in "${!SECTIONS[@]}"; do
     file="manuscript/${SECTIONS[$section]}"
@@ -169,7 +169,7 @@ grep -q "All results.*20.times.5\|All results.*coarse" manuscript/abstract.tex 2
 hdr "14. Recent literature coverage  (2021–2026)"
 RECENT_OK=0
 for year in 2021 2022 2023 2024 2025; do
-    N=$(grep -c "year.*=.*{$year}" manuscript/references.bib 2>/dev/null || echo 0)
+    N=$(grep -c "year.*=.*{'$year'}" manuscript/references.bib 2>/dev/null | awk -F: '{s+=$NF} END{print s+0}')
     [[ "$N" -gt 0 ]] && { ok "$year: $N reference(s)"; ((RECENT_OK++)); }  \
                      || warn "$year: 0 references"
 done
