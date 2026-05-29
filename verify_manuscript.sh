@@ -67,7 +67,7 @@ hdr "8. Required sections"
 check_section() { has "$1" "manuscript/$2" && ok "$3" || fail "$3 — not found in $2"; }
 check_section "micrograd"                 "abstract.tex"                     "Abstract"
 check_section "Nondimensional analysis"   "chapter2_mathematical_model.tex"  "Nondimensional analysis"
-check_section "adjoint sensitivity"       "chapter2_mathematical_model.tex"  "Adjoint derivation"
+check_section "Adjoint"                   "chapter2_mathematical_model.tex"  "Adjoint derivation"
 check_section "Finite element"            "chapter3_numerical_methods.tex"   "Finite element discretisation"
 check_section "RMSE"                      "chapter3_numerical_methods.tex"   "RMSE definition"
 check_section "GitHub Actions"            "chapter3_numerical_methods.tex"   "CI / reproducibility"
