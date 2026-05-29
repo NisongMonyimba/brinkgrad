@@ -93,6 +93,63 @@ The Brinkman--Stokes model is a well-established surrogate for creeping flow at 
 
 \paragraph{Dimensional note.}
 All simulations are two-dimensional; the flow rate $Q$ and hydraulic resistance $R = \Delta p / Q$ are therefore reported per unit channel depth (units: m$^2$\,s$^{-1}$ and Pa\,s\,m$^{-2}$, respectively). Three-dimensional values follow by multiplying $Q$ by the channel depth $L_z = 100\,\mu$m (as assumed in the Reynolds-number calculation, Section~\ref{sec:nondim}), giving $Q_{\mathrm{3D}} = Q \cdot L_z$ and $R_{\mathrm{3D}} = R / L_z$.
+
+\subsection{Definition and reporting of error metrics}
+\label{sec:metrics}
+
+To prevent ambiguity, we state precisely how the outlet RMSE is defined,
+computed, and reported throughout this paper.
+
+\paragraph{Mesh.}
+All reported RMSE values use the primary \(80\times20\) structured mesh
+(1600 triangular elements, \(N_{\mathrm{out}} = 21\) uniformly spaced
+P1 outlet nodes at \(\Delta y = 25\,\mu\)m).
+Results on the coarse \(20\times5\) screening mesh are always explicitly
+labelled as such and are never used for the main performance claims.
+
+\paragraph{Iteration.}
+The optimiser runs for exactly 400 iterations with \(\beta\)-continuation
+(\(\beta \in \{1,2,4,8,16,32,64\}\)) and tracks the best-objective
+design at each step.
+The RMSE is evaluated on the concentration field \(c_h\) re-computed
+by a fresh forward solve applied to the \emph{best-objective} density
+field \(\bar\rho^*\), not the last-iteration field.
+This is implemented explicitly in the code (line~91 of
+\texttt{gradient\_optimizer.py}): \texttt{self.c\_h = best\_c\_h}.
+
+\paragraph{Topology state.}
+The density field \(\bar\rho\) is the Heaviside-projected field at
+\(\beta = 64\) (the final sharpness value).
+RMSE is evaluated \emph{before} hard thresholding at \(\bar\rho = 0.5\);
+the projected density with \(\beta = 64\) is already near-binary
+(grey volume below \(2\%\)).
+
+\paragraph{Concentration normalisation.}
+Both \(c_h\) and \(c_{\mathrm{target}}\) are dimensionless, normalised
+to \([0,1]\) with \(0\) = pure solvent (inlet~1) and \(1\) = pure solute
+(inlet~2).
+RMSE is therefore dimensionless; a value of \(\rmseTopOpt\) corresponds
+to \(\rmseTopOptPP\,\)pp of the full concentration range.
+
+\paragraph{Nodal evaluation, no interpolation.}
+RMSE is evaluated directly at the \(N_{\mathrm{out}} = 21\) P1 finite
+element nodes on \(\Gamma_{\mathrm{out}}\) (\(x = L_x\)).
+No additional interpolation, smoothing, or resampling is applied.
+The formula is Eq.~\eqref{eq:rmse}.
+
+\paragraph{Brinkman model only.}
+All reported RMSE values are from the Brinkman--Stokes forward model.
+Full Navier--Stokes validation on a body-fitted mesh is planned as
+a future study (Section~\ref{sec:ns_validation}).
+
+\paragraph{Canonical value.}
+The canonical RMSE for the linear gradient target on the primary
+\(80\times20\) mesh is \(\rmseTopOpt\) (\(\rmseTopOptPP\,\)pp).
+This is the value stored in \texttt{macros.tex} and used in every
+figure, table, and prose statement in this paper.
+Any earlier value of 0.098 cited in prior drafts referred to a
+different mesh resolution and is superseded by this result.
+
 \paragraph{Outlet RMSE definition.}
 \label{def:rmse}
 The outlet concentration profile is compared to the prescribed target via the
