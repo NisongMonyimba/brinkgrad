@@ -11,7 +11,7 @@ from .compatibility import fallback_to_oc
 
 class GradientGeneratorOptimizer:
     def __init__(self, Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
-                 target_expr=None, w_f=1e-3, w_c=5e1, V_star=0.5):
+                 target_expr=None, w_f=1e-7, w_c=5e4, V_star=0.5):
         self.Lx, self.Ly = Lx, Ly
         self.msh, self.boundary_data = create_rectangular_mesh(Lx, Ly, nx, ny)
         self.V_rho = fem.functionspace(self.msh, ("Lagrange", 1))
@@ -30,7 +30,7 @@ class GradientGeneratorOptimizer:
         self.V_star_final = V_star
         self.r_filter = 2 * (Lx / nx)
 
-    def run(self, max_iter=400, beta_continuation=(1,2,4,8,16), move=0.05,
+    def run(self, max_iter=80, beta_continuation=(1,2,4,8,16,32,64), move=0.2,
             V_star_schedule=None, method='oc', snapshot_iterations=None):
         method = fallback_to_oc(method)
         if V_star_schedule is None:
@@ -39,7 +39,7 @@ class GradientGeneratorOptimizer:
         sched = np.array(V_star_schedule)
         V_seq = np.interp(np.arange(max_iter), sched[:,0], sched[:,1])
         history = []
-        n_betas = len(beta_continuation); iters_per_beta = min(80, max_iter // n_betas)
+        n_betas = len(beta_continuation); iters_per_beta = max_iter // n_betas
         mma_updater = None
         if method == 'mma':
             mma_updater = MMAUpdater(len(self.rho.x.array), m=1)
@@ -54,7 +54,7 @@ class GradientGeneratorOptimizer:
             beta = beta_continuation[beta_idx]
             # Alpha-max continuation: log ramp 1e3→1e9 over all iterations
             # log ramp keeps alpha low (≤1e5) for first ~40% of iters
-            _ut.alpha_max = 1e5  # fixed: sweep showed 1e5 maximises OC signal
+            _ut.alpha_max = 10 ** (3 + 6 * min(1.0, step / max_iter))
 
             helmholtz_filter(self.rho, self.rho_filt, self.V_rho, self.r_filter)
             heaviside_projection(self.rho_filt, self.rho_phys, beta)

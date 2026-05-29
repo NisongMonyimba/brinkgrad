@@ -126,11 +126,11 @@ if __name__ == "__main__":
     opt = GradientGeneratorOptimizer(
         Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
         target_expr=lambda x: x[1]/500e-6,
-        w_f=1e-3, w_c=5e1, V_star=0.5
+        w_f=1e-7, w_c=5e4, V_star=0.5
     )
     opt.run(max_iter=400,
-            beta_continuation=[1,2,4,8,16],
-            move=0.05)
+            beta_continuation=[1,2,4,8,16,32,64],
+            move=0.2)
 
     results = run_binary_validation(opt, verbose=True)
     pathlib.Path("/tmp/binary_validation.json").write_text(

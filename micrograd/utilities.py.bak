@@ -5,10 +5,7 @@ import numpy as np
 from petsc4py import PETSc
 
 alpha_min=1e-4; alpha_max=1e3; D_min=1e-15; p_simp=3.0  # alpha_max ramped in optimizer
-def alpha(r):
-    # floor prevents RMSE=inf when binary_validation sets alpha_min=0
-    _raw = alpha_min + (alpha_max - alpha_min) * (1.0 - r) / (1.0 + r)
-    return ufl.max_value(_raw, 1e-4)
+def alpha(r): return alpha_min + (alpha_max-alpha_min)*(1.0-r)/(1.0+r)
 def D_eff(r, Df=1e-9): return D_min + (Df-D_min)*r**p_simp
 
 def helmholtz_filter(rin, rout, V, rf):
