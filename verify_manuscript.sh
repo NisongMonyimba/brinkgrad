@@ -34,11 +34,12 @@ if [[ "$SKIP_COMPILE" -eq 0 ]]; then
 else
   warn "Compile skipped (--no-compile)"
 fi
-LOG=manuscript/main.log
+LOG="$(pwd)/manuscript/main.log"
 
 # ── 2. LATEX ERRORS ───────────────────────────────────────────────────────────
 hdr "2. LaTeX fatal errors  (expect 0)"
-N=$(grep -c "^!" "$LOG" 2>/dev/null || echo 0)
+  N=$(grep "^!" "$LOG" 2>/dev/null | wc -l | tr -d " \n")
+")
 if [[ "$N" -eq 0 ]]; then ok "0 fatal errors"
 else
   fail "$N fatal error(s)"
@@ -47,7 +48,8 @@ fi
 
 # ── 3. UNDEFINED REFS ─────────────────────────────────────────────────────────
 hdr "3. Undefined citations / labels  (expect 0)"
-N=$(grep -c "LaTeX Warning:.*undefined" "$LOG" 2>/dev/null || echo 0)
+N=$(grep "LaTeX Warning:.*undefined" "$LOG" 2>/dev/null | wc -l | tr -d " 
+")
 if [[ "$N" -eq 0 ]]; then ok "0 undefined references"
 else
   fail "$N undefined reference(s)"
@@ -56,7 +58,8 @@ fi
 
 # ── 4. BIBTEX ─────────────────────────────────────────────────────────────────
 hdr "4. BibTeX warnings  (expect 0)"
-N=$(grep -c "^Warning" /tmp/ms_bib.log 2>/dev/null || echo 0)
+N=$(grep "^Warning" /tmp/ms_bib.log 2>/dev/null | wc -l | tr -d " 
+")
 if [[ "$N" -eq 0 ]]; then ok "0 BibTeX warnings"
 else
   fail "$N BibTeX warning(s)"
@@ -282,14 +285,19 @@ has "dolfinx" .github/workflows/ci.yml \
 has "docker run\|Docker" manuscript/chapter3_numerical_methods.tex \
   && ok "Docker one-liner present in §Methods" \
   || fail "Docker one-liner missing from §Methods"
-has "zenodo\|XXXXXXX" manuscript/chapter3_numerical_methods.tex \
-  && { ! has "XXXXXXX" manuscript/chapter3_numerical_methods.tex \
-       && ok "Zenodo DOI present (no placeholder)" \
-       || warn "Zenodo DOI still contains XXXXXXX placeholder"; } \
-  || warn "Zenodo DOI not mentioned in §Methods"
-has "environment.yaml\|requirements" . \
-  && ok "Environment lockfile mentioned" \
-  || warn "No environment lockfile mentioned"
+if has "XXXXXXX" manuscript/chapter7_data_availability.tex \
+    || has "XXXXXXX" manuscript/chapter3_numerical_methods.tex; then
+  warn "Zenodo DOI still contains XXXXXXX placeholder — register at zenodo.org"
+elif   if grep -rq "XXXXXXX" manuscript/*.tex 2>/dev/null; then
+    warn "Zenodo DOI placeholder XXXXXXX — register at zenodo.org before submission"
+  elif grep -rq "zenodo" manuscript/chapter7_data_availability.tex 2>/dev/null; then
+    ok "Zenodo DOI present in data availability section"
+  else
+    warn "Zenodo DOI not found in data availability section"
+  fi
+[[ -f "environment.yaml" || -f "requirements.txt" || -f "environment.yml" ]] \
+  && ok "environment.yaml / requirements.txt present" \
+  || warn "No environment lockfile found (add environment.yaml)"
 
 # ── 19. GRAMMAR / LANGUAGE CHECKS ────────────────────────────────────────────
 hdr "19. Known grammar issues"
@@ -308,7 +316,7 @@ has "Jeon.*2000\|2000.*Jeon" manuscript/chapter1_introduction.tex \
 
 # ── 20. WINDOWS PDF PATH ─────────────────────────────────────────────────────
 hdr "20. Output"
-WIN=$(wslpath -w ~/micrograd/main.pdf 2>/dev/null || echo "~/micrograd/main.pdf")
+WIN=$(wslpath -w "$(pwd)/main.pdf" 2>/dev/null | tr -d "\n" || echo "$(pwd)/main.pdf")
 MTIME=$(date -r main.pdf '+%Y-%m-%d %H:%M' 2>/dev/null || echo "unknown")
 ok "PDF: $WIN"
 ok "Last modified: $MTIME"

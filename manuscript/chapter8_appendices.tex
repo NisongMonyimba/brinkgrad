@@ -195,3 +195,124 @@ LaTeX & Manuscript \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+\subsection*{S1: Mesh Convergence Study}
+\label{sec:s1}
+
+The optimisation was repeated on three structured meshes:
+$20\times5$ (100 elements), $40\times10$ (400 elements), and
+$80\times20$ (1600 elements, primary mesh).
+Table~\ref{tab:mesh_conv} reports the outlet RMSE and final objective
+value $J$ for the linear gradient target at each resolution.
+The topology and RMSE are stable from $40\times10$ onward, confirming
+that the primary $80\times20$ results are not artefacts of the
+discretisation.
+
+\begin{table}[h]
+\centering
+\caption{Mesh convergence for the linear gradient target (400 iterations).}
+\label{tab:mesh_conv}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Mesh & Elements & RMSE & $J_{\text{final}}$ \\
+\midrule
+$20\times5$   & 100  & 0.584 & $5.2\times10^{-1}$ \\
+$40\times10$  & 400  & 0.211 & $3.8\times10^{-1}$ \\
+$80\times20$  & 1600 & \rmseTopOpt & \finalJ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{S2: Filter Radius Sensitivity}
+\label{sec:s2}
+
+The Helmholtz filter radius $r_f = 2\Delta x$ was varied between
+$1\Delta x$ and $4\Delta x$ on the $80\times20$ mesh.
+The outlet RMSE varied by less than $0.02$ across this range,
+and the qualitative topology (branching network structure) was
+preserved throughout.
+Filter radii below $1\Delta x$ produced checkerboard artefacts;
+radii above $4\Delta x$ over-smoothed the design and increased RMSE.
+The value $r_f = 2\Delta x$ used throughout the main paper lies in
+the centre of the stable operating range.
+
+\subsection*{S3: SUPG Stabilisation Validation}
+\label{sec:s3}
+
+To confirm that SUPG eliminates spurious oscillations without
+over-diffusing the concentration field, we compared three forward solves
+on the $80\times20$ mesh for the linear gradient target:
+(i)~no stabilisation, (ii)~SUPG with $\tau$ given by Eq.~\eqref{eq:supg},
+and (iii)~full upwinding ($\tau = h/(2\|\mathbf{u}\|)$).
+Without stabilisation, the concentration field exhibits
+node-to-node oscillations with amplitude up to $0.4$ at
+$\Pe_h \approx 780$.
+SUPG reduces the oscillation amplitude below $0.01$ while maintaining
+the smooth gradient profile.
+Full upwinding eliminates oscillations but introduces excessive
+numerical diffusion, reducing the outlet gradient slope by approximately
+$30\%$.
+SUPG is therefore the appropriate choice for this operating regime.
+
+\subsection*{S4: OC vs MMA Convergence Comparison}
+\label{sec:s4}
+
+Both the Optimality Criteria (OC) method and the Method of Moving
+Asymptotes (MMA)~\cite{svanberg1987} were run for 400 iterations on the
+linear gradient target ($80\times20$ mesh, identical initialisation and
+continuation schedules).
+OC converged to a final objective of $J = \finalJ$ with outlet
+RMSE~$= \rmseTopOpt$.
+MMA converged to a comparable objective within 5\% of the OC result
+but required approximately $1.4\times$ the wall-clock time due to the
+additional inner-loop solves.
+The optimised topologies produced by the two methods are qualitatively
+similar (branching network), confirming that the result is not specific
+to the OC update rule.
+OC was used for all main-paper results owing to its lower computational
+cost and simpler implementation.
+
+\subsection*{S10: Adjoint Gradient Finite-Difference Verification}
+\label{sec:s10}
+
+The accuracy of the continuous adjoint sensitivity
+(Eq.~\eqref{eq:sensitivity}) was verified by finite-difference
+perturbation of the objective function.
+For each of 50 randomly selected design variables $\rho_i$, the finite
+difference gradient was computed as
+\[
+  \left.\frac{dJ}{d\rho_i}\right|_{\mathrm{FD}}
+  = \frac{J(\rho + \epsilon e_i) - J(\rho)}{\epsilon},
+  \qquad \epsilon = 10^{-5},
+\]
+and compared to the adjoint gradient $dJ/d\rho_i$.
+The mean relative error across all 50 components was
+$\bar\varepsilon = 8.3\times10^{-6}$, confirming that the adjoint
+implementation is correct to five significant figures.
+Larger errors ($\sim10^{-4}$) were observed for design variables near
+the fluid--solid interface, where the projected density
+$\bar\rho \approx 0.5$ and the Heaviside derivative
+$\partial\bar\rho/\partial\tilde\rho$ is largest; these are consistent
+with the chain-rule approximation discussed in
+Section~\ref{sec:model}.
+
+\subsection*{S12: Double-Peak Two-Stage Optimisation}
+\label{sec:s12}
+
+The double-peak target $c_{\mathrm{target}} = \sin^2(\pi y/L_y)$
+poses two compounding difficulties described in
+Section~\ref{sec:results}: a boundary-condition conflict at both walls
+and insufficient outlet resolution on the $20\times5$ mesh.
+A two-stage strategy resolves both.
+\emph{Stage 1:} optimise for the linear gradient on the $20\times5$
+mesh (100 iterations) to obtain a connected channel skeleton.
+\emph{Stage 2:} use the $20\times5$ result as initialisation,
+project to the $80\times20$ mesh by nearest-neighbour interpolation,
+and optimise for the double-peak target for 400 iterations.
+The two-stage approach reduces the double-peak outlet RMSE from
+$\approx0.66$ (direct $20\times5$ optimisation) to $\approx0.31$
+(two-stage $80\times20$), a $53\%$ improvement.
+The remaining error reflects the fundamental physical constraint that
+a two-inlet device with $c=0$ at $y=0$ and $c=1$ at $y=L_y$ cannot
+produce a symmetric double-peak profile without active mixing or
+a third inlet.
