@@ -1,0 +1,4 @@
+mesh,J_total,J_flow,J_conc,outlet_rmse
+40×10,8.333781e-05,nan,nan,5.916075e-01
+80×20,6.672183e-05,nan,nan,5.212413e-01
+160×40,1.203571e-05,nan,nan,2.246274e-01
