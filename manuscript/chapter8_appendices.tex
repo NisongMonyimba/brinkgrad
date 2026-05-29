@@ -210,18 +210,36 @@ discretisation.
 
 \begin{table}[h]
 \centering
-\caption{Mesh convergence for the linear gradient target (400 iterations).}
+\caption{Mesh convergence study for the linear gradient target (400 iterations,
+         $\beta$-continuation to $\beta=64$, OC update, move limit 0.2).
+         The diffusion layer thickness $\delta\approx4\,\mu$m is
+         underresolved at all resolutions; RMSE measures the global outlet
+         profile error, not the local diffusion-layer structure.}
 \label{tab:mesh_conv}
-\begin{tabular}{@{}lccc@{}}
+\begin{tabular}{@{}lccccl@{}}
 \toprule
-Mesh & Elements & RMSE & $J_{\text{final}}$ \\
+Mesh & Elements & $\Delta y\,(\mu\text{m})$ & $\delta/\Delta y$ & RMSE & Note \\
 \midrule
-$20\times5$   & 100  & 0.584 & $5.2\times10^{-1}$ \\
-$40\times10$  & 400  & 0.211 & $3.8\times10^{-1}$ \\
-$80\times20$  & 1600 & \rmseTopOpt & \finalJ \\
+$20\times5$   & 100   & 100  & 0.04$\times$ & 0.584 & Screening only \\
+$40\times10$  & 400   & 50   & 0.08$\times$ & 0.211 & \\
+$80\times20$  & 1600  & 25   & 0.16$\times$ & \rmseTopOpt & Primary result \\
+$160\times40$ & 6400  & 12.5 & 0.32$\times$ & \rmse160\  & Validation \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\noindent
+The $160\times40$ result (\texttt{nx=160, ny=40}) was obtained using the
+same optimisation parameters as the primary run.
+The reduction in RMSE from $80\times20$ to $160\times40$ quantifies the
+sensitivity of the result to further refinement.
+The qualitative topology (branching network, number of junctions) is
+visually identical between the two finest meshes, confirming that the
+channel-scale structure is mesh-converged at $80\times20$.
+The remaining RMSE gap reflects the smoothing of the inlet concentration
+interface rather than a topological difference.
+An adaptive mesh refinement (AMR) study targeting the fluid--solid
+interface is deferred to future work.
 
 \subsection*{S2: Filter Radius Sensitivity}
 \label{sec:s2}

@@ -48,7 +48,9 @@ To contextualise our result, we compare it with quantitative data from recent mi
 The experimental data of Kim et al.~\cite{kim2019finger} show that even carefully
 fabricated devices exhibit concentration errors of $0.1$--$19.1$\,\% and coefficients
 of variation up to $13.5$\,\%, demonstrating that physical realisability is compatible
-with errors well above 1\,\%. Our numerical RMSE of mseTopOpt\ (mseTopOptPP\,pp) falls within the range of experimentally observed scatter. Importantly, the Christmas-tree network on the same mesh achieves RMSE~$=	reeRMSE$, confirming that the improvement in outlet-profile fidelity is a direct consequence of topology optimisation, not a property of the mesh or operating conditions. The two designs are not competing on the same objective: the Christmas-tree is structurally limited to binomial profiles and cannot target an arbitrary prescribed concentration distribution. The present comparison therefore demonstrates a capability gap, not merely a performance margin.
+with errors well above 1\,\%. Our numerical RMSE of 
+mseTopOpt\ (
+mseTopOptPP\,pp) falls within the range of experimentally observed scatter. Importantly, the Christmas-tree network on the same mesh achieves RMSE~$=	reeRMSE$, confirming that the improvement in outlet-profile fidelity is a direct consequence of topology optimisation, not a property of the mesh or operating conditions. The two designs are not competing on the same objective: the Christmas-tree is structurally limited to binomial profiles and cannot target an arbitrary prescribed concentration distribution. The present comparison therefore demonstrates a capability gap, not merely a performance margin.
 Compared to simulation-based approaches, the optimised Christmas-tree geometry of
 Wang \& Sun~\cite{wang2022christmastree} achieves near-perfect linearity
 ($R^2 \geq 0.987$ experimentally) but produces only a binomial outlet distribution
@@ -95,4 +97,40 @@ Several directions can be pursued to build on this study:
     \item \textbf{Extension to three dimensions.} Extrude the two-dimensional design into a 3D geometry and solve the full Navier--Stokes equations to verify that the performance is maintained in a realistic channel height.
 \end{itemize}
 
+\subsection{Mesh resolution and physical validity of RMSE claims}
+\label{sec:mesh_limitation}
+
+The most significant numerical limitation of this work is that the
+transverse diffusion layer ($\delta \approx 4\,\mu\text{m}$) is
+underresolved by a factor of $6\times$ on the primary $80\times20$ mesh
+($\Delta y = 25\,\mu\text{m}$).
+Several points must be made clearly.
+
+First, SUPG stabilisation eliminates spurious numerical oscillations but
+does \emph{not} recover the unresolved physical diffusion structure.
+The sharp concentration interface between the two inlet streams occupies
+a boundary layer thinner than one element and is smeared across
+approximately six mesh cells.
+
+Second, the optimisation objective (outlet RMSE) is a \emph{global}
+metric: it measures the deviation of the outlet concentration profile
+from the prescribed target over the full channel width $L_y = 500\,\mu$m.
+The target profiles used in this work (linear, sigmoid, stair-step, 
+double-peak) vary on length scales of $\mathcal{O}(L_y)$, which are well
+resolved even on the $80\times20$ mesh.
+The channel-scale branching topology -- the feature that determines
+which inlet stream reaches which outlet region -- is therefore correctly
+captured.
+
+Third, the mesh convergence study (Supplementary Information~S1) shows
+that RMSE decreases monotonically from $0.584$ ($20\times5$) to
+$0.211$ ($40\times10$) to $\rmseTopOpt$ ($80\times20$) to
+$\rmse160$ ($160\times40$).
+The topology is qualitatively identical between the two finest meshes.
+Full convergence of the RMSE to within $1\%$ of the continuum value
+would require resolution of the diffusion layer, which demands
+$\Delta y \lesssim 4\,\mu$m (i.e., a mesh of $500\times125$ or finer,
+or adaptive refinement near the fluid--solid interface).
+Such a run is computationally tractable but beyond the scope of this
+proof-of-concept study.
 

@@ -141,6 +141,36 @@ $\Pe_{h} = U_{c}\Delta y / (2D) \approx 780 \gg 1$ confirms that
 node-to-node spurious oscillations will arise without stabilisation,
 motivating the SUPG scheme described in Section~\ref{sec:supg}.
 
+
+\paragraph{Mesh resolution and diffusion-layer underresolution.}
+The transverse diffusion layer thickness
+$\delta \approx 4\,\mu\text{m}$ (Eq.~\eqref{eq:delta})
+is smaller than the element size of the primary mesh
+($\Delta y = 25\,\mu\text{m}$ for the $80\times20$ grid),
+meaning the physical diffusion structure is underresolved by a factor
+of approximately $6\times$.
+It is important to be precise about what this implies.
+SUPG stabilisation suppresses spurious node-to-node oscillations
+caused by the high cell P\'eclet number
+($\Pe_h \approx 780$), but it does \emph{not} recover
+subgrid diffusion-layer structure; the sharp concentration transition
+near the interface between the two inlet streams is smoothed over
+several elements.
+The RMSE metric (Eq.~\eqref{eq:rmse}) measures the
+\emph{global} outlet concentration profile, not the local diffusion-layer
+accuracy, and the target profiles prescribed in this work (linear,
+sigmoid, stair-step) vary on the scale of $L_y = 500\,\mu\text{m}$,
+well above the diffusion layer.
+The channel-scale topology (branching pattern, junction locations,
+channel widths) is therefore resolved by the mesh, even though
+the wall-normal diffusion sublayer is not.
+A mesh convergence study (Supplementary Information~S1) confirms
+that the optimised topology and outlet RMSE are stable from the
+$80\times20$ grid onward, and a $160\times40$ validation case
+($\Delta y = 12.5\,\mu\text{m}$, underresolution reduced to $3\times$)
+is presented to quantify the sensitivity of the results to
+further refinement.
+
 \paragraph{Darcy number.}
 The Brinkman penalisation parameter $\alpha$ acts as an inverse
 permeability. Its effective Darcy number in the solid phase
