@@ -122,6 +122,7 @@ done
 # ── 10. KEY CITATIONS ─────────────────────────────────────────────────────────
 hdr "10. Key citations in references.bib"
 for key in \
+  borrvall2003 whitesides2006 jeon2000 yang2020 \
   fenicsx2022 brooks1982 lazarov2011 wang2011 bendsoe2003 svanberg1987 \
   elman2014 geuzaine2009 giles2000 scroggs2022 \
   bezgin2023jaxfluids lu2021hpinn papadopoulos2022stokes \
