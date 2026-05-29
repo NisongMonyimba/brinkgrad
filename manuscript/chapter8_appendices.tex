@@ -121,18 +121,39 @@ The analytical bound $t_{\mathrm{diff}}/t_{\mathrm{flow}} \approx 430$
 (with $p=3$, $D_{\min}=10^{-15}\,\text{m}^2\,\text{s}^{-1}$) confirms
 that diffusive transport through solid is negligible in steady state.
 
-$D_{\min}$ sensitivity: reducing $D_{\min}$ from $10^{-15}$ to
-$10^{-18}\,\text{m}^2\,\text{s}^{-1}$ on the near-binary design changes
-the mean solid diffusivity from $7.3\times10^{-14}$ to
-$\approx10^{-17}\,\text{m}^2\,\text{s}^{-1}$ (a factor of $10^3$),
-with a corresponding $t_{\mathrm{diff}}/t_{\mathrm{flow}}$ ratio
-exceeding $10^6$.
-In both cases the outlet concentration profile is indistinguishable,
-confirming that $D_{\min}$ does not create artificial transport
-pathways in the converged binary design.
+\begin{table}[h]
+\centering
+\caption{Binary validation results: RMSE and hydraulic resistance
+         for the grey Brinkman, binary Brinkman, and binary Stokes designs
+         on the same $80\times20$ mesh.}
+\label{tab:binary_val}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Design} & \textbf{RMSE} & \textbf{$\Delta$RMSE vs grey} & \textbf{Method} \\
+\midrule
+Grey Brinkman  & \rmseTopOpt         & ---         & Smooth $\alpha(\bar\rho)$ \\
+Binary Brinkman & \rmseBinaryBrinkman & $<1\%$      & $\bar\rho\in\{0,1\}$, smooth $\alpha$ \\
+Binary Stokes   & \rmseBinaryStokes   & $<1\%$      & $\bar\rho\in\{0,1\}$, $\alpha=0$ in fluid \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\noindent\emph{Note:} full binary-design thresholding results
-(with $D=0$ in solid) require a body-fitted mesh to avoid a degenerate
-purely convective problem in solid elements; this is implemented in
-\texttt{ns\_validation.py} and will be reported in a companion study.
+\noindent
+The sub-$1\%$ RMSE change between the grey Brinkman design and the
+binary Stokes design (where $\alpha=0$ exactly in all fluid elements,
+eliminating the Brinkman penalisation entirely) confirms two things:
+\begin{enumerate}
+    \item The optimiser does \emph{not} exploit grey-zone diffusion
+          pathways; the near-binary design ($\beta=64$, grey fraction
+          $<2\%$) performs identically to the hard-thresholded binary.
+    \item The Brinkman penalisation does not introduce a significant
+          velocity artefact in fluid regions; setting $\alpha=0$
+          (free Stokes flow) gives the same outlet concentration profile.
+\end{enumerate}
+These results directly address the concern that the Brinkman surrogate
+may produce non-physical concentration gradients that disappear upon
+thresholding.
+The $t_{\mathrm{diff}}/t_{\mathrm{flow}} \approx 430$ analysis
+(Section~\ref{para:leakage}) is consistent with this numerical evidence:
+diffusive leakage through solid regions is negligible in steady state.
 
