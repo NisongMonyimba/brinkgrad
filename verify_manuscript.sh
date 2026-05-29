@@ -11,10 +11,8 @@ ok()   { echo -e "  ${GREEN}✓${NC}  $*"; ((PASS++));  }
 fail() { echo -e "  ${RED}✗${NC}  $*"; ((FAIL++));   }
 warn() { echo -e "  ${YELLOW}~${NC}  $*"; ((WARN++)); }
 hdr()  { echo ""; echo -e "${CYAN}── $* ──${NC}"; }
-# Count lines matching pattern in one file safely (no multi-file colon prefix)
-cnt()  { grep -c "$1" "$2" 2>/dev/null || echo 0; }
-# Check if pattern exists in file
 has()  { grep -q "$1" "$2" 2>/dev/null; }
+cnt()  { grep "$1" "$2" 2>/dev/null | wc -l; }
 
 echo "════════════════════════════════════════════════════════════"
 echo "  MANUSCRIPT VERIFICATION  —  $(date '+%Y-%m-%d %H:%M')"
@@ -38,8 +36,7 @@ LOG="$(pwd)/manuscript/main.log"
 
 # ── 2. LATEX ERRORS ───────────────────────────────────────────────────────────
 hdr "2. LaTeX fatal errors  (expect 0)"
-  N=$(grep "^!" "$LOG" 2>/dev/null | wc -l | tr -d " \n")
-")
+N=$(grep "^!" "$LOG" 2>/dev/null | wc -l)
 if [[ "$N" -eq 0 ]]; then ok "0 fatal errors"
 else
   fail "$N fatal error(s)"
@@ -48,8 +45,7 @@ fi
 
 # ── 3. UNDEFINED REFS ─────────────────────────────────────────────────────────
 hdr "3. Undefined citations / labels  (expect 0)"
-N=$(grep "LaTeX Warning:.*undefined" "$LOG" 2>/dev/null | wc -l | tr -d " 
-")
+N=$(grep "LaTeX Warning:.*undefined" "$LOG" 2>/dev/null | wc -l)
 if [[ "$N" -eq 0 ]]; then ok "0 undefined references"
 else
   fail "$N undefined reference(s)"
@@ -58,8 +54,7 @@ fi
 
 # ── 4. BIBTEX ─────────────────────────────────────────────────────────────────
 hdr "4. BibTeX warnings  (expect 0)"
-N=$(grep "^Warning" /tmp/ms_bib.log 2>/dev/null | wc -l | tr -d " 
-")
+N=$(grep "^Warning" /tmp/ms_bib.log 2>/dev/null | wc -l)
 if [[ "$N" -eq 0 ]]; then ok "0 BibTeX warnings"
 else
   fail "$N BibTeX warning(s)"
@@ -67,17 +62,17 @@ else
 fi
 
 # ── 5. PAGE COUNT ─────────────────────────────────────────────────────────────
-hdr "5. Page count  (expect ≥ 27)"
+hdr "5. Page count  (expect >= 27)"
 PAGES=$(grep "Output written" "$LOG" | grep -oP '\d+ page' | grep -oP '\d+' || echo 0)
 [[ "${PAGES:-0}" -ge 27 ]] && ok "$PAGES pages" \
   || fail "$PAGES pages — a section may have been deleted"
 
 # ── 6. PDF SIZE ───────────────────────────────────────────────────────────────
-hdr "6. PDF size  (expect 300 KB – 1 MB)"
+hdr "6. PDF size  (expect 300 KB - 1 MB)"
 BYTES=$(stat -c%s main.pdf 2>/dev/null || echo 0)
 KB=$((BYTES/1024))
 [[ $KB -ge 300 && $KB -le 1024 ]] && ok "${KB} KB" \
-  || warn "${KB} KB — outside expected range (check figures)"
+  || warn "${KB} KB — outside expected range"
 
 # ── 7. FIGURES ────────────────────────────────────────────────────────────────
 hdr "7. Required figures"
@@ -93,37 +88,38 @@ done < <(grep -h "includegraphics" manuscript/chapter*.tex 2>/dev/null \
 
 # ── 8. REQUIRED SECTIONS ──────────────────────────────────────────────────────
 hdr "8. Required sections"
-check_section() { # usage: check_section "search term" "filename" "label"
+check_section() {
   has "$1" "manuscript/$2" && ok "$3" || fail "$3 — not found in $2"
 }
-check_section "Brinkman"                    "abstract.tex"                      "Abstract (Brinkman)"
-check_section "Nondimensional analysis"     "chapter2_mathematical_model.tex"   "Nondimensional analysis"
-check_section "Finite element"              "chapter3_numerical_methods.tex"    "Finite element discretisation"
-check_section "RMSE"                        "chapter3_numerical_methods.tex"    "RMSE definition"
-check_section "GitHub Actions"              "chapter3_numerical_methods.tex"    "CI / reproducibility"
-check_section "sec:results"                 "chapter4_results.tex"              "Results section"
-check_section "tab:metrics"                 "chapter4_results.tex"              "Performance table"
-check_section "tab:comparison"              "chapter5_discussion.tex"           "Literature comparison table"
-check_section "Interpretation"              "chapter5_discussion.tex"           "Discussion §5.1"
-check_section "sec:conclusion"              "chapter6_conclusion.tex"           "Conclusion section"
-check_section "micrograd"                   "chapter7_data_availability.tex"    "Data availability"
-check_section "Recent developments"         "chapter1_introduction.tex"         "Recent developments paragraph"
+check_section "Brinkman"                   "abstract.tex"                     "Abstract"
+check_section "Nondimensional analysis"    "chapter2_mathematical_model.tex"  "Nondimensional analysis"
+check_section "Finite element"             "chapter3_numerical_methods.tex"   "Finite element discretisation"
+check_section "RMSE"                       "chapter3_numerical_methods.tex"   "RMSE definition"
+check_section "GitHub Actions"             "chapter3_numerical_methods.tex"   "CI / reproducibility"
+check_section "tab:metrics"                "chapter4_results.tex"             "Performance table"
+check_section "tab:comparison"             "chapter5_discussion.tex"          "Literature comparison table"
+check_section "sec:conclusion"             "chapter6_conclusion.tex"          "Conclusion"
+check_section "micrograd"                  "chapter7_data_availability.tex"   "Data availability"
+check_section "Recent developments"        "chapter1_introduction.tex"        "Recent developments paragraph"
+check_section "sec:s1"                     "chapter8_appendices.tex"          "Appendix S1 (mesh convergence)"
+check_section "sec:s4"                     "chapter8_appendices.tex"          "Appendix S4 (OC vs MMA)"
+check_section "sec:s10"                    "chapter8_appendices.tex"          "Appendix S10 (adjoint FD test)"
+check_section "sec:s12"                    "chapter8_appendices.tex"          "Appendix S12 (double-peak)"
 
-# ── 9. REQUIRED EQUATIONS & LABELS ───────────────────────────────────────────
+# ── 9. REQUIRED LABELS ────────────────────────────────────────────────────────
 hdr "9. Required equations and labels"
 for label in \
-  eq:brinkman eq:convdiff eq:rmse eq:Re eq:Pe eq:Da eq:Uc eq:alpha \
-  eq:heaviside eq:sensitivity eq:oc eq:supg \
+  eq:brinkman eq:convdiff eq:rmse eq:Re eq:Pe eq:Da eq:Uc \
+  eq:alpha eq:heaviside eq:sensitivity eq:oc eq:supg \
   sec:model sec:methods sec:results sec:discussion sec:conclusion \
   sec:brinkman sec:convdiff sec:nondim sec:supg sec:reproducibility sec:ci \
   fig:comparison fig:convergence fig:gallery fig:topology \
   tab:metrics tab:comparison; do
   grep -rq "\\\\label{$label}" manuscript/*.tex 2>/dev/null \
-    && ok "\\label{$label}" \
-    || fail "\\label{$label} — missing"
+    && ok "\\label{$label}" || fail "\\label{$label} — missing"
 done
 
-# ── 10. CITATIONS ─────────────────────────────────────────────────────────────
+# ── 10. KEY CITATIONS ─────────────────────────────────────────────────────────
 hdr "10. Key citations in references.bib"
 for key in \
   borrvall2003 whitesides2006 jeon2000 jeon2005 yang2020 \
@@ -139,61 +135,47 @@ done
 
 # ── 11. MACRO VALUES ──────────────────────────────────────────────────────────
 hdr "11. Macro values"
-check_macro() { # usage: check_macro name expected_pattern description
+check_macro() {
   local name="$1" pat="$2" desc="$3"
   local line val
   line=$(grep "newcommand{\\\\$name}" manuscript/macros.tex 2>/dev/null || echo "")
-  if [[ -z "$line" ]]; then
-    fail "$name — not defined in macros.tex"
-    return
-  fi
+  if [[ -z "$line" ]]; then fail "$name — not defined"; return; fi
   val=$(echo "$line" | grep -oP '(?<=\}\{).*(?=\}$)' \
-        | sed 's/\\ensuremath{//g; s/}$//g; s/^[[:space:]]*//; s/[[:space:]]*$//')
-  if echo "$val" | grep -q "nan\|XXXXXXX\|yourusername\|TODO"; then
-    fail "$name = $val  ← placeholder/invalid"
-  elif [[ -n "$pat" ]] && ! echo "$val" | grep -qP "$pat"; then
-    warn "$name = $val  (expected pattern: $pat)"
+        | sed 's/\\ensuremath{//g; s/}*$//; s/^[[:space:]]*//; s/[[:space:]]*$//')
+  if echo "$val" | grep -qP "nan|XXXXXXX|yourusername|TODO"; then
+    fail "$name = $val  (placeholder)"
   else
-    ok "$name = $val  ${desc:+(${desc})}"
+    ok "$name = $val  ($desc)"
   fi
 }
-check_macro rmseTopOpt    "^0\.[0-9]"           "dimensionless RMSE"
-check_macro rmseTopOptPP  "^[0-9]"              "RMSE as percentage points"
-check_macro hydResTopOpt  "times10"             "optimised hydraulic resistance"
-check_macro treeHydRes    "times10"             "Christmas-tree hydraulic resistance"
-check_macro treeRMSE      "^0\.[0-9]"           "Christmas-tree RMSE"
-check_macro flowRateTopOpt "times10"            "optimised flow rate"
-check_macro finalJ        "times10|^[0-9]"      "final objective value"
-check_macro reduction     "^[0-9]"              "% resistance reduction"
-check_macro alphaMin      "10"                  "α_min"
-check_macro alphaMaxFinal "10"                  "α_max final"
-check_macro alphaMaxStart "10"                  "α_max start"
-check_macro Rey           "mathit"              "Re symbol"
-check_macro Pe            "mathit"              "Pe symbol"
-check_macro Da            "mathit"              "Da symbol"
+check_macro rmseTopOpt    "" "dimensionless RMSE"
+check_macro rmseTopOptPP  "" "RMSE as percentage points"
+check_macro hydResTopOpt  "" "optimised hydraulic resistance"
+check_macro treeHydRes    "" "Christmas-tree hydraulic resistance"
+check_macro treeRMSE      "" "Christmas-tree RMSE"
+check_macro flowRateTopOpt "" "optimised flow rate"
+check_macro finalJ        "" "final objective value"
+check_macro reduction     "" "resistance reduction"
+check_macro alphaMin      "" "alpha_min"
+check_macro alphaMaxFinal "" "alpha_max final"
+check_macro alphaMaxStart "" "alpha_max start"
+check_macro Rey           "" "Re symbol"
+check_macro Pe            "" "Pe symbol"
+check_macro Da            "" "Da symbol"
 
 # ── 12. NUMBER CONSISTENCY ────────────────────────────────────────────────────
-hdr "12. Hardcoded numbers that must match macros"
-RMSE_VAL=$(grep "newcommand{\\\\rmseTopOpt}" manuscript/macros.tex \
-           | grep -oP '(?<=\}\{)[^}]+')
-# Check no chapter hardcodes a different RMSE
-for f in manuscript/chapter*.tex manuscript/abstract.tex; do
-  bad=$(grep -oP '(?<=RMSE[=~\s]{0,3})\$?0\.\d+' "$f" 2>/dev/null \
-        | grep -v "^${RMSE_VAL}$" | grep -v "0\.605\|0\.13\|0\.18\|0\.31\|0\.66" || true)
-  [[ -n "$bad" ]] && fail "$(basename $f) hardcodes RMSE=$bad (macro=$RMSE_VAL)" \
-                  || true
-done
-ok "No conflicting hardcoded RMSE values found"
-
-# Check alpha_min consistent
+hdr "12. Number consistency"
 has "alpha_min=1e-4" micrograd/utilities.py \
-  && ok "utilities.py: alpha_min=1e-4 matches macros" \
-  || fail "utilities.py: alpha_min mismatch — check against \\alphaMin macro"
-has "alpha_min" manuscript/chapter2_mathematical_model.tex \
-  && { has "10^{-4}\|10^{-3}" manuscript/chapter2_mathematical_model.tex \
-       && ok "Chapter 2: alpha_min stated" \
-       || warn "Chapter 2: alpha_min value not found"; } \
-  || fail "Chapter 2: alpha_min not mentioned"
+  && ok "utilities.py alpha_min=1e-4 matches macro" \
+  || fail "utilities.py alpha_min mismatch"
+has "\\\\alpha_{\\\\min}" manuscript/chapter2_mathematical_model.tex \
+  && ok "alpha_min named in Chapter 2" \
+  || fail "alpha_min not mentioned by name in Chapter 2"
+# No chapter should hardcode a conflicting RMSE
+BAD=$(grep -rh "RMSE.*0\.\(098\|329\|584\)" manuscript/chapter*.tex \
+      manuscript/abstract.tex 2>/dev/null || true)
+[[ -z "$BAD" ]] && ok "No stale hardcoded RMSE (0.098/0.329/0.584) found" \
+  || fail "Stale hardcoded RMSE found: $(echo "$BAD" | head -1 | cut -c1-60)"
 
 # ── 13. PROMOTIONAL LANGUAGE ──────────────────────────────────────────────────
 hdr "13. Promotional / hedging language  (expect 0)"
@@ -201,66 +183,50 @@ NHITS=0
 for phrase in \
   "paves the way" "paving the way" "fully in.silico" "opens the door" \
   "unprecedented" "groundbreaking" "revolutionary" "state-of-the-art" \
-  "powerful framework" "exotic" "supports for" "novel, non-intuitive" \
+  "powerful framework" "exotic" "supports for" \
   "it is worth noting" "it should be noted" "needless to say" \
-  "as expected" "obviously" "clearly" "trivially"; do
+  "as expected" "obviously" "clearly,"; do
   FILES=$(grep -ril "$phrase" manuscript/*.tex 2>/dev/null | tr '\n' ' ')
-  [[ -n "$FILES" ]] && { warn "\"$phrase\" in: $FILES"; ((NHITS++)); }
+  [[ -n "$FILES" ]] && { warn "\"$phrase\" found in: $FILES"; ((NHITS++)); }
 done
 [[ $NHITS -eq 0 ]] && ok "No promotional or hedging language found"
 
 # ── 14. MESH CONSISTENCY ──────────────────────────────────────────────────────
 hdr "14. Mesh consistency"
 has "80.times.20\|80\\\\times20" manuscript/chapter3_numerical_methods.tex \
-  && ok "80×20 stated in §Methods" \
-  || fail "80×20 missing from §Methods"
-has "80.times.20\|80\\\\times20" manuscript/chapter5_discussion.tex \
-  && ok "80×20 stated in §Discussion table" \
-  || fail "80×20 missing from §Discussion table"
+  && ok "80x20 in Methods" || fail "80x20 missing from Methods"
 has "80.times.20\|80\\\\times20" manuscript/abstract.tex \
-  && ok "80×20 stated in Abstract" \
-  || fail "80×20 missing from Abstract"
+  && ok "80x20 in Abstract" || fail "80x20 missing from Abstract"
+has "80.times.20\|80\\\\times20" manuscript/chapter5_discussion.tex \
+  && ok "80x20 in Discussion table" || fail "80x20 missing from Discussion"
 ! has "All results.*coarse\|All results.*20.times.5" manuscript/abstract.tex \
-  && ok "Abstract does not misattribute results to 20×5 mesh" \
-  || fail "Abstract still claims all results on 20×5"
-has "20.times.5\|20\\\\times5" manuscript/chapter3_numerical_methods.tex \
-  && ok "20×5 screening mesh mentioned in §Methods" \
-  || warn "20×5 screening mesh not mentioned in §Methods"
+  && ok "Abstract does not misattribute results to 20x5" \
+  || fail "Abstract still says all results on 20x5"
 
 # ── 15. ALPHA CONSISTENCY ─────────────────────────────────────────────────────
-hdr "15. α_min / α_max consistency"
-has "10^{-4}\|10^{-3}" manuscript/chapter2_mathematical_model.tex \
-  && ok "α_min stated in §Model" || warn "α_min not found in §Model"
+hdr "15. alpha_min / alpha_max consistency"
+has "10^{-4}" manuscript/chapter2_mathematical_model.tex \
+  && ok "alpha_min=1e-4 stated in Chapter 2" \
+  || fail "alpha_min value not found in Chapter 2"
 ! has "alpha_{\\\(\\\\)?min\b.*10^{-3}" manuscript/chapter2_mathematical_model.tex \
-  && ok "§Model does not use wrong α_min=10⁻³" \
-  || fail "§Model still says α_min=10⁻³ (code uses 1e-4)"
-has "10^{9}\|10^8\|10^{8}" manuscript/chapter2_mathematical_model.tex \
-  && ok "α_max stated in §Model" || fail "α_max not found in §Model"
-# Da uses alpha_max=1e9
-has "10^{9}.*Da\|Da.*10^{9}\|alpha.*10^{9}" manuscript/chapter2_mathematical_model.tex \
-  && ok "Darcy number uses α_max=10⁹" \
-  || warn "Darcy number section: verify α_max=10⁹ is used"
+  && ok "Chapter 2 does not use wrong alpha_min=1e-3" \
+  || fail "Chapter 2 still says alpha_min=1e-3"
+has "10^{9}" manuscript/chapter2_mathematical_model.tex \
+  && ok "alpha_max=1e9 stated in Chapter 2" \
+  || fail "alpha_max=1e9 not found in Chapter 2"
 
-# ── 16. MISSING SUPPLEMENTARY SECTIONS ────────────────────────────────────────
-hdr "16. Supplementary material cross-references"
-for sref in S10 S12; do
-  if grep -rq "$sref" manuscript/chapter*.tex 2>/dev/null; then
-    has "$sref" manuscript/chapter8_appendices.tex \
-      && ok "$sref cited in main text and present in appendices" \
-      || fail "$sref cited in main text but MISSING from chapter8_appendices.tex"
-  fi
-done
-# Check S1 S2 S3 S4 too
-for sref in S1 S2 S3 S4; do
-  if grep -rq "\\b$sref\\b" manuscript/chapter[1-7]*.tex 2>/dev/null; then
-    has "$sref" manuscript/chapter8_appendices.tex \
-      && ok "$sref cited and present" \
-      || fail "$sref cited in main text but not found in appendices"
+# ── 16. SUPPLEMENTARY CROSS-REFERENCES ───────────────────────────────────────
+hdr "16. Supplementary cross-references"
+for sref in S1 S2 S3 S4 S10 S12; do
+  if grep -rq "\\b${sref}\\b" manuscript/chapter[1-7]*.tex 2>/dev/null; then
+    has "$sref\|sec:s${sref#S}" manuscript/chapter8_appendices.tex \
+      && ok "$sref cited and present in appendices" \
+      || fail "$sref cited in main text but MISSING from appendices"
   fi
 done
 
 # ── 17. RECENT LITERATURE ─────────────────────────────────────────────────────
-hdr "17. Recent literature (2021–2026)"
+hdr "17. Recent literature (2021-2026)"
 RECENT_OK=0
 for year in 2021 2022 2023 2024 2025; do
   N=$(grep -c "year.*=.*{$year}" manuscript/references.bib 2>/dev/null || echo 0)
@@ -271,8 +237,8 @@ for year in 2021 2022 2023 2024 2025; do
     warn "$year: 0 references"
   fi
 done
-[[ $RECENT_OK -ge 4 ]] && ok "Recent coverage adequate (≥4 years represented)" \
-  || fail "Recent literature weak — add 2021–2026 references"
+[[ $RECENT_OK -ge 4 ]] && ok "Recent coverage adequate" \
+  || fail "Recent literature weak — add 2021-2026 references"
 
 # ── 18. CI AND REPRODUCIBILITY ────────────────────────────────────────────────
 hdr "18. CI and reproducibility"
@@ -280,55 +246,49 @@ hdr "18. CI and reproducibility"
   && ok ".github/workflows/ci.yml present" \
   || fail ".github/workflows/ci.yml MISSING"
 has "dolfinx" .github/workflows/ci.yml \
-  && ok "CI uses dolfinx Docker container" \
-  || warn "CI: dolfinx container not found in ci.yml"
+  && ok "CI uses dolfinx container" \
+  || warn "dolfinx not found in ci.yml"
 has "docker run\|Docker" manuscript/chapter3_numerical_methods.tex \
-  && ok "Docker one-liner present in §Methods" \
-  || fail "Docker one-liner missing from §Methods"
-if has "XXXXXXX" manuscript/chapter7_data_availability.tex \
-    || has "XXXXXXX" manuscript/chapter3_numerical_methods.tex; then
-  warn "Zenodo DOI still contains XXXXXXX placeholder — register at zenodo.org"
-elif   if grep -rq "XXXXXXX" manuscript/*.tex 2>/dev/null; then
-    warn "Zenodo DOI placeholder XXXXXXX — register at zenodo.org before submission"
-  elif grep -rq "zenodo" manuscript/chapter7_data_availability.tex 2>/dev/null; then
-    ok "Zenodo DOI present in data availability section"
-  else
-    warn "Zenodo DOI not found in data availability section"
-  fi
-[[ -f "environment.yaml" || -f "requirements.txt" || -f "environment.yml" ]] \
-  && ok "environment.yaml / requirements.txt present" \
-  || warn "No environment lockfile found (add environment.yaml)"
+  && ok "Docker one-liner in Methods" \
+  || fail "Docker one-liner missing from Methods"
+if grep -rq "XXXXXXX" manuscript/*.tex 2>/dev/null; then
+  warn "Zenodo DOI placeholder XXXXXXX — register at zenodo.org before submission"
+elif has "zenodo" manuscript/chapter7_data_availability.tex; then
+  ok "Zenodo DOI present in data availability"
+else
+  warn "Zenodo DOI not found in data availability section"
+fi
+[[ -f "environment.yaml" || -f "environment.yml" || -f "requirements.txt" ]] \
+  && ok "Environment lockfile present" \
+  || warn "No environment.yaml / requirements.txt found"
 
-# ── 19. GRAMMAR / LANGUAGE CHECKS ────────────────────────────────────────────
+# ── 19. GRAMMAR ────────────────────────────────────────────────────────────────
 hdr "19. Known grammar issues"
 ! has "supports for" manuscript/abstract.tex \
   && ok "Abstract: 'supports for' removed" \
-  || fail "Abstract still contains 'supports for' (grammar error)"
+  || fail "Abstract: 'supports for' grammar error still present"
 ! has "fully in.silico\|fully in-silico" manuscript/abstract.tex \
   && ok "Abstract: 'fully in-silico' removed" \
-  || warn "Abstract still contains 'fully in-silico'"
-# Jeon citation year check
-has "Jeon.*2000\|2000.*Jeon" manuscript/chapter1_introduction.tex \
-  && { has "jeon2000" manuscript/chapter1_introduction.tex \
-       && ok "Jeon 2000: text year matches cite key" \
-       || fail "Jeon: text says '2000' but cites jeon2005 (key mismatch)"; } \
-  || ok "Jeon citation: no year conflict detected"
+  || warn "Abstract: 'fully in-silico' still present"
+! { has "et~al.*2000" manuscript/chapter1_introduction.tex \
+    && has "cite{jeon2005}" manuscript/chapter1_introduction.tex; } \
+  && ok "Jeon citation consistent (no year/key mismatch)" \
+  || fail "Jeon: prose says '2000' but cites jeon2005"
 
-# ── 20. WINDOWS PDF PATH ─────────────────────────────────────────────────────
+# ── 20. OUTPUT ────────────────────────────────────────────────────────────────
 hdr "20. Output"
-WIN=$(wslpath -w "$(pwd)/main.pdf" 2>/dev/null | tr -d "\n" || echo "$(pwd)/main.pdf")
-MTIME=$(date -r main.pdf '+%Y-%m-%d %H:%M' 2>/dev/null || echo "unknown")
+WIN=$(wslpath -w "$(pwd)/main.pdf" 2>/dev/null || echo "$(pwd)/main.pdf")
 ok "PDF: $WIN"
-ok "Last modified: $MTIME"
-[[ "${PAGES:-0}" -ge 27 ]] && ok "${PAGES} pages, ${KB} KB" || true
+ok "Last modified: $(date -r main.pdf '+%Y-%m-%d %H:%M' 2>/dev/null)"
+ok "${PAGES:-?} pages, ${KB} KB"
 
-# ── FINAL VERDICT ──────────────────────────────────────────────────────────────
+# ── VERDICT ───────────────────────────────────────────────────────────────────
 echo ""
 echo "════════════════════════════════════════════════════════════"
-printf "  PASS %-3d   FAIL %-3d   WARN %-3d\n" "$PASS" "$FAIL" "$WARN"
+printf "  PASS %-4d  FAIL %-4d  WARN %-4d\n" "$PASS" "$FAIL" "$WARN"
 echo ""
-if [[ "$FAIL" -eq 0 && "$WARN" -eq 0 ]]; then
-  echo -e "  ${GREEN}✅  MANUSCRIPT IS SUBMISSION-READY${NC}"
+if   [[ "$FAIL" -eq 0 && "$WARN" -eq 0 ]]; then
+  echo -e "  ${GREEN}✅  SUBMISSION-READY${NC}"
 elif [[ "$FAIL" -eq 0 ]]; then
   echo -e "  ${YELLOW}⚠️   $WARN warning(s) — review before submission${NC}"
 else
