@@ -84,10 +84,15 @@ The \(\alpha_{\max}\) ramping described in Eq.~\eqref{eq:alpha_cont} is recommen
 
 \subsection{Post-processing and validation pipeline}
 \label{sec:ns_validation}
-After optimisation, the final physical density field \(\bar\rho\) is thresholded at \(\bar\rho = 0.5\) to obtain a binary fluid--solid distribution.
-The fluid region is extracted using \texttt{pyvista} and remeshed with a body-fitted grid using \texttt{Gmsh}~\cite{geuzaine2009} to eliminate the Brinkman penalty approximation.
-On this body-fitted mesh we solve the full incompressible Navier--Stokes equations (including the convective term) with a Picard iteration (five steps) to validate the design under real fluid physics.
-The concentration field is then re-computed with SUPG-stabilised convection--diffusion on the same body-fitted mesh.
+After optimisation, the final physical density field \(\bar\rho\) is thresholded at \(\bar\rho = 0.5\) to obtain a binary fluid--solid distribution, and all performance metrics (RMSE, hydraulic resistance, flow rate) are evaluated on the Brinkman mesh using the forward solution at the best-objective iteration.
+
+\paragraph{Planned Navier--Stokes validation.}
+The \texttt{micrograd} repository includes a post-processing module (\texttt{ns\_validation.py}) that (i)~extracts the fluid subdomain using \texttt{pyvista}, (ii)~generates a body-fitted triangular mesh with \texttt{Gmsh}~\cite{geuzaine2009}, and (iii)~solves the full incompressible Navier--Stokes equations with a Picard iteration on the remeshed domain to validate the design under real fluid physics without the Brinkman penalisation.
+This pipeline requires \texttt{pyvista} and \texttt{gmsh} Python packages that are not included in the \texttt{dolfinx:v0.7.3} Docker image; full NS validation results will be reported in a subsequent study using a custom Docker image with these dependencies pre-installed.
+The Brinkman--Stokes model is a well-established surrogate for creeping flow at \(\Rey \ll 1\)~\cite{borrvall2003}, and the Darcy number \(\Da \approx 4\times10^{-6}\) confirms that solid regions are effectively impermeable, making the Brinkman approximation tight for the operating regime studied here.
+
+\paragraph{Dimensional note.}
+All simulations are two-dimensional; the flow rate $Q$ and hydraulic resistance $R = \Delta p / Q$ are therefore reported per unit channel depth (units: m$^2$\,s$^{-1}$ and Pa\,s\,m$^{-2}$, respectively). Three-dimensional values follow by multiplying $Q$ by the channel depth $L_z = 100\,\mu$m (as assumed in the Reynolds-number calculation, Section~\ref{sec:nondim}), giving $Q_{\mathrm{3D}} = Q \cdot L_z$ and $R_{\mathrm{3D}} = R / L_z$.
 \paragraph{Outlet RMSE definition.}
 \label{def:rmse}
 The outlet concentration profile is compared to the prescribed target via the
