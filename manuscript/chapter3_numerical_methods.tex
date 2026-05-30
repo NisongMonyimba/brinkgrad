@@ -96,7 +96,7 @@ The grey-zone fraction at $\beta=\betaMax$ is $\grayFrac$
 
 \paragraph{Brinkman penalty ramping.}
 $\alpha_{\max}$ is ramped logarithmically from $\alphaMaxStart$ to
-$\alphaMaxFinal$ over the full 400 iterations:
+$\alphaMaxFinal$ over the first 300 iterations:
 \begin{equation}
     \alpha_{\max}(t) = 10^{\,3 + t},
     \qquad t = \min\!\left(1,\;2\cdot\frac{\text{step}}{\text{max\_iter}}\right),
