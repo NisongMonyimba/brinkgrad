@@ -97,12 +97,14 @@ These results are obtained in approximately twenty minutes on a standard laptop.
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.85\textwidth]{../figures/comparison.pdf}
-    \caption{Outlet concentration profiles for the linear gradient target.
-             Topology-optimised design (blue solid) vs.\ linear target
-             (red dotted; RMSE~$= \rmseTopOpt$, $N_{\mathrm{out}}=21$ nodes,
-             Eq.~\eqref{eq:rmse}).
-             The Christmas-tree network (green dashed) is structurally
-             limited to binomial profiles (RMSE~$= \treeRMSE$).}
+    \caption{Pareto fronts for topology optimisation (blue squares,
+             $w_f$ sweep) and Christmas-tree network (red circles,
+             channel-width sweep) on the same $80\times20$ Brinkman mesh.
+             Left: hydraulic resistance vs.\ outlet RMSE (log scale).
+             Right: viscous dissipation $J_f$ vs.\ outlet RMSE.
+             The topology optimiser achieves lower RMSE than the best-optimised Christmas tree at comparable resistance,
+             confirming a genuine performance advantage over the
+             best-achievable Christmas-tree design at each operating point.}
     \label{fig:comparison}
 \end{figure}
 
@@ -165,11 +167,15 @@ future work.
 \label{sec:comparison}
 
 The classic Christmas-tree network of Jeon~\emph{et~al.}~\cite{jeon2000}
-was simulated on the same Brinkman mesh as a performance baseline.
-Because the Christmas-tree topology is structurally constrained to
-produce binomial concentration profiles and cannot be optimised for an
-arbitrary target, this comparison demonstrates a \emph{capability gap}
-rather than a marginal performance difference on the same objective.
+is used as a performance baseline.
+To ensure a fair comparison, we sweep the channel width over
+$\{5,8,12,18,25,35,50,70\}\,\mu$m, tracing the Christmas-tree
+Pareto front in (resistance, RMSE) space rather than comparing against
+a single fixed, unoptimised configuration.
+The topology optimiser Pareto front is traced by sweeping
+$w_f \in \{10^{-4}, 5\times10^{-4}, 10^{-3}, 5\times10^{-3},
+10^{-2}\}$ with $w_c = 5\times10^1$ fixed.
+Figure~\ref{fig:comparison} shows both Pareto fronts.
 
 Table~\ref{tab:metrics} summarises key performance metrics.
 The topology-optimised design simultaneously reduces hydraulic resistance
