@@ -37,8 +37,7 @@ def adjoint_and_sensitivity(msh, boundary_data, rho_phys, u_h, c_h, target_expr,
     bc_lo = fem.dirichletbc(delta, fem.locate_dofs_topological(Vc, fd, out))
     bc_l1 = fem.dirichletbc(PETSc.ScalarType(0.0), fem.locate_dofs_topological(Vc, fd, i1), Vc)
     bc_l2 = fem.dirichletbc(PETSc.ScalarType(0.0), fem.locate_dofs_topological(Vc, fd, i2), Vc)
-    lam_h = LinearProblem(a_lam, L_lam, bcs=[bc_l1, bc_l2, bc_lo],
-                          petsc_options_prefix="lp1_", petsc_options={"ksp_type":"preonly","pc_type":"lu"}).solve()
+    lam_h = LinearProblem(a_lam, L_lam, bcs=[bc_l1, bc_l2, bc_lo], petsc_options={"ksp_type":"preonly","pc_type":"lu"}).solve()
 
     # ---- Flow adjoint (homogeneous Dirichlet on walls via penalty) ----
     (v_a, q_a) = ufl.TrialFunctions(W)
@@ -65,8 +64,7 @@ def adjoint_and_sensitivity(msh, boundary_data, rho_phys, u_h, c_h, target_expr,
     rhs_func.interpolate(fem.Expression(rhs_expr, Vv.element.interpolation_points))
     L_adj = - ufl.inner(rhs_func, w_s) * ufl.dx
 
-    w_adj = LinearProblem(a_adj, L_adj, bcs=[bc_walls_adj, bc_p_adj],
-                          petsc_options_prefix="lp2_", petsc_options={"ksp_type":"preonly","pc_type":"lu"}).solve()
+    w_adj = LinearProblem(a_adj, L_adj, bcs=[bc_walls_adj, bc_p_adj], petsc_options={"ksp_type":"preonly","pc_type":"lu"}).solve()
     vh = w_adj.sub(0).collapse(); qh = w_adj.sub(1).collapse()
 
     # ---- Objective ----
