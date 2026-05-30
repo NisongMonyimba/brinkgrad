@@ -77,13 +77,26 @@ Both the Optimality Criteria (OC) method and the Method of Moving
 Asymptotes (MMA)~\cite{svanberg1987} were run for 400 iterations on the
 linear gradient target ($80\times20$ mesh, identical initialisation and
 continuation schedules).
-The hybrid OC/MMA strategy (OC for topology formation, MMA for
-sharpening) converges to $J = \finalJ$ with outlet RMSE~$= \rmseTopOpt$.
-Pure OC exhibits period-2 oscillations at high $\beta$ due to
-near-symmetric sensitivity distributions (47\%/53\% negative/positive
-split); MMA resolves this via its asymptote-based move control.
-The self-contained Svanberg dual-bisection MMA implementation requires
-no external packages beyond those already in the FEniCSx environment.
+The hybrid OC/MMA strategy (OC for topology formation at $\beta=1$--$2$,
+MMA for sharpening at $\beta=4$--$16$) converges to
+$J = \finalJ$ with outlet RMSE~$=\rmseTopOpt$ in 600 iterations.
+
+Pure OC was tested independently and exhibits a period-2 oscillation
+at $\beta \geq 4$: the objective alternates between
+$J \approx 3.6\times10^{-3}$ and $J \approx 5.9\times10^{-3}$ on
+every iteration, converging to neither value.
+Diagnosis revealed that the sensitivity vector has a near-symmetric
+sign distribution ($47\%$ negative, $53\%$ positive), causing the
+OC bisection to find two complementary designs that it alternates
+between indefinitely.
+MMA's asymptote-based move control breaks this cycle by adaptively
+contracting asymptotes in oscillating directions.
+
+The self-contained Svanberg dual-bisection MMA implementation
+(\texttt{micrograd/optimizer.py}) requires no external packages.
+The volume constraint is enforced explicitly via dual bisection
+in the MMA subproblem, achieving $|V - V^*| < 10^{-3}$ at every
+iteration once the topology is established.
 
 \subsection*{S10: Adjoint Gradient Taylor-Test Details}
 \label{sec:s10}
