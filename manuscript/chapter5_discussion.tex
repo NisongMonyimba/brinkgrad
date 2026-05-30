@@ -46,6 +46,15 @@ requiring exact sensitivity matching (e.g., second-order optimisers).
 \subsection{Limitations}
 \label{sec:limitations}
 \begin{itemize}
+    \item \textbf{Gray-design binary gap.}
+          The optimised design has a gray-zone fraction of $\grayFrac$
+          and achieves its performance through diffusive transport in
+          intermediate-density Brinkman elements. Hard thresholding at
+          $\bar\rho=0.5$ increases outlet RMSE by $\binaryGapPct\%$
+          (Section~\ref{sec:thresholding}), confirming that the surrogate
+          exploits gray pathways with no direct binary physical analogue.
+          Body-fitted Navier--Stokes validation on a topologically
+          connected binary geometry is deferred to future work.
     \item \textbf{Brinkman approximation.}
           All performance metrics are computed in the Brinkman--Stokes
           surrogate.

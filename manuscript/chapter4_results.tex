@@ -39,8 +39,8 @@ Table~\ref{tab:mesh_conv} summarises outlet RMSE and final objective.
 
 \begin{table}[htbp]
 \centering
-\caption{Mesh convergence for the linear gradient target (400 iterations,
-         OC, move limit~$0.2$, $\beta$-continuation to $\beta=64$).
+\caption{Mesh convergence for the linear gradient target (600 iterations,
+         hybrid OC/MMA, move limit~$0.15$--$0.2$, $\beta$-continuation to $\beta=\betaMax$).
          The primary result ($80\times20$) and the $160\times40$
          validation case ($\rmseHiRes$) confirm monotone convergence.}
 \label{tab:mesh_conv}
@@ -76,7 +76,7 @@ Supplementary~S3.
 The framework was applied to the inverse design of a two-inlet microfluidic
 concentration gradient generator with prescribed linear outlet profile
 $c_{\mathrm{target}}(y) = y/L_y$ on a $2000\times500\,\mu$m domain.
-After 400 iterations on the primary $80\times20$ mesh, the optimised design
+After 600 iterations on the primary $80\times20$ mesh, the optimised design
 achieves an outlet RMSE of $\rmseTopOpt$
 ($\rmseTopOptPP$\,pp of the $[0,1]$ range; Eq.~\eqref{eq:rmse})
 and a hydraulic resistance of $\hydResTopOpt$\,Pa$\cdot$s/m$^2$
@@ -118,21 +118,37 @@ These results are obtained in approximately twenty minutes on a standard laptop.
 \end{figure}
 
 
-\subsection{Thresholding robustness}
+\subsection{Thresholding robustness and binary gap}
 \label{sec:thresholding}
-At the end of optimisation ($\beta=64$), the grey-zone fraction
-($ 0.05 < \bar\rho < 0.95$) is below~$2\%$ of the domain area,
-confirming that the design is near-binary.
-To assess whether the grey design relies on artificial diffusion
-pathways through partially solid regions, we hard-threshold $\bar\rho$
-at $0.5$ and re-solve the forward Brinkman problem on the same mesh
-(with $D_{\min}$ retained in solid regions as a physical floor;
-Section~\ref{para:leakage}).
-The thresholded-design RMSE and the sensitivity of the result to
-the choice of $D_{\min}$ are reported in Supplementary~S5.
-The analytical bound $t_{\mathrm{diff}}/t_{\mathrm{flow}} \approx 430$
-(Section~\ref{para:leakage}) provides the primary guarantee that
-leakage pathways are negligible in the converged near-binary design.
+At the end of the 600-iteration hybrid optimisation ($\beta_{\max}=\betaMax$),
+the grey-zone fraction ($0.05 < \bar\rho < 0.95$) is $\grayFrac$
+of the domain area, and the fluid volume fraction is $\fluidVol$.
+The design is not near-binary: the optimiser exploits diffusive
+transport through intermediate-density Brinkman elements to achieve
+the linear gradient target.
+
+To quantify this effect, we hard-threshold $\bar\rho$ at $0.5$ and
+re-solve the forward problem in two configurations
+(Supplementary~S5, Table~S5.1):
+\begin{enumerate}
+    \item \textbf{Binary Brinkman}: hard-threshold $\bar\rho$,
+          retain the smooth $\alpha(\rho)$ interpolation
+          (RMSE~$=\rmseBinaryBrinkman$).
+    \item \textbf{Binary Stokes}: hard-threshold $\bar\rho$,
+          set $\alpha=0$ in fluid regions for pure free-flow
+          (RMSE~$=\rmseBinaryStokes$).
+\end{enumerate}
+Both configurations show RMSE changes of $+356\%$ (binary Brinkman and Stokes, identical). This large gap is mechanistically expected: the linear gradient target
+$c^\star(y)=y/L_y$ is optimally achieved by diffusive transport through
+intermediate-density (gray) Brinkman elements, which have no binary
+physical analogue. Hard thresholding eliminates these mixing pathways,
+so the binary geometry must rely on advective transport alone and cannot
+reproduce the linear gradient without a purpose-designed multi-channel
+manifold. This constitutes a known limitation of density-based surrogate
+optimisation for mixing objectives
+(Section~\ref{sec:limitations}), and body-fitted Navier--Stokes
+validation on a topologically connected binary geometry is deferred to
+future work.
 
 \subsection{Comparison with the Christmas-tree baseline}
 \label{sec:comparison}
