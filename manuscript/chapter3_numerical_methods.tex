@@ -204,6 +204,39 @@ Algorithm~\ref{alg:main} summarises the complete optimisation procedure.
 \end{tabular}
 \end{table}
 
+\subsection{Practical usage and Jupyter notebook}
+\label{sec:practical}
+\texttt{micrograd} is designed for rapid inverse design exploration.
+A typical workflow proceeds in three steps:
+\begin{enumerate}\itemsep2pt
+    \item \textbf{Define target}: specify the desired outlet
+          concentration profile $c^*(y)$ as a Python lambda;
+          no adjoint modifications are required.
+    \item \textbf{Run optimisation}: call
+          \texttt{GradientGeneratorOptimizer} with mesh resolution,
+          volume fraction $V^*$, and objective weights $w_f, w_c$;
+          the continuation schedule runs automatically.
+    \item \textbf{Post-process}: extract RMSE, gray fraction,
+          and permeability field; optionally threshold-project
+          to a binary design for downstream analysis.
+\end{enumerate}
+The repository includes a Jupyter notebook
+(\texttt{notebooks/quickstart.ipynb}) demonstrating this workflow
+for the linear gradient target in under 30 lines of user code.
+Key API calls are:
+\begin{verbatim}
+from micrograd import GradientGeneratorOptimizer
+opt = GradientGeneratorOptimizer(
+    Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
+    target_expr=lambda x: x[1]/500e-6,
+    w_f=1e-3, w_c=50.0, V_star=0.5)
+opt.run(max_iter=600)
+print(f"RMSE = {opt.rmse:.4f}")
+\end{verbatim}
+The full $\nIterPrimary$-iteration primary result is reproduced by
+\texttt{bash run\_all.sh} inside the Docker container
+(Section~\ref{sec:reproducibility}).
+
 \subsection{Reproducibility and open-source release}
 \label{sec:reproducibility}
 \label{sec:ci}

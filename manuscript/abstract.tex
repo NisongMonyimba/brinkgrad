@@ -14,11 +14,11 @@ Gradient direction is verified by finite-difference Taylor test
 finite-difference gradients; OC/MMA optimisers are insensitive
 to gradient magnitude, ensuring reliable convergence.
 
-As a benchmark, the framework is applied to porous microfluidic mixing
-on an $80\times20$ mesh, achieving outlet RMSE of
-$\rmseTopOpt$ (linear), $\rmseSigmoid$ (sigmoid),
-and $\rmseGaussian$ (Gaussian peak) across three target profiles
-without modifying the adjoint structure.
+As a benchmark, the framework achieves outlet RMSE~$=\rmseTopOpt$
+for a linear concentration gradient on an $80\times20$ mesh.
+Framework generality is demonstrated on sigmoid and Gaussian peak
+targets (RMSE~$=\rmseSigmoid$ and $\rmseGaussian$ respectively),
+obtained without modifying the adjoint structure.
 The gray-zone fraction is reduced to $\grayFrac$ via $\nIterPrimary$-iteration
 $\beta$-continuation.
 \texttt{micrograd} is deliberately a surrogate tool for rapid inverse design

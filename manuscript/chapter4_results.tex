@@ -263,28 +263,35 @@ conductance and concentration mixing.
 
 \subsection{Framework generality: multiple target profiles}
 \label{sec:profiles}
-A key advantage of the porous-medium topology optimisation framework
-is its ability to target arbitrary outlet concentration profiles without
-modifying the adjoint structure --- only the target function $c^*(y)$ changes.
-Figure~\ref{fig:profiles} shows optimised outlet profiles for three targets
-on the $80\times20$ mesh with the standard 600-iteration hybrid OC/MMA schedule.
+The primary contribution of this paper is the linear gradient result
+(Section~\ref{sec:results}, RMSE~$=\rmseTopOpt$).
+To demonstrate that the framework generalises without modification,
+Figure~\ref{fig:profiles} shows two additional targets on the
+$80\times20$ mesh with the standard 600-iteration schedule.
+Only the target function $c^*(y)$ changes; the adjoint structure,
+continuation schedule, and all hyperparameters are identical.
 
 \paragraph{Linear gradient.}
 The linear target $c^*(y)=y/L_y$ achieves RMSE~$=\rmseLinear$
 with gray-zone fraction $\grayFrac$ (at $\beta=128$, 1400 iterations).
 
-\paragraph{Sigmoid profile.}
+\paragraph{Sigmoid profile (generality demonstration).}
 The sigmoid target $c^*(y)=\sigma(12(y/L_y-0.5))$ achieves
-RMSE~$=\rmseSigmoid$.
-The higher RMSE reflects a physical constraint: the sharp midpoint
-transition requires concentration gradients steeper than the diffusion
-capacity of the Brinkman model at $\Pe\sim10^3$.
+RMSE~$=\rmseSigmoid$, which is higher than the linear result.
+This is physically expected: the sharp midpoint transition requires
+concentration gradients steeper than the Brinkman diffusion capacity
+at $\Pe\sim10^3$. The result confirms the framework handles
+non-linear targets, though achievable RMSE depends on target
+compatibility with porous diffusive mixing.
 
-\paragraph{Gaussian peak.}
+\paragraph{Gaussian peak (generality demonstration).}
 The Gaussian target $c^*(y)=\exp(-(y/L_y-0.5)^2/0.02)$
-achieves RMSE~$=\rmseGaussian$.
-The localised peak is better approximated because its structure can be
-reproduced by concentrating porous mixing pathways near the centreline.
+achieves RMSE~$=\rmseGaussian$, better than the sigmoid
+because the localised peak structure can be reproduced by
+concentrating porous mixing pathways near the centreline.
+Together, the three profiles confirm that the same adjoint pipeline
+handles smooth, sharp, and localised targets; the linear gradient
+remains the primary validated result.
 
 \begin{figure}[h]
     \centering
