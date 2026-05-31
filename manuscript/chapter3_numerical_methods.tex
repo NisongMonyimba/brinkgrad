@@ -15,8 +15,7 @@ velocities (P2) and continuous piecewise linear pressure (P1), giving
 approximately 20\,000 velocity degrees of freedom on the $80\times20$ mesh.
 The convection--diffusion equation~\eqref{eq:convdiff} and its
 adjoint~\eqref{eq:adj_conc} are discretised with continuous piecewise
-linear elements (P1) and stabilised using the SUPG method
-(Eq.~\eqref{eq:supg}).
+linear elements (P1) and stabilised using the SUPG method~\cite{donea2003}.
 The design variable $\rho$ and the filtered and projected fields
 $\tilde\rho$, $\bar\rho$ are also discretised with P1 elements.
 Weak forms are assembled using the Unified Form Language (UFL);

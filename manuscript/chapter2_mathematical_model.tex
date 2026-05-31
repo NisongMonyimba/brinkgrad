@@ -80,6 +80,11 @@ $L_x/U_c \approx 20\,\text{s}$.
 The ratio $t_{\mathrm{diff}}/t_{\mathrm{flow}} \approx 3000$
 confirms that diffusive leakage through solid regions is negligible in
 steady state, even for intermediate grey densities.
+\begin{equation}
+  \delta \approx \sqrt{\frac{D_{\rm fluid}\,L_y}{u_{\rm max}}} \approx 4\,\mu{\rm m}.
+  \label{eq:delta}
+\end{equation}
+
 
 This conclusion is verified quantitatively: re-solving the forward
 problem on the hard-thresholded thresholded-permeability design ($\rho \in \{0,1\}$,
@@ -273,7 +278,6 @@ where $\gamma = 10^6$, $\delta = 10^{-6}$, and
     \phi_\delta(c) = \tfrac{1}{2}\bigl(\sqrt{c^2+\delta^2} - c\bigr)^2
                    + \tfrac{1}{2}\bigl(\sqrt{(c-1)^2+\delta^2} + (c-1)\bigr)^2.
     \label{eq:phi_delta}
-    \label{eq:delta}
 \end{equation}
 The function $\phi_\delta$ is non-negative and vanishes for
 $c \in [0,1]$; it replaces the hard clipping of $c_h$ to $[0,1]$
