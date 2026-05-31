@@ -1,10 +1,13 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
+
+[![ORCID](https://img.shields.io/badge/ORCID-0009-0000-7558-8580-green)](https://orcid.org/0009-0000-7558-8580)
+
 markdown
 # micrograd – Topology optimisation of microfluidic gradient generators
 
 [![CI](https://github.com/nisongmonyimba278-byte/micrograd/actions/workflows/ci.yml/badge.svg)](https://github.com/nisongmonyimba278-byte/micrograd/actions)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
 **Automated inverse design of microfluidic concentration gradient generators for arbitrary outlet profiles.**
 
@@ -39,7 +42,7 @@ This method uses a pre‑built FEniCSx Docker image that already contains **all*
 
    ```bash
    # Windows PowerShell
-   .\run_docker.ps1
+   .un_docker.ps1
    
    # Linux / macOS (bash)
    bash run_docker.sh
@@ -70,7 +73,7 @@ Run the complete reproduction
 
 bash
 # Windows PowerShell
-.\run_all.ps1
+.un_all.ps1
 
 # Linux / macOS (if you create a bash equivalent – see run_all.sh)
 bash run_all.sh
@@ -190,3 +193,5 @@ Nisong Monyimba – nmonyimb@asu.edu
 GitHub: https://github.com/yourusername/micrograd
 
 text
+
+> **Note**: DOI badge will be updated automatically after first release is archived on Zenodo.
