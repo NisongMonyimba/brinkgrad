@@ -47,8 +47,8 @@ git archive --format=zip HEAD -o micrograd_v1.0.zip
 # Authors: Nisong Monyimba (Arizona State University)
 # License: MIT
 # Click 'Reserve DOI' BEFORE publishing
-# Copy the DOI (format: 10.5281/zenodo.XXXXXXX)
-bash submission_checklist.sh --set-doi 10.5281/zenodo.XXXXXXX
+# Copy the DOI (format: 10.5281/zenodo.20479523)
+bash submission_checklist.sh --set-doi 10.5281/zenodo.20479523
 ```
 
 ### ITEM 2: Professional GitHub URL (10 minutes)
@@ -61,7 +61,7 @@ After moving:
 ```bash
 # Update the URL in manuscript
 find manuscript -name '*.tex' -exec sed -i \
-  's|nisongmonyimba278-byte/micrograd|YOUR-NEW-ORG/micrograd|g' {} \;
+  's|NisongMonyimba/micrograd|YOUR-NEW-ORG/micrograd|g' {} \;
 bash submission_checklist.sh --recompile
 git add -A && git commit -m 'update: professional GitHub URL'
 git push origin main

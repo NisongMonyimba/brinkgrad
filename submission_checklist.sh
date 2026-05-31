@@ -29,7 +29,7 @@ info "         microfluidic mixers using Brinkman-convection-diffusion equations
 ok   "Pages:   ${PAGES:-31}"
 ok   "Errors:  0 LaTeX errors"
 ok   "Refs:    0 undefined references"
-ok   "Pushed:  github.com/nisongmonyimba278-byte/micrograd"
+ok   "Pushed:  github.com/NisongMonyimba/micrograd"
 
 # ───────────────────────────────────────────────────────────────────
 banner "KEY RESULTS"
@@ -111,7 +111,7 @@ if grep -q "XXXXXXX" manuscript/chapter3_numerical_methods.tex 2>/dev/null; then
     warn "[ITEM 1] Zenodo DOI not registered — EwC WILL REJECT without this"
     info "  cd ~/micrograd && git archive --format=zip HEAD -o micrograd_v1.0.zip"
     info "  Go to https://zenodo.org → New upload → upload micrograd_v1.0.zip"
-    info "  Reserve DOI, then: bash submission_checklist.sh --set-doi 10.5281/zenodo.XXXXXXX"
+    info "  Reserve DOI, then: bash submission_checklist.sh --set-doi 10.5281/zenodo.20479523"
 else
     ok   "[ITEM 1] Zenodo DOI registered"
 fi

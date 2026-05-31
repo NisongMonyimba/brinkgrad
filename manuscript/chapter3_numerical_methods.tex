@@ -240,13 +240,13 @@ The full $\nIterPrimary$-iteration primary result is reproduced by
 \label{sec:reproducibility}
 \label{sec:ci}
 The complete pipeline is released as \texttt{micrograd} (MIT licence) at
-\url{https://github.com/nisongmonyimba278-byte/micrograd}~\cite{micrograd2025zenodo}.
+\url{https://github.com/NisongMonyimba/micrograd}~\cite{micrograd2025zenodo}.
 The repository includes all FEM modules, post-processing tools,
 a Jupyter notebook (\texttt{notebooks/quickstart.ipynb}),
 a comprehensive test suite, and a continuous integration workflow using GitHub Actions~\cite{GitHubActions2024}
 that executes the full pipeline on every commit inside the
 \texttt{dolfinx/dolfinx:v0.7.3} Docker container.
-A Zenodo archive (DOI:~\href{https://doi.org/10.5281/zenodo.XXXXXXX}{10.5281/zenodo.XXXXXXX}, to be registered upon acceptance)
+A Zenodo archive (DOI:~\href{https://doi.org/10.5281/zenodo.20479523}{10.5281/zenodo.20479523}, )
 provides a versioned snapshot.
 
 \paragraph{Reproducing specific results.}
@@ -277,7 +277,7 @@ All results & \texttt{bash run\_all.sh} \\
 
 The full pipeline (all results) is reproduced by:
 \begin{verbatim}
-git clone https://github.com/nisongmonyimba278-byte/micrograd
+git clone https://github.com/NisongMonyimba/micrograd
 cd micrograd
 docker run --rm -v ${PWD}:/root/micrograd \
   -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
