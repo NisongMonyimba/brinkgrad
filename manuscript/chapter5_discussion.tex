@@ -55,6 +55,11 @@ even though the wall-normal diffusion sublayer is not.
     \item \textbf{Two-dimensional steady flow.}
           The framework is 2D; three-dimensional extension is implemented
           in \texttt{validation\_3d.py} but not systematically validated.
+    \item \textbf{Additional target profiles.}
+          Section~\ref{sec:extra_profiles} demonstrates the framework
+          on sigmoid (RMSE~$=0.639$) and Gaussian peak (RMSE~$=0.318$)
+          targets, confirming generality at the cost of higher RMSE
+          for targets requiring steep concentration gradients.
     \item \textbf{Fixed objective weights.}
           The weights $w_f$ and $w_c$ are fixed in this study.
           A Pareto sweep over $(w_f, w_c)$ is planned to quantify the
