@@ -30,7 +30,7 @@ if [[ "$SKIP_COMPILE" -eq 0 ]]; then
 else
   warn "Compile skipped (--no-compile)"
 fi
-LOG="$(pwd)/manuscript/main.log"
+LOG="${PWD}/manuscript/main.log"
 
 hdr "2. LaTeX fatal errors  (expect 0)"
 N=$(grep "^!" "$LOG" 2>/dev/null | wc -l)
@@ -210,8 +210,8 @@ hdr "19. Grammar issues"
   || fail "Jeon: prose says 2000 but cites jeon2005"
 
 hdr "20. Output"
-WIN=$(wslpath -w "$(pwd)/main.pdf" 2>/dev/null | tr -d '\r\n' \
-      || echo "$(pwd)/main.pdf")
+WIN=$(wslpath -w "${PWD}/main.pdf" 2>/dev/null | tr -d '\r\n' \
+      || echo "${PWD}/main.pdf")
 ok "PDF: $WIN"
 ok "Modified: $(date -r main.pdf '+%Y-%m-%d %H:%M' 2>/dev/null)"
 ok "${PAGES:-?} pages, ${KB} KB"

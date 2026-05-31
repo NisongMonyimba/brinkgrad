@@ -35,8 +35,54 @@
 2. **FALLBACK:** Computers & Fluids (Elsevier) — 7.5/10
 3. **PREPRINT:** arXiv cs.NA (cross-list: physics.flu-dyn) — BEFORE journal
 
-## Pre-submission Tasks
-- [ ] Register Zenodo DOI at https://zenodo.org
+## Pre-submission Tasks (REQUIRED — EwC will reject without these)
+
+### ITEM 1: Register Zenodo DOI (5 minutes, free, REQUIRED)
+```bash
+cd ~/micrograd
+git archive --format=zip HEAD -o micrograd_v1.0.zip
+# Go to https://zenodo.org → New upload
+# Upload micrograd_v1.0.zip
+# Title: micrograd: FEniCSx topology optimisation of Brinkman-convection-diffusion systems
+# Authors: Nisong Monyimba (University of Ghana)
+# License: MIT
+# Click 'Reserve DOI' BEFORE publishing
+# Copy the DOI (format: 10.5281/zenodo.XXXXXXX)
+bash submission_checklist.sh --set-doi 10.5281/zenodo.XXXXXXX
+```
+
+### ITEM 2: Professional GitHub URL (10 minutes)
+EwC reviewers may question a username with numbers (nisongmonyimba278-byte).
+Options (choose one):
+- Create a GitHub org: github.com/micrograd-fenicsx/micrograd
+- Rename your GitHub account to your real name
+- Transfer the repo to a university org if available
+After moving:
+```bash
+# Update the URL in manuscript
+find manuscript -name '*.tex' -exec sed -i \
+  's|nisongmonyimba278-byte/micrograd|YOUR-NEW-ORG/micrograd|g' {} \;
+bash submission_checklist.sh --recompile
+git add -A && git commit -m 'update: professional GitHub URL'
+git push origin main
+```
+
+### ITEM 3: ORCID and real affiliation
+Add to main.tex author block:
+```latex
+\author{Nisong Monyimba\textsuperscript{1}\thanks{ORCID: 0000-0000-0000-0000}}
+\affil{\textsuperscript{1}Department of Mathematics,
+       University of Ghana, Accra, Ghana}
+```
+Register free ORCID at https://orcid.org if you do not have one.
+
+### ITEM 4: $(pwd) → ${PWD} portability ✅ DONE
+Already fixed in all .tex and .sh files.
+
+- [ ] Register Zenodo DOI (Item 1 above)
+- [ ] Fix GitHub URL (Item 2 above)
+- [ ] Add ORCID to main.tex (Item 3 above)
+- [x] Fix $(pwd) → ${PWD} (Item 4 — done)
 - [ ] Upload preprint to arXiv (cs.NA)
 - [ ] Submit to Engineering with Computers
 

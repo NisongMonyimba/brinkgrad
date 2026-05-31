@@ -108,16 +108,36 @@ echo ""
 
 # Check 1: Zenodo DOI
 if grep -q "XXXXXXX" manuscript/chapter3_numerical_methods.tex 2>/dev/null; then
-    warn "Zenodo DOI not registered yet"
-    info "  1. Go to https://zenodo.org"
-    info "  2. New upload → upload micrograd_v1.0.zip"
-    info "  3. Title: micrograd v1.0"
-    info "  4. Authors: Nisong Monyimba"
-    info "  5. License: MIT"
-    info "  6. Reserve DOI → copy number"
-    info "  7. Run:  bash submission_checklist.sh --set-doi 10.5281/zenodo.XXXXXXX"
+    warn "[ITEM 1] Zenodo DOI not registered — EwC WILL REJECT without this"
+    info "  cd ~/micrograd && git archive --format=zip HEAD -o micrograd_v1.0.zip"
+    info "  Go to https://zenodo.org → New upload → upload micrograd_v1.0.zip"
+    info "  Reserve DOI, then: bash submission_checklist.sh --set-doi 10.5281/zenodo.XXXXXXX"
 else
-    ok   "Zenodo DOI registered"
+    ok   "[ITEM 1] Zenodo DOI registered"
+fi
+
+# Check 2: Professional GitHub URL
+if grep -q "nisongmonyimba278-byte" manuscript/chapter3_numerical_methods.tex 2>/dev/null; then
+    warn "[ITEM 2] GitHub username has numbers — consider a professional org URL"
+    info "  Options: github.com/micrograd-fenicsx/micrograd"
+    info "  Or rename your GitHub account to your real name"
+else
+    ok   "[ITEM 2] GitHub URL updated"
+fi
+
+# Check 3: ORCID
+if grep -q "0000-0000-0000-0000" manuscript/main.tex 2>/dev/null; then
+    warn "[ITEM 3] ORCID placeholder not replaced — register at https://orcid.org"
+    info "  Then update manuscript/main.tex with real ORCID"
+else
+    ok   "[ITEM 3] ORCID set"
+fi
+
+# Check 4: pwd portability
+if grep -rq '\$(pwd)' manuscript/*.tex 2>/dev/null; then
+    warn "[ITEM 4] \$(pwd) found — run this script to fix"
+else
+    ok   "[ITEM 4] \${PWD} used throughout (portable)"
 fi
 
 # Check 2: arXiv preprint

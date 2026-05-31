@@ -15,7 +15,7 @@ git clone https://github.com/nisongmonyimba278-byte/micrograd
 cd micrograd
 
 # Reproduce all results (approx. 3-4 hours)
-docker run --rm -v $(pwd):/root/micrograd \
+docker run --rm -v ${PWD}:/root/micrograd \
   -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
   dolfinx/dolfinx:v0.7.3 bash -c \
   "cd /root/micrograd && bash run_all.sh"
@@ -25,7 +25,7 @@ docker run --rm -v $(pwd):/root/micrograd \
 To reproduce only the primary linear gradient result (Figure~2,
 approximately 1 hour):
 \begin{verbatim}
-docker run --rm -v $(pwd):/root/micrograd \
+docker run --rm -v ${PWD}:/root/micrograd \
   dolfinx/dolfinx:v0.7.3 bash -c \
   "cd /root/micrograd && \
    python scripts/optimize.py --target linear --iter 1400"
@@ -48,7 +48,7 @@ python scripts/optimize.py --target linear --nx 160 --ny 40
 An interactive walkthrough is available in
 \texttt{notebooks/quickstart.ipynb}:
 \begin{verbatim}
-docker run --rm -p 8888:8888 -v $(pwd):/root/micrograd \
+docker run --rm -p 8888:8888 -v ${PWD}:/root/micrograd \
   dolfinx/dolfinx:v0.7.3 bash -c \
   "cd /root/micrograd && jupyter notebook --ip=0.0.0.0"
 \end{verbatim}

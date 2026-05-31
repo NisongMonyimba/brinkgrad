@@ -14,7 +14,7 @@ the official \texttt{dolfinx/dolfinx:v0.7.3} Docker container.
 
 All results in this paper are reproducible with a single command:
 \begin{verbatim}
-docker run --rm -v $(pwd):/root/micrograd \
+docker run --rm -v ${PWD}:/root/micrograd \
   -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
   dolfinx/dolfinx:v0.7.3 bash -c \
   "cd /root/micrograd && bash run_all.sh"
