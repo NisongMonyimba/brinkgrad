@@ -6,7 +6,7 @@
 The optimisation was repeated on four structured meshes:
 $20\times5$, $40\times10$, $80\times20$ (primary), and $160\times40$
 (validation), all for the linear gradient target
-         ($80\times20$: 600 iters; $160\times40$: 800 iters, tuned).
+         Both $80\times20$ and $160\times40$ use identical 600-iter schedules.
 
 \begin{table}[h]
 \centering
@@ -16,7 +16,7 @@ $20\times5$, $40\times10$, $80\times20$ (primary), and $160\times40$
          sensitivity (plateau after iter~100).
          The $80\times20$ primary result uses 600 iterations;
          the $160\times40$ validation uses 800 iterations (tuned schedule)
-         (monotone convergence confirmed with tuned 800-iter schedule).
+         (600 iter identical schedule; $J$ monotone, RMSE non-monotone).
          RMSE measures the global outlet profile error.}
 \label{tab:mesh_conv_full}
 \begin{tabular}{@{}lcccl@{}}
@@ -26,7 +26,7 @@ Mesh & Elements & $\Delta y\,(\mu\text{m})$ & RMSE & Note \\
 $20\times5$   & 100  & 100  & ---          & excluded (too coarse; $N_{\mathrm{out}}=6$) \\
 $40\times10$  & 400  & 50   & 0.414        & optimizer not converged \\
 $80\times20$  & 1600 & 25   & \rmseTopOpt  & Primary result \\
-$160\times40$ & 6400 & 12.5 & \rmseHiRes   & 800 iter, tuned (monotone) \\
+$160\times40$ & 6400 & 12.5 & \rmseHiRes   & 600 iter, identical; $J$ monotone \\
 \bottomrule
 \end{tabular}
 \end{table}

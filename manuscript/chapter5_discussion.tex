@@ -34,34 +34,9 @@ Full convergence to within 1\% of the continuum value requires
 $\Delta y \lesssim \delta \approx 4\,\mu$m, demanding adaptive mesh
 refinement or a mesh of $\gtrsim 500\times125$ elements;
 this is deferred to future work.
-The $160\times40$ validation run (800 iterations, tuned continuation) gives
-RMSE~$=\rmseHiRes=0.062$, confirming monotone mesh convergence:
-RMSE decreases from $0.079$ ($80\times20$) to $0.062$ ($160\times40$).Monotone convergence is confirmed with the tuned 800-iteration schedule: RMSE decreases from $0.079$ ($80	imes20$, 600 iters) to $
-mseHiRes$ ($160	imes40$, 800 iters tuned).
-
-\subsection{Adjoint consistency}
-Applying SUPG to the continuous adjoint PDE independently (rather than
-transposing the discrete stabilised stiffness matrix) introduces a
-consistency gap: the computed sensitivity is not the consistently computed gradient of
-the \emph{discretised} objective.
-Gradient-descent verification (Section~\ref{sec:taylor_test}) confirms that this
-inconsistency is below $10^{-5}$ in relative terms for the mesh
-resolutions and operating conditions studied here, which is sufficient
-for gradient-based optimisation but should be noted for applications
-requiring exact sensitivity matching (e.g., second-order optimisers).
-
-\subsection{Limitations}
-\label{sec:limitations}
-\begin{itemize}
-    \item \textbf{Gray-design binary gap.}
-          The optimised design has a gray-zone fraction of $\grayFrac$
-          and achieves its performance through diffusive transport in
-          intermediate-density Brinkman elements. Hard thresholding at
-          $\bar\rho=0.5$ increases outlet RMSE by $\binaryGapPct\%$
-          (Section~\ref{sec:thresholding}), confirming that the surrogate
-          exploits gray pathways with no direct binary physical analogue.
-          Body-fitted Navier--Stokes validation on a topologically
-          connected binary geometry is deferred to future work.
+With an identical 600-iteration hybrid OC/MMA schedule, the $160\times40$ mesh gives RMSE~$=\rmseHiRes=0.091$ and $J=9.82\times10^{-4}$, compared to RMSE~$=\rmseTopOpt=0.064$ and $J=1.77\times10^{-3}$ on the $80\times20$ mesh.
+The RMSE is non-monotone (finer mesh gives higher outlet RMSE), while the objective $J$ IS monotone ($J_{160}=9.82\times10^{-4} < J_{80}=1.77\times10^{-3}$), suggesting the finer mesh finds a lower-dissipation topology with higher gray fraction (0.676 vs 0.540) that achieves better flow efficiency but less sharp concentration gradients.
+True Richardson-extrapolation mesh convergence would require identical topology similarity ($\|\rho_h - I(\rho_{2h})\|/\|\rho_{2h}\|\to 0$) and is deferred to future work; the current study demonstrates optimizer sensitivity to mesh resolution rather than pure discretisation error.
           \emph{The Brinkman surrogate RMSE~$=\rmseTopOpt$ is
           not the performance of a physically realisable chip};
           closing this gap remains an open challenge.
