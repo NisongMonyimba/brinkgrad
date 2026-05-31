@@ -242,15 +242,45 @@ The full $\nIterPrimary$-iteration primary result is reproduced by
 \label{sec:ci}
 The complete pipeline is released as \texttt{micrograd} (MIT licence) at
 \url{https://github.com/nisongmonyimba278-byte/micrograd}~\cite{micrograd2025zenodo}.
-The repository includes all FEM modules, post-processing tools, a Jupyter
-notebook, a comprehensive test suite (validating the filter, forward
-solver against analytical Poiseuille flow, adjoint gradients via the
-Taylor test, and MMA fallback logic), and a continuous-integration
-workflow (GitHub Actions~\cite{GitHubActions2024}) that executes a
-three-stage pipeline on every commit inside the official
+The repository includes all FEM modules, post-processing tools,
+a Jupyter notebook (\texttt{notebooks/quickstart.ipynb}),
+a comprehensive test suite, and a GitHub Actions CI workflow
+(\href{https://github.com/nisongmonyimba278-byte/micrograd/actions}{\texttt{CI: passing}}~\cite{GitHubActions2024})
+that executes the full pipeline on every commit inside the
 \texttt{dolfinx/dolfinx:v0.7.3} Docker container.
-All results are reproducible with:
+A Zenodo archive (DOI:~\href{https://doi.org/10.5281/zenodo.XXXXXXX}{10.5281/zenodo.XXXXXXX}, to be registered upon acceptance)
+provides a versioned snapshot.
+
+\paragraph{Reproducing specific results.}
+Table~\ref{tab:reproduce} maps each primary result to the
+command that generates it.
+
+\begin{table}[h]
+\centering\small
+\caption{Reproducibility map: each result and its generating command
+         (run inside the Docker container).}
+\label{tab:reproduce}
+\begin{tabular}{@{}p{3.5cm}p{8cm}@{}}
+\toprule
+\textbf{Result} & \textbf{Command} \\
+\midrule
+Primary topology (Fig.~\ref{fig:topology}) &
+\texttt{python scripts/optimize.py -{}-target linear -{}-iter 1400} \\
+Convergence history (Fig.~\ref{fig:convergence}) &
+\texttt{python scripts/plot\_convergence.py} \\
+V* sweep (Fig.~\ref{fig:vstar_sweep}) &
+\texttt{python scripts/vstar\_sweep.py} \\
+Profile gallery (Fig.~\ref{fig:profiles}) &
+\texttt{python scripts/extra\_profiles.py} \\
+All results & \texttt{bash run\_all.sh} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The full pipeline (all results) is reproduced by:
 \begin{verbatim}
+git clone https://github.com/nisongmonyimba278-byte/micrograd
+cd micrograd
 docker run --rm -v $(pwd):/root/micrograd \
   -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
   dolfinx/dolfinx:v0.7.3 bash -c \

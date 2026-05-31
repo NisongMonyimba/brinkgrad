@@ -132,6 +132,20 @@ $160\times40^\dagger$ & 6400 & 41 & $\rmseHiResScaled$ & $\ensuremath{1.01\times
 \end{tabular}
 \end{table}
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{../figures/scaling_and_mesh.pdf}
+    \caption{Left: approximate wall-time per iteration vs.\ number of
+             elements (single thread, Intel Core~i7).
+             Power-law fit gives $\mathcal{O}(N^{1.5})$ scaling,
+             consistent with 2D sparse direct factorisation (MUMPS).
+             Right: outlet RMSE vs.\ mesh resolution.
+             The $80\times20$ mesh ($\star$) is the primary result;
+             finer meshes are sensitivity studies
+             (Section~\ref{sec:mesh_limitation}).}
+    \label{fig:scaling}
+\end{figure}
+
 \subsection{SUPG stabilisation validation}
 Without stabilisation at the nominal operating conditions
 ($\Pe_h \approx 780$ on the $80\times20$ mesh at peak velocity),
@@ -147,6 +161,20 @@ Supplementary~S3.
 
 \section{Proof-of-concept: linear gradient generator}
 \label{sec:results}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.85\textwidth]{../figures/domain_schematic.pdf}
+    \caption{Problem domain with boundary conditions.
+             Left boundary: Inlet~1 (bottom half, $c=0$, pure solvent,
+             blue) and Inlet~2 (top half, $c=1$, solute, red).
+             Right boundary: outlet ($c=c^*(y)$, target profile).
+             Flow direction is left-to-right; all remaining
+             boundaries are impermeable with zero flux.
+             The optimised permeability distribution $\bar\rho(\mathbf{x})$
+             is shown in Figure~\ref{fig:topology}.}
+    \label{fig:domain}
+\end{figure}
 
 \subsection{Optimised design}
 The framework was applied to the inverse design of a two-inlet microfluidic
@@ -260,6 +288,26 @@ conductance and concentration mixing.
              flow conductance and porous mixing capacity.}
     \label{fig:vstar_sweep}
 \end{figure}
+
+\begin{table}[h]
+\centering\small
+\caption{Performance summary. The linear gradient is the primary
+         validated result; sigmoid and Gaussian are 600-iteration
+         generality demonstrations (1400-iteration runs not performed
+         for these targets). Gray fraction reported for
+         the 1400-iteration linear result only.}
+\label{tab:performance}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Target} & \textbf{RMSE} & \textbf{Iterations} & \textbf{Gray frac.} & \textbf{Runtime (approx.)} \\
+\midrule
+Linear (primary)    & $\rmseTopOpt$      & $\nIterPrimary$ & $\grayFrac$ & $\sim$60\,min \\
+Linear (short run)  & $\rmseShortRun$    & 600             & $\grayShortRun$ & $\sim$30\,min \\
+Sigmoid (demo)      & $\rmseSigmoid$     & 600             & ---          & $\sim$30\,min \\
+Gaussian peak (demo) & $\rmseGaussian$   & 600             & ---          & $\sim$30\,min \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Framework generality: multiple target profiles}
 \label{sec:profiles}

@@ -1,3 +1,66 @@
+\subsection*{S0: Getting Started Guide}
+\label{sec:s0}
+This section provides step-by-step instructions for reproducing
+all results in this paper.
+
+\paragraph{Step 1: Prerequisites.}
+Install Docker (\url{https://docs.docker.com/get-docker/}).
+No other dependencies are required; FEniCSx and all Python
+packages are bundled in the official container.
+
+\paragraph{Step 2: Clone and run.}
+\begin{verbatim}
+# Clone the repository
+git clone https://github.com/nisongmonyimba278-byte/micrograd
+cd micrograd
+
+# Reproduce all results (approx. 3-4 hours)
+docker run --rm -v $(pwd):/root/micrograd \
+  -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
+  dolfinx/dolfinx:v0.7.3 bash -c \
+  "cd /root/micrograd && bash run_all.sh"
+\end{verbatim}
+
+\paragraph{Step 3: Quick start (single result).}
+To reproduce only the primary linear gradient result (Figure~2,
+approximately 1 hour):
+\begin{verbatim}
+docker run --rm -v $(pwd):/root/micrograd \
+  dolfinx/dolfinx:v0.7.3 bash -c \
+  "cd /root/micrograd && \
+   python scripts/optimize.py --target linear --iter 1400"
+\end{verbatim}
+
+\paragraph{Step 4: Modify parameters.}
+Key parameters are set via command-line arguments:
+\begin{verbatim}
+# Change volume fraction
+python scripts/optimize.py --target linear --V_star 0.3
+
+# Change target profile
+python scripts/optimize.py --target sigmoid --iter 600
+
+# Change mesh resolution
+python scripts/optimize.py --target linear --nx 160 --ny 40
+\end{verbatim}
+
+\paragraph{Step 5: Jupyter notebook.}
+An interactive walkthrough is available in
+\texttt{notebooks/quickstart.ipynb}:
+\begin{verbatim}
+docker run --rm -p 8888:8888 -v $(pwd):/root/micrograd \
+  dolfinx/dolfinx:v0.7.3 bash -c \
+  "cd /root/micrograd && jupyter notebook --ip=0.0.0.0"
+\end{verbatim}
+
+\paragraph{Expected outputs.}
+After \texttt{run\_all.sh} completes, results are in:
+\begin{itemize}\itemsep1pt
+    \item \texttt{figures/}: all PDF and PNG figures
+    \item \texttt{results/}: JSON files with RMSE, J, gray fraction
+    \item \texttt{logs/}: convergence history per run
+\end{itemize}
+
 \section*{Supplementary Information}
 
 \subsection*{S1: Mesh Convergence and Diffusion-Layer Resolution}
