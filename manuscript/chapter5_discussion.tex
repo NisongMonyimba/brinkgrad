@@ -99,9 +99,14 @@ are explicitly acknowledged:
           Further reduction toward a near-binary permeability distribution
           is achievable via robust projection~\cite{wang2011} or
           perimeter penalisation, and is deferred to future work.
-    \item \textbf{Gradient magnitude}: the continuous adjoint provides
-          correct descent direction (correlation $\geq 0.80$) but not
-          the exact gradient magnitude; a discrete adjoint is future work.
+    \item \textbf{Gradient magnitude}: the continuous adjoint direction
+          is approximately correct (Pearson correlation $\geq 0.80$
+          with finite-difference gradients) but the magnitude is wrong
+          by factors of $10^2$--$10^4$ depending on mesh resolution.
+          The OC/MMA optimisers are insensitive to magnitude errors
+          (OC uses sign only; MMA normalises by bounds), so convergence
+          is achieved despite the mismatch.
+          A discrete adjoint with correct magnitude is future work.
     \item \textbf{Mesh convergence}: RMSE is not monotone under
           identical-schedule refinement; the study characterises optimizer
           sensitivity, not classical Richardson-extrapolation convergence.

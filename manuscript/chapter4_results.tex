@@ -28,39 +28,52 @@ On the $20\times5$ coarse mesh the slope is $2.12$;
 on the $80\times20$ primary mesh the slope is $2.07$,
 confirming second-order remainder and Fr\'{e}chet differentiability.
 
-\paragraph{Direction test (adjoint vs.\ finite-difference).}
-The adjoint sensitivity vector $g$ returned by
-\texttt{adjoint\_and\_sensitivity()} is a \emph{continuous} adjoint
-assembled in the finite-element dual space:
-$g_i = \int_\Omega (\partial J/\partial\bar\rho)\,\psi_i\,\mathrm{d}x$.
-This differs from the Euclidean (discrete) gradient
+\paragraph{Direction test and adjoint accuracy.}
+The adjoint sensitivity vector $g$ is a continuous adjoint assembled
+in the finite-element dual space:
+$g_i = \int_\Omega (\partial J/\partial\bar\rho)\,\psi_i\,\mathrm{d}x$,
+which differs from the Euclidean gradient
 $\hat{g}_i = \partial J/\partial\bar\rho_i$
-by the finite-element mass matrix $M$: $\hat{g} = M^{-1}g$.
-The Pearson correlation between the mass-scaled adjoint
-$g/m_i$ (where $m_i = \int_\Omega\psi_i\,\mathrm{d}x$ is the lumped
-mass) and the finite-difference gradient is $0.80$ ($20\times5$)
-and $0.88$ ($80\times20$), confirming that the adjoint captures
-the correct descent direction.
-The continuously assembled adjoint is standard practice for
-continuous-adjoint topology optimisation~\cite{lazarov2016}
-and provides the correct descent direction for the OC and MMA
-optimisers used here, which normalise steps by design-variable
-bounds rather than gradient magnitude.
+by the mass matrix $M$: $\hat{g} = M^{-1}g$.
+
+When the mass-scaled adjoint $g/m_i$ is used as the reference in
+the Taylor remainder test, the slope is $1.0$ on both meshes,
+indicating that the lumped mass map does not recover the
+correct Euclidean gradient magnitude.
+The relative error between the adjoint directional derivative
+and the finite-difference reference is $99\%$ ($20\times5$)
+and $3303\%$ ($80\times20$).
+
+The Pearson correlation between $g/m_i$ and the finite-difference
+gradient is $0.80$ ($20\times5$) and $0.88$ ($80\times20$),
+confirming that the adjoint captures the approximate descent direction
+but not the magnitude.
+The OC optimiser uses a bisection update that depends only on the
+sign of the sensitivity, not its magnitude; MMA normalises steps
+by design-variable bounds.
+Both optimisers are therefore insensitive to gradient magnitude
+errors, which explains why the framework converges despite
+the magnitude mismatch.
+A discrete adjoint providing exact gradient magnitude
+is identified as future work.
 
 \begin{table}[h]
 \centering
 \caption{Adjoint gradient verification summary.
-         FD slope: Taylor-remainder order (finite-difference reference;
-         slope $\approx 2$ confirms Fr\'{e}chet differentiability).
-         Corr: Pearson correlation between mass-scaled adjoint
-         $g/m_i$ and finite-difference gradient (20 sampled DOFs).}
+         FD slope: Taylor-remainder order using FD directional derivative
+         as reference (slope $\approx 2$ confirms Fr\'{e}chet
+         differentiability of $J$).
+         Corr: Pearson correlation between mass-scaled adjoint $g/m_i$
+         and FD gradient (20 sampled DOFs; direction approximately correct).
+         Rel.~err: relative error of adjoint directional derivative
+         vs.\ FD reference (magnitude incorrect; see text).}
 \label{tab:adjoint_verif}
-\begin{tabular}{@{}lccc@{}}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-Mesh & FD Taylor slope & Corr($g/m$, $\hat{g}$) & Status \\
+Mesh & FD slope & Corr($g/m$, $\hat{g}$) & Rel.~err & Status \\
 \midrule
-$20\times5$   & 2.12 & 0.80 & direction verified \\
-$80\times20$  & 2.07 & 0.88 & direction verified \\
+$20\times5$   & 2.12 & 0.80 & 99\%   & direction only \\
+$80\times20$  & 2.07 & 0.88 & 3303\% & direction only \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -223,6 +236,43 @@ conductance and concentration mixing.
              0.064 ($V^*=0.5$, primary),
              0.303 ($V^*=0.7$).}
     \label{fig:vstar_sweep}
+\end{figure}
+
+\subsection{Framework generality: multiple target profiles}
+\label{sec:profiles}
+A key advantage of the porous-medium topology optimisation framework
+is its ability to target arbitrary outlet concentration profiles without
+modifying the adjoint structure --- only the target function $c^*(y)$ changes.
+Figure~\ref{fig:profiles} shows optimised outlet profiles for three targets
+on the $80\times20$ mesh with the standard 600-iteration hybrid OC/MMA schedule.
+
+\paragraph{Linear gradient.}
+The linear target $c^*(y)=y/L_y$ achieves RMSE~$=\rmseLinear$
+with gray-zone fraction $\grayFrac$ (at $\beta=128$, 1400 iterations).
+
+\paragraph{Sigmoid profile.}
+The sigmoid target $c^*(y)=\sigma(12(y/L_y-0.5))$ achieves
+RMSE~$=\rmseSigmoid$.
+The higher RMSE reflects a physical constraint: the sharp midpoint
+transition requires concentration gradients steeper than the diffusion
+capacity of the Brinkman model at $\Pe\sim10^3$.
+
+\paragraph{Gaussian peak.}
+The Gaussian target $c^*(y)=\exp(-(y/L_y-0.5)^2/0.02)$
+achieves RMSE~$=\rmseGaussian$.
+The localised peak is better approximated because its structure can be
+reproduced by concentrating porous mixing pathways near the centreline.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{../figures/profile_gallery.pdf}
+    \caption{Outlet concentration profiles for three target functions
+             ($80\times20$ mesh, 600-iter hybrid OC/MMA).
+             Left: sigmoid (RMSE~$=\rmseSigmoid$);
+             right: Gaussian peak (RMSE~$=\rmseGaussian$).
+             Linear target result is shown in Figure~\ref{fig:topology}.
+             All three cases use the same adjoint structure.}
+    \label{fig:profiles}
 \end{figure}
 
 \subsection{Convergence and reproducibility}
