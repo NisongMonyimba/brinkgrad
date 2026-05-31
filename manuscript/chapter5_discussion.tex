@@ -77,6 +77,29 @@ even though the wall-normal diffusion sublayer is not.
           Experimental fabrication and testing are necessary next steps.
 \end{itemize}
 
+\subsection{Summary of known limitations}
+\label{sec:known_limitations}
+For transparency, the following limitations of the current version
+are explicitly acknowledged:
+\begin{itemize}\itemsep2pt
+    \item \textbf{Gray fraction}: $\grayFrac=0.074$ at $\beta=128$;
+          the $<5\%$ threshold commonly required for binary manufacturability
+          without post-processing has not been achieved.
+    \item \textbf{Gradient magnitude}: the continuous adjoint provides
+          correct descent direction (correlation $\geq 0.80$) but not
+          the exact gradient magnitude; a discrete adjoint is future work.
+    \item \textbf{Mesh convergence}: RMSE is not monotone under
+          identical-schedule refinement; the study characterises optimizer
+          sensitivity, not classical Richardson-extrapolation convergence.
+    \item \textbf{Binary performance}: binary-thresholded RMSE ($0.359$)
+          matches the Christmas-tree baseline ($0.329$); no manufacturable
+          improvement over existing designs is demonstrated.
+    \item \textbf{2D steady flow only}: 3D extension and unsteady
+          flows are implemented but not systematically validated.
+    \item \textbf{No experimental validation}: all results are
+          computational; fabrication and testing are necessary next steps.
+\end{itemize}
+
 \subsection{Future directions}
 Immediate priorities are: (i)~adaptive mesh refinement targeting the
 fluid--solid interface; (ii)~integration of body-fitted Navier--Stokes

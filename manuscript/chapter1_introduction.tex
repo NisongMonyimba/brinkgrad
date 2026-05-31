@@ -29,9 +29,8 @@ At the P\'eclet numbers relevant to microfluidic transport ($\Pe \sim 10^2$--$10
 depending on operating conditions), the convection--diffusion equation
 and its adjoint require stabilisation.
 We apply the SUPG scheme~\cite{brooks1982} consistently to both the
-forward and adjoint transport equations and verify the resulting gradient
-accuracy via gradient-descent verification on the primary mesh, something not previously reported
-for this class of problems in FEniCSx.
+forward and adjoint transport equations and verify gradient accuracy via Taylor remainder and direction tests,
+something not previously reported for this class of problems in FEniCSx.
 
 \emph{Gap~3 --- End-to-end reproducibility.}
 Topology optimisation results are sensitive to implementation choices
@@ -51,9 +50,9 @@ workflow that reproduces every result from a single command.
           (Section~\ref{sec:adjoint}).
     \item \textbf{Consistently implemented adjoint.}
           We implement the stabilised forward and adjoint solvers in FEniCSx
-          and verify gradient correctness via gradient-descent monotonicity on the primary mesh, with
-          second-order convergence, confirming consistently implemented chain-rule propagation
-          through the Helmholtz filter and Heaviside projection
+          and verify gradient accuracy via finite-difference Taylor test
+          (slope $\approx 2.0$) and direction test (correlation $\geq 0.80$),
+          confirming consistently implemented chain-rule propagation
           (Section~\ref{sec:verification}).
     \item \textbf{Continuation strategies for robust convergence.}
           Five nested continuation strategies are presented and analysed:

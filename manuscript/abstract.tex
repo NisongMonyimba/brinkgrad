@@ -21,10 +21,11 @@ $\beta$-continuation to $\beta=\betaMax$, and logarithmic
 $\alpha_{\max}$ ramping to $\alphaMaxFinal$ together drive the
 design toward low gray-zone fractions.
 
-Gradient correctness is verified by finite-difference Taylor test (slope $\approx 2.0$)
-functional that yields second-order convergence
-(gradient-descent verified, see Section~\ref{sec:taylor_test}),
-confirming consistently implemented chain-rule propagation through the filter and projection.
+Functional smoothness is confirmed by a finite-difference Taylor remainder test
+(slope $\approx 2.0$ on both coarse and primary meshes).
+The continuously assembled adjoint captures the correct descent direction
+(Pearson correlation $\geq 0.80$ with finite-difference gradients);
+a discrete adjoint with exact gradient magnitude is identified as future work.
 Manufactured-solution tests confirm the expected spatial convergence
 rates for the forward and adjoint PDE solvers.
 
