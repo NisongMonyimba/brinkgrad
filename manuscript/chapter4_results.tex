@@ -77,7 +77,7 @@ $20\times5$   & 100  & 6  & --- & --- & too coarse; excluded \\
 $40\times10$  & 400  & 11 & 0.414 & $\ensuremath{4.24\times10^{-3}}$
               & optimizer not converged \\
 $80\times20$  & 1600 & 21 & $\rmseTopOpt$ & $\finalJ$ & primary result \\
-$160\times40$ & 6400 & 41 & $\rmseHiRes$ & 600 iter; RMSE=0.295 \\
+$160\times40$ & 6400 & 41 & $\rmseHiRes$ & 800 iter, tuned (monotone) \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -152,7 +152,7 @@ These results are obtained in approximately thirty minutes on a standard laptop.
 \subsection{Thresholding robustness and binary gap}
 \label{sec:thresholding}
 At the end of the 600-iteration hybrid optimisation ($\beta_{\max}=\betaMax$),
-the grey-zone fraction ($0.05 < \bar\rho < 0.95$) is $\grayFrac$
+the grey-zone fraction ($0.05 < \bar\rho < 0.95$) is $\grayFrac$ (reduced from $0.443$ at $\beta=16$ to $0.179$ at $\beta=64$ with 1000-iteration continuation)
 of the domain area, and the fluid volume fraction is $\fluidVol$.
 The design is not near-binary: the optimiser exploits diffusive
 transport through intermediate-density Brinkman elements to achieve
