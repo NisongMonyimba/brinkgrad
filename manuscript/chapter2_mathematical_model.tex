@@ -84,7 +84,7 @@ steady state, even for intermediate grey densities.
 This conclusion is verified quantitatively: re-solving the forward
 problem on the hard-thresholded thresholded-permeability design ($\rho \in \{0,1\}$,
 $D = 0$ in solid) produces an RMSE change of $+\binaryGapPct\%$
-relative to the grey design (Supplementary~S5, Table~S5.1).
+relative to the grey design (Section~\ref{sec:thresholding}, Table~S5.1).
 This large gap is mechanistically expected for a mixing objective
 (Section~\ref{sec:thresholding}): the grey Brinkman design exploits
 diffusive transport through intermediate-density elements that have
@@ -106,146 +106,12 @@ while a zero diffusive flux condition is applied at the outlet,
 No-flux conditions are imposed on the remaining walls.
 
 
-\subsection{Nondimensional analysis and operating regime}
+\subsection{Nondimensional operating regime}
 \label{sec:nondim}
-
-Before writing the governing equations it is instructive to identify the
-characteristic scales of the problem and to establish which physical
-processes dominate at the length scales of soft-lithography porous microfluidic domains.
-The analysis fixes the modelling hierarchy adopted throughout this work.
-
-\paragraph{Characteristic scales.}
-The channel has length $L_x = 2000\,\mu\text{m}$ and width
-$L_y = 500\,\mu\text{m}$.
-An applied gauge pressure $\Delta p = 1000\,\text{Pa}$ drives the flow.
-The solute is a small molecule (e.g.\ a fluorescent dye or a signalling
-factor) with aqueous diffusivity
-$D = 10^{-9}\,\text{m}^{2}\,\text{s}^{-1}$; the carrier fluid is water
-($\mu = 10^{-3}\,\text{Pa\,s}$,
-$\rho_{f} = 10^{3}\,\text{kg\,m}^{-3}$).
-A characteristic velocity follows from the Darcy--Stokes momentum balance:
-%
-\begin{equation}
-  U_{c}
-  = \frac{\Delta p \, L_{y}^{2}}{\mu \, L_{x}}
-  = \frac{10^{3} \times (500\times10^{-6})^{2}}
-         {10^{-3} \times 2\times10^{-3}}
-  \approx 1.25\times10^{-1}\,\text{m\,s}^{-1}.
-  \label{eq:Uc}
-\end{equation}
-
-\paragraph{Reynolds number.}
-The channel Reynolds number, based on the hydraulic diameter
-$D_{h} \approx L_{y}$ (assuming a depth $L_{z} = 100\,\mu\text{m}$
-typical of PDMS chips), is
-%
-\begin{equation}
-  \Rey
-  \;=\; \frac{\rho_{f}\,U_{c}\,L_{y}}{\mu}
-  \;=\; \frac{10^{3}\times1.25\times10^{-1}\times500\times10^{-6}}
-             {10^{-3}}
-  \;\approx\; 6.25\times10^{-2} \;\ll\; 1.
-  \label{eq:Re}
-\end{equation}
-%
-Inertial forces are therefore entirely negligible throughout the design
-domain. The Navier--Stokes equations reduce to the \emph{Stokes creeping-flow}
-equations, justifying the Brinkman--Stokes model
-(Section~\ref{sec:brinkman}).
-
-\paragraph{P\'eclet number.}
-The ratio of convective to diffusive axial transport is
-%
-\begin{equation}
-  \Pe
-  \;=\; \frac{U_{c}\,L_{x}}{D}
-  \;=\; \frac{1.25\times10^{-1}\times2\times10^{-3}}
-             {10^{-9}}
-  \;=\; 2.5\times10^{5} \;\gg\; 1.
-  \label{eq:Pe}
-\end{equation}
-%
-Convection dominates axial transport: the solute is swept downstream before
-it can diffuse along the channel length.
-The transverse diffusion layer thickness is
-%
-\begin{equation}
-  \delta
-  \;=\; \sqrt{\frac{D\,L_{x}}{U_{c}}}
-  \;=\; \sqrt{\frac{10^{-9}\times2\times10^{-3}}{1.25\times10^{-1}}}
-  \;\approx\; 4\,\mu\text{m},
-  \label{eq:delta}
-\end{equation}
-%
-which is smaller than the element size of the finest mesh used
-($\Delta y \approx 12.5\,\mu\text{m}$ for the $80\times20$ grid).
-A cell-level P\'eclet number
-$\Pe_{h} = U_{c}\Delta y / (2D) \approx 780 \gg 1$ confirms that
-node-to-node spurious oscillations will arise without stabilisation,
-motivating the SUPG scheme described in Section~\ref{sec:supg}.
-
-
-\paragraph{Mesh resolution and diffusion-layer underresolution.}
-The transverse diffusion layer thickness
-$\delta \approx 4\,\mu\text{m}$ (Eq.~\eqref{eq:delta})
-is smaller than the element size of the primary mesh
-($\Delta y = 25\,\mu\text{m}$ for the $80\times20$ grid),
-meaning the physical diffusion structure is underresolved by a factor
-of approximately $6\times$.
-It is important to be precise about what this implies.
-SUPG stabilisation suppresses spurious node-to-node oscillations
-caused by the high cell P\'eclet number
-($\Pe_h \approx 780$), but it does \emph{not} recover
-subgrid diffusion-layer structure; the sharp concentration transition
-near the interface between the two inlet streams is smoothed over
-several elements.
-The RMSE metric (Eq.~\eqref{eq:rmse}) measures the
-\emph{global} outlet concentration profile, not the local diffusion-layer
-accuracy, and the target profiles prescribed in this work (linear,
-sigmoid, stair-step) vary on the scale of $L_y = 500\,\mu\text{m}$,
-well above the diffusion layer.
-The channel-scale topology (branching pattern, junction locations,
-permeability widths) is therefore resolved by the mesh, even though
-the wall-normal diffusion sublayer is not.
-A mesh convergence study (Supplementary Information~S1) confirms
-that the optimised topology and outlet RMSE are stable from the
-$80\times20$ grid onward, and a $160\times40$ validation case
-($\Delta y = 12.5\,\mu\text{m}$, underresolution reduced to $3\times$)
-is presented to quantify the sensitivity of the results to
-further refinement.
-
-\paragraph{Darcy number.}
-The Brinkman penalisation parameter $\alpha$ acts as an inverse
-permeability. Its effective Darcy number in the solid phase
-($\rho_{\mathrm{phys}}\!\to\!0$, $\alpha\!\to\!\alpha_{\max}=10^{5}$)
-is
-%
-\begin{equation}
-  \Da
-  \;=\; \frac{\mu}{\alpha_{\max}\,L_{y}^{2}}
-  \;=\; \frac{10^{-3}}{10^{9}\times(500\times10^{-6})^{2}}
-  \;=\; 4\times10^{-6} \;\ll\; 1,
-  \label{eq:Da}
-\end{equation}
-%
-confirming that solid regions are effectively impermeable.
-In fluid regions ($\alpha\!\to\!\alpha_{\min}=10^{-4}$) the
-Darcy number is $\Da\sim\mathcal{O}(1)$, recovering free Stokes flow.
-
-\paragraph{Summary and modelling hierarchy.}
-The three dimensionless groups $\Rey\ll1$, $\Pe\gg1$, and $\Da\ll1$
-(solid) jointly justify the modelling choices made in this work:
-%
-\begin{enumerate}
-  \item $\Rey\ll1$: \emph{Brinkman--Stokes equations} replace the full
-        Navier--Stokes system; inertia is discarded without loss of accuracy.
-  \item $\Pe\gg1$: \emph{Convection--diffusion} with SUPG stabilisation
-        governs scalar transport; purely diffusive models would be
-        qualitatively wrong.
-  \item $\Da\ll1$ (solid): The Brinkman penalisation produces genuinely
-        binary channel architectures in which solid regions are
-        hydrodynamically sealed.
-\end{enumerate}
+The operating regime is characterised by three dimensionless
+numbers (Table~\ref{tab:regime}): Stokes flow ($\Rey\ll1$),
+convection-dominated transport ($\Pe_h\approx780$), and
+valid impermeability surrogate ($\Da\ll1$).
 
 \begin{table}[h]
 \centering\small
@@ -413,17 +279,4 @@ $c \in [0,1]$; it replaces the hard clipping of $c_h$ to $[0,1]$
 previously used in the implementation, which is non-differentiable and
 alters the adjoint right-hand side.
 
-\subsection{Numerical stabilisation}
-\label{sec:supg}
-At high Péclet numbers, the convection-diffusion equation~\eqref{eq:convdiff} can suffer from spurious oscillations.
-To suppress them, we employ the Streamline Upwind Petrov--Galerkin (SUPG) method~\cite{brooks1982}.
-The stabilisation parameter \(\tau\) is computed element-wise as
-\begin{equation}
-    \tau = \frac{h}{2\|\mathbf{u}\|}\,
-           \left( \frac{1}{\tanh(\text{Pe})} - \frac{1}{\text{Pe}} \right),
-    \qquad
-    \text{Pe} = \frac{\|\mathbf{u}\|\,h}{2\,D(\rho)},
-    \label{eq:supg}
-\end{equation}
-where \(h\) is the local cell diameter and \(\|\mathbf{u}\|\) is the local velocity magnitude.
-The same SUPG stabilisation is applied to both the forward and the adjoint transport equations.
+% SUPG stabilisation moved to Section 3 (numerical methods)

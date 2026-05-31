@@ -110,61 +110,6 @@ pressure~\cite{elman2014}.
 Iteration counts remain below 50 for all mesh sizes tested
 ($20\times5$ to $160\times40$), confirming near-optimal scalability.
 
-\subsection*{S2: Filter Radius Sensitivity}
-\label{sec:s2}
-
-The Helmholtz filter radius $r_f = 2\Delta x$ was varied between
-$1\Delta x$ and $4\Delta x$ on the $80\times20$ mesh.
-The outlet RMSE varied by less than $0.02$ across this range, and
-the qualitative topology was preserved throughout.
-Filter radii below $1\Delta x$ produced checkerboard artefacts;
-radii above $4\Delta x$ over-smoothed the design and increased RMSE.
-The value $r_f = 2\Delta x$ lies in the centre of the stable range
-and is used throughout the main paper.
-
-\subsection*{S3: SUPG Stabilisation Validation}
-\label{sec:s3}
-
-Three forward solves on the $80\times20$ mesh were compared for the
-linear gradient target:
-(i)~no stabilisation, (ii)~SUPG with $\tau$ from Eq.~\eqref{eq:supg},
-and (iii)~full upwinding ($\tau = h/(2\|\mathbf{u}\|)$).
-Without stabilisation, the concentration field exhibits oscillations with
-amplitude up to~$0.4$ at the inlet interface.
-SUPG reduces oscillation amplitude below $10^{-3}$ while maintaining
-the smooth outlet gradient profile.
-Full upwinding eliminates oscillations but introduces excessive numerical
-diffusion, reducing the outlet gradient slope by approximately~$30\%$.
-SUPG is therefore the appropriate choice for this operating regime.
-
-\subsection*{S4: OC vs.\ MMA Convergence Comparison}
-\label{sec:s4}
-
-Both the Optimality Criteria (OC) method and the Method of Moving
-The hybrid OC/MMA schedule was run for 600 iterations on the
-linear gradient target ($80\times20$ mesh, identical initialisation and
-continuation schedules).
-The hybrid OC/MMA strategy (OC for topology formation at $\beta=1$--$2$,
-MMA for sharpening at $\beta=4$--$16$) converges to
-$J = \finalJ$ with outlet RMSE~$=\rmseTopOpt$ in $\nIterPrimary$ iterations.
-
-Pure OC was tested independently and exhibits a period-2 oscillation
-at $\beta \geq 4$: the objective alternates between
-$J \approx 3.6\times10^{-3}$ and $J \approx 5.9\times10^{-3}$ on
-every iteration, converging to neither value.
-Diagnosis revealed that the sensitivity vector has a near-symmetric
-sign distribution ($47\%$ negative, $53\%$ positive), causing the
-OC bisection to find two complementary designs that it alternates
-between indefinitely.
-MMA's asymptote-based move control breaks this cycle by adaptively
-contracting asymptotes in oscillating directions.
-
-The self-contained Svanberg dual-bisection MMA implementation
-(\texttt{micrograd/optimizer.py}) requires no external packages.
-The volume constraint is enforced explicitly via dual bisection
-in the MMA subproblem, achieving $|V - V^*| < 10^{-3}$ at every
-iteration once the topology is established.
-
 \subsection*{S10: Adjoint Gradient Verification Details}
 \label{sec:s10}
 

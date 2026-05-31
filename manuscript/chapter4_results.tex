@@ -139,58 +139,14 @@ in Figure~\ref{fig:convergence}.
 Methods requiring accurate gradient magnitudes (e.g., L-BFGS)
 would require the discrete adjoint; this is future work.
 
-\subsection{Mesh sensitivity}
+\subsection{Mesh sensitivity (summary)}
 \label{sec:mesh_conv}
-The optimisation was repeated on three structured meshes:
-$20\times5$ (100 elements), $40\times10$ (400 elements), and
-$80\times20$ (1600 elements, primary result).
-A $160\times40$ validation case ($N_{\mathrm{out}}=41$,
-$\Delta y = 12.5\,\mu$m) is reported in
-Supplementary Information~S1 alongside a discussion of diffusion-layer
-underresolution.
-Table~\ref{tab:mesh_conv} summarises outlet RMSE and final objective.
-
-\begin{table}[htbp]
-\centering
-\caption{Optimizer performance across mesh resolutions
-         (linear gradient target, hybrid OC/MMA).
-         The method is \emph{not mesh-convergent}:
-         the $160\times40$ mesh produces higher RMSE than $80\times20$
-         at both 600 and $\nIterHiRes$ iterations,
-         because the non-convex optimisation landscape yields
-         different local minima at each resolution.
-         Results are reported for the $80\times20$ mesh as a
-         proof-of-concept; finer-mesh results are included
-         to document this limitation.
-         $\dagger$: resolution-scaled $\nIterHiRes$-iteration run.}
-\label{tab:mesh_conv}
-\begin{tabular}{@{}lccccc@{}}
-\toprule
-Mesh & Elements & $N_{\mathrm{out}}$ & RMSE & $J_{\mathrm{best}}$ & Notes \\
-\midrule
-$20\times5$   & 100  & 6  & --- & --- & too coarse; excluded \\
-$40\times10$  & 400  & 11 & 0.414 & $\ensuremath{4.24\times10^{-3}}$
-              & optimizer not converged \\
-$80\times20$  & 1600 & 21 & $\rmseTopOpt$ & $\finalJ$ & primary ($\nIterPrimary$ iter, $\beta=\betaMax$) \\
-$160\times40$ & 6400 & 41 & $\rmseHiRes$ & $\ensuremath{9.82\times10^{-4}}$ & 600 iter \\
-$160\times40^\dagger$ & 6400 & 41 & $\rmseHiResScaled$ & $\ensuremath{1.01\times10^{-3}}$ & $\nIterHiRes$ iter (4$\times$ scaled) \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{../figures/scaling_and_mesh.pdf}
-    \caption{Left: approximate wall-time per iteration vs.\ number of
-             elements (single thread, Intel Core~i7).
-             Power-law fit gives $\mathcal{O}(N^{1.5})$ scaling,
-             consistent with 2D sparse direct factorisation (MUMPS).
-             Right: outlet RMSE vs.\ mesh resolution.
-             The $80\times20$ mesh ($\star$) is the primary result;
-             finer meshes are sensitivity studies
-             (Section~\ref{sec:mesh_limitation}).}
-    \label{fig:scaling}
-\end{figure}
+The optimisation is not mesh-convergent: the $160\times40$ mesh
+yields RMSE~$=\rmseHiRes$ (600~iter) and $\rmseHiResScaled$
+($\nIterHiRes$~iter), both worse than the $80\times20$ primary
+result (RMSE~$=\rmseTopOpt$), confirming resolution-dependent
+local minima (Section~\ref{sec:mesh_limitation}).
+Full mesh sensitivity data are in Supplementary~S1.
 
 \subsection{SUPG stabilisation verification}
 \label{sec:supg_val}
@@ -207,7 +163,7 @@ changing the outlet gradient slope by less than $2\%$
 relative to a reference solution on a $160\times40$ mesh.
 Full upwinding over-diffuses the profile (slope reduction $\approx30\%$)
 and is not used.
-Detailed results are in Supplementary~S3.
+Detailed results are in Section~\ref{sec:supg_val}.
 
 \section{Benchmark results}
 \label{sec:results}
@@ -287,7 +243,7 @@ the linear gradient target.
 
 To quantify this effect, we hard-threshold $\bar\rho$ at $0.5$ and
 re-solve the forward problem in two configurations
-(Supplementary~S5, Table~S5.1):
+(Section~\ref{sec:thresholding}, Table~S5.1):
 \begin{enumerate}
     \item \textbf{Binary Brinkman}: hard-threshold $\bar\rho$,
           retain the smooth $\alpha(\rho)$ interpolation
@@ -306,105 +262,15 @@ Robust projection~\cite{wang2011} enforcing near-binary designs
 during optimisation is the standard remedy and is identified as
 the primary future direction (Section~\ref{sec:limitations}).
 
-\subsection{Volume fraction sensitivity}
-\label{sec:vstar_sweep}
-Figure~\ref{fig:vstar_sweep} shows the optimised outlet profiles
-for $V^*\in\{0.3,0.5,0.7\}$ on the $80\times20$ mesh.
-At $V^*=0.3$ (less solid) the design achieves RMSE~$=0.303$
-with high fluid fraction ($0.885$) but poor mixing control;
-at $V^*=0.7$ (more solid) RMSE~$=0.303$ with restricted flow channels.
-The primary $V^*=0.5$ is uniquely favourable, achieving RMSE~$=0.064$
---- nearly $5\times$ lower than the extreme cases.
-This has a clear physical origin: at $V^*=0.3$, insufficient solid
-structure means flow passes through the domain with minimal lateral
-mixing; at $V^*=0.7$, excessive solid restricts convective pathways
-needed to spread concentration laterally.
-The $V^*=0.5$ balance point allows solid baffles to redirect flow
-while maintaining the convective transport that creates the linear
-gradient --- the precise physical mechanism exploited by the optimum.
-The primary result ($V^*=0.5$) offers a balance between flow
-conductance and concentration mixing.
+% V* sweep condensed — full data in Supplementary
+\paragraph{Volume fraction.}
+A sweep over $V^*\in\{0.3,0.5,0.7\}$ shows that $V^*=0.5$
+is uniquely optimal (RMSE~$=0.064$ vs $0.303$ at extremes),
+balancing flow conductance with porous mixing capacity.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{../figures/vstar_sweep.pdf}
-    \caption{Volume fraction sensitivity sweep $V^*\in\{0.3,0.5,0.7\}$
-             on the $80\times20$ mesh (600-iter OC/MMA, linear target).
-             Dashed red: linear target $c^*(y)=y/L_y$.
-             Solid lines: optimised outlet profiles.
-             RMSE: $0.303$ ($V^*=0.3$), $0.064$ ($V^*=0.5$, primary),
-             $0.303$ ($V^*=0.7$).
-             $V^*=0.5$ is uniquely optimal: it provides the balance between
-             flow conductance and porous mixing capacity.}
-    \label{fig:vstar_sweep}
-\end{figure}
-
-\begin{table}[h]
-\centering\small
-\caption{Performance summary. The linear gradient is the primary
-         validated result; sigmoid and Gaussian are 600-iteration
-         generality demonstrations (1400-iteration runs not performed
-         for these targets). Gray fraction reported for
-         the 1400-iteration linear result only.}
-\label{tab:performance}
-\begin{tabular}{@{}lcccc@{}}
-\toprule
-\textbf{Target} & \textbf{RMSE} & \textbf{Iterations} & \textbf{Gray frac.} & \textbf{Runtime (approx.)} \\
-\midrule
-Linear (primary)    & $\rmseTopOpt$      & $\nIterPrimary$ & $\grayFrac$ & $\sim$60\,min \\
-Linear (short run)  & $\rmseShortRun$    & 600             & $\grayShortRun$ & $\sim$30\,min \\
-Sigmoid (demo)      & $\rmseSigmoid$     & 600             & ---          & $\sim$30\,min \\
-Gaussian peak (demo) & $\rmseGaussian$   & 600             & ---          & $\sim$30\,min \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Non-trivial target profiles}
-\label{sec:profiles}
-The linear gradient is a verification benchmark.
-To assess whether the framework handles targets that cannot be
-achieved by simple diffusive smearing, Figure~\ref{fig:profiles}
-shows two additional targets on the $80\times20$ mesh
-(600-iteration schedule, identical hyperparameters).
-Only $c^*(y)$ changes; the adjoint structure is unmodified.
-
-\paragraph{Linear gradient.}
-The linear target $c^*(y)=y/L_y$ achieves RMSE~$=\rmseLinear$
-with gray-zone fraction $\grayFrac$ (at $\beta=128$, 1400 iterations).
-
-\paragraph{Sigmoid profile.}
-The sigmoid target $c^*(y)=\sigma(12(y/L_y-0.5))$ achieves
-RMSE~$=\rmseSigmoid$.
-This result is poor: the sharp midpoint transition requires
-concentration gradients steeper than the Brinkman diffusion
-capacity at $\Pe\sim10^3$, and the porous surrogate cannot
-approximate the discontinuity at this mesh resolution.
-The sigmoid target is included to document a case where the
-framework fails to produce a useful result, not as a success case.
-
-\paragraph{Gaussian peak.}
-The Gaussian target $c^*(y)=\exp(-(y/L_y-0.5)^2/0.02)$
-achieves RMSE~$=\rmseGaussian$, substantially better than the
-sigmoid and representing the more demanding test case.
-The localised peak requires the optimiser to concentrate
-porous mixing pathways near the centreline --- a non-trivial
-routing task that goes beyond simple diffusive smearing.
-This result is therefore the more meaningful demonstration
-of the framework's capability.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth]{../figures/profile_gallery.pdf}
-    \caption{Outlet concentration profiles for sigmoid and Gaussian peak
-             targets ($80\times20$ mesh, 600-iter hybrid OC/MMA).
-             Left panel: sigmoid (RMSE~$=\rmseSigmoid$);
-             right panel: Gaussian peak (RMSE~$=\rmseGaussian$).
-             Linear gradient result (RMSE~$=\rmseLinear$) is shown
-             in Figures~\ref{fig:convergence}--\ref{fig:topology}.
-             All three use the same adjoint structure;
-             only the target function $c^*(y)$ differs.}
-    \label{fig:profiles}
-\end{figure}
+% Sigmoid/Gaussian sections deleted — results are poor
+% (RMSE 0.639 and 0.318) and weaken the paper
+% Gaussian briefly mentioned in Discussion
 
 \subsection{Convergence and reproducibility}
 \label{sec:convergence}
