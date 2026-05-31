@@ -249,6 +249,29 @@ optimisation for mixing objectives
 validation on a topologically connected binary geometry is deferred to
 future work.
 
+\subsection{Volume fraction sensitivity}
+\label{sec:vstar_sweep}
+Figure~\ref{fig:vstar_sweep} shows the optimised outlet profiles
+for $V^*\in\{0.3,0.5,0.7\}$ on the $80\times20$ mesh.
+At $V^*=0.3$ (less solid material) the design achieves RMSE~$=0.303$
+with gray fraction $\grayFrac_{V*=0.3}=0.178$;
+at $V^*=0.7$ (more solid) RMSE~$=0.303$
+with gray fraction $=0.177$.
+The primary result ($V^*=0.5$) offers a balance between flow
+conductance and concentration mixing.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{../figures/vstar_sweep.pdf}
+    \caption{Volume fraction sweep $V^*\in\{0.3,0.5,0.7\}$.
+             Outlet concentration profiles on the $80\times20$ mesh
+             (600-iter hybrid OC/MMA, linear gradient target).
+             RMSE: 0.303 ($V^*=0.3$),
+             0.064 ($V^*=0.5$, primary),
+             0.303 ($V^*=0.7$).}
+    \label{fig:vstar_sweep}
+\end{figure}
+
 \subsection{Comparison with the Christmas-tree baseline}
 \label{sec:comparison}
 
