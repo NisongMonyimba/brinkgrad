@@ -33,6 +33,15 @@ maintains near-optimal convergence rates (Supplementary~S1).
 
 \subsection{Mesh resolution and optimizer sensitivity}
 \label{sec:mesh_limitation}
+The $160\times40$ mesh (Table~\ref{tab:mesh_conv}) gives
+RMSE~$=\rmseHiRes$ with a 600-iteration identical schedule,
+which is worse than the $80\times20$ primary result (RMSE~$=\rmseTopOpt$).
+This is expected: at $4\times$ the DOFs, 600 iterations provides
+approximately one quarter of the per-DOF update budget of the primary mesh.
+A resolution-scaled 2400-iteration run on $160\times40$ is in progress;
+the current study characterises optimizer sensitivity to resolution,
+not classical mesh convergence.
+
 On coarse meshes ($20\times5$, $N_{\mathrm{out}}=6$) the outlet
 discretisation is insufficient to represent the linear gradient target
 and the optimizer finds unphysical reversed-flow local minima.

@@ -32,10 +32,10 @@ At P\'{e}clet numbers relevant to microfluidic transport
 ($\Pe \sim 10^2$--$10^5$), both the forward and adjoint
 transport equations require streamline-upwind Petrov-Galerkin (SUPG)
 stabilisation~\cite{brooks1982}.
-Consistent application of SUPG to the adjoint --- using the same
-element-wise stabilisation parameter as the forward problem --- is
-important for numerical stability but has not been reported
-for this class of problems in FEniCSx.
+SUPG is applied to both the forward and adjoint transport equations
+using the same element-wise stabilisation parameter, ensuring
+numerical consistency; this implementation has not been previously
+reported for coupled Brinkman--convection-diffusion systems in FEniCSx.
 
 \emph{Gap~3 --- End-to-end reproducibility.}
 Topology optimisation results are sensitive to implementation choices ---

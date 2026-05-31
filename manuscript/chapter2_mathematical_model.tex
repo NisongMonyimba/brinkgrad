@@ -247,6 +247,22 @@ The three dimensionless groups $\Rey\ll1$, $\Pe\gg1$, and $\Da\ll1$
         hydrodynamically sealed.
 \end{enumerate}
 
+\begin{table}[h]
+\centering\small
+\caption{Operating regime for the benchmark microfluidic configuration.
+         All values computed on the primary $80\times20$ mesh at peak velocity.}
+\label{tab:regime}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Parameter & Symbol & Value & Physical regime \\
+\midrule
+Reynolds number & $\Rey$ & $3\times10^{-3}$ & Stokes flow ($\Rey\ll1$) \\
+Cell P\'{e}clet & $\Pe_h$ & $\approx780$ & Convection-dominated \\
+Darcy number & $\Da$ & $4\times10^{-6}$ & Impermeability valid ($\Da\ll1$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Optimisation problem}
 The design is driven by a multi-objective cost functional that simultaneously penalises viscous dissipation (a proxy for pressure drop) and the deviation of the outlet concentration from a user-specified target \(c_{\text{target}}\):
 \begin{subequations}

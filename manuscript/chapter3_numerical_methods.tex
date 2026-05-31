@@ -149,7 +149,9 @@ Algorithm~\ref{alg:main} summarises the complete optimisation procedure.
 \begin{table}[h]
 \centering\small
 \caption{Hybrid OC/MMA topology optimisation loop with $\beta$-continuation.
-         Steps 2--8 repeat for $k=0,\ldots,\nIterPrimary-1$.}
+         Steps 2--8 repeat for $k=0,\ldots,N-1$
+         where $N=\nIterPrimary$ for the primary result
+         (configurable; a 600-iteration run uses $N=600$).}
 \label{alg:main}
 \begin{tabular}{@{}cl@{}}
 \toprule
