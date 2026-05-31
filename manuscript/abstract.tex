@@ -24,8 +24,14 @@ The optimised permeability distribution achieves outlet concentration
 RMSE of $\rmseTopOpt$ (linear target), $\rmseSigmoid$ (sigmoid), and
 $\rmseGaussian$ (Gaussian peak), demonstrating framework generality
 across target profiles without modifying the adjoint structure.
-The gray-zone fraction is reduced to $\grayFrac$ via extended
-$\beta$-continuation; threshold-projection to binary-permeability
-and experimental validation are future directions.
+The gray-zone fraction is reduced to $\grayFrac$ at $\beta=\betaMax$
+via $\nIterPrimary$-iteration continuation.
+The optimised design exploits the continuous permeability field of the
+Brinkman model to achieve precise mixing targets;
+this porous optimum is not representable as a binary solid/fluid geometry
+without performance penalty.
+\texttt{micrograd} is therefore a tool for surrogate-based inverse design
+in porous media, not a direct manufacturable device generator;
+threshold-projection and experimental validation are future directions.
 The complete pipeline runs on a standard laptop in under thirty minutes
 and is fully reproducible via Docker and continuous integration.
