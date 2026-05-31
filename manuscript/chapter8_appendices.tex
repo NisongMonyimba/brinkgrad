@@ -6,7 +6,7 @@
 The optimisation was repeated on four structured meshes:
 $20\times5$, $40\times10$, $80\times20$ (primary), and $160\times40$
 (validation), all for the linear gradient target
-         ($80\times20$: 600 iters; $160\times40$: 600 iters).
+         ($80\times20$: 600 iters; $160\times40$: 800 iters, tuned).
 
 \begin{table}[h]
 \centering
@@ -15,7 +15,7 @@ $20\times5$, $40\times10$, $80\times20$ (primary), and $160\times40$
          local minima). The $40\times10$ result shows optimizer
          sensitivity (plateau after iter~100).
          The $80\times20$ primary result uses 600 iterations;
-         the $160\times40$ validation uses 600 iterations
+         the $160\times40$ validation uses 800 iterations (tuned schedule)
          (monotone convergence confirmed with tuned 800-iter schedule).
          RMSE measures the global outlet profile error.}
 \label{tab:mesh_conv_full}
