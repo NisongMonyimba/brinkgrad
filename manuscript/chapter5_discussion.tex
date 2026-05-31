@@ -81,10 +81,6 @@ even though the wall-normal diffusion sublayer is not.
           Section~\ref{sec:vstar_sweep} shows that $V^*=0.5$ is
           optimal for the linear target: both $V^*=0.3$ and $V^*=0.7$
           give RMSE~$\approx 0.303$, confirming the primary choice.
-    \item \textbf{Volume fraction sensitivity.}
-          Section~\ref{sec:vstar_sweep} shows that $V^*=0.5$ is
-          optimal for the linear target: both $V^*=0.3$ and $V^*=0.7$
-          give RMSE~$\approx 0.303$, confirming the primary choice.
     \item \textbf{Fixed objective weights.}
           The weights $w_f$ and $w_c$ are fixed in this study.
           A Pareto sweep over $(w_f, w_c)$ is planned to quantify the
@@ -109,9 +105,10 @@ are explicitly acknowledged:
     \item \textbf{Mesh convergence}: RMSE is not monotone under
           identical-schedule refinement; the study characterises optimizer
           sensitivity, not classical Richardson-extrapolation convergence.
-    \item \textbf{Binary performance}: threshold-projected RMSE ($0.359$)
-329$); no physically realisable
-          improvement over existing designs is demonstrated.
+    \item \textbf{Threshold-projected performance}: threshold-projected
+          RMSE ($\rmseBinaryBrinkman$) reflects the loss of gray mixing
+          pathways upon binarisation; the framework optimises within
+          the Brinkman--SIMP porous-medium design space.
     \item \textbf{2D steady flow only}: 3D extension and unsteady
           flows are implemented but not systematically validated.
     \item \textbf{No experimental validation}: all results are
