@@ -140,6 +140,38 @@ channel width $L_y = 500\,\mu$m, a scale that is well resolved;
 the channel-scale branching topology is therefore correctly captured
 even though the wall-normal diffusion sublayer is not.
 
+\paragraph{Context: what does optimisation buy?}
+Table~\ref{tab:context} quantifies the improvement of the
+optimised design over simple baselines computed on the
+same $80\times20$ mesh.
+The uniform-permeability design ($\rho\equiv V^*=0.5$,
+no optimisation) gives RMSE~$=0.450$;
+the optimised design achieves RMSE~$=\rmseTopOpt$,
+a $\rmseImprovement\%$ improvement.
+The binary-thresholded design (RMSE~$=\rmseBinaryBrinkman$)
+provides an honest lower bound on what is achievable
+with a physical geometry at this Pe.
+
+\begin{table}[h]
+\centering\small
+\caption{Context: outlet RMSE for the linear gradient target
+         on the $80\times20$ mesh.
+         All values computed with the same forward solver.
+         Heuristic and Stokes-only baselines are not implemented;
+         comparison is against same-code baselines only.}
+\label{tab:context}
+\begin{tabular}{@{}lccl@{}}
+\toprule
+Design & RMSE & Iterations & Notes \\
+\midrule
+Uniform $\rho=V^*$ (no optimisation) & $0.450$ & 0 & forward solve only \\
+Binary-thresholded optimum & $\rmseBinaryBrinkman$ & $\nIterPrimary$ & physical upper bound \\
+Short-run optimised ($\beta=16$) & $\rmseShortRun$ & 600 & 30 min \\
+\textbf{Primary optimised ($\beta=128$)} & $\mathbf{\rmseTopOpt}$ & $\nIterPrimary$ & \textbf{main result} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Positioning relative to existing frameworks}
 \label{sec:positioning}
 Table~\ref{tab:comparison} (Section~\ref{sec:introduction}) compares
@@ -160,19 +192,17 @@ formulation for this specific coupled system at high Pe,
 not the SUPG method itself.
 
 \paragraph{FEniCSx continuous adjoint vs.\ finite differences.}
-Sensitivity computation via finite differences requires $2N$
-additional forward solves per iteration, where $N$ is the number
-of design variables.
-For the primary $80\times20$ mesh ($N=1600$), this would require
-$3200$ forward solves per iteration --- computationally prohibitive.
-The continuous adjoint requires only two additional adjoint solves
-regardless of $N$, enabling the $\nIterPrimary$-iteration
-primary run to complete in approximately one hour.
-dolfin-adjoint~\cite{farrell2013} provides discrete adjoints
-via automatic differentiation, which gives exact gradient magnitude
-but requires the entire forward solve to be differentiable through
-the FEniCSx assembly; \texttt{micrograd} trades exact magnitude
-for simplicity and explicitness of the adjoint derivation.
+Finite-difference sensitivity requires $2N$ forward solves per
+iteration ($N=1600$ for the primary mesh --- $3200$ solves per step).
+The continuous adjoint requires two adjoint solves regardless of $N$,
+enabling the $\nIterPrimary$-iteration run in approximately one hour.
+Simpler approaches that avoid a coupled adjoint entirely --- such as
+flow-only topology optimisation~\cite{borrvall2003} or global mixing
+objectives~\cite{kreissl2011} --- do not support outlet-profile
+targets without the concentration adjoint derived here.
+The unoptimised uniform-permeability baseline gives
+RMSE~$=0.450$ (Table~\ref{tab:context}), confirming
+that the $\rmseImprovement\%$ improvement requires active optimisation.
 
 \paragraph{Reproducibility.}
 To our knowledge, \texttt{micrograd} is the first fully reproducible
