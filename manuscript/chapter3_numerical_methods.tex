@@ -247,7 +247,7 @@ The repository includes a Jupyter notebook
 (\texttt{notebooks/quickstart.ipynb}) demonstrating this workflow
 for the linear gradient target in under 30 lines of user code.
 Key API calls are:
-\begin{verbatim}
+\begin{lstlisting}[language=Python,breaklines=true]
 from micrograd import GradientGeneratorOptimizer
 opt = GradientGeneratorOptimizer(
     Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
@@ -255,7 +255,7 @@ opt = GradientGeneratorOptimizer(
     w_f=1e-3, w_c=50.0, V_star=0.5)
 opt.run(max_iter=600)
 print(f"RMSE = {opt.rmse:.4f}")
-\end{verbatim}
+\end{lstlisting}
 The full $\nIterPrimary$-iteration primary result is reproduced by
 \texttt{bash run\_all.sh} inside the Docker container
 (Section~\ref{sec:reproducibility}).
@@ -300,11 +300,11 @@ All results & \texttt{bash run\_all.sh} \\
 \end{table}
 
 The full pipeline (all results) is reproduced by:
-\begin{verbatim}
+\begin{lstlisting}[language=bash,breaklines=true]
 git clone https://github.com/NisongMonyimba/micrograd
 cd micrograd
 docker run --rm -v ${PWD}:/root/micrograd \
   -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
   dolfinx/dolfinx:v0.7.3 bash -c \
   "cd /root/micrograd && bash run_all.sh"
-\end{verbatim}
+\end{lstlisting}
