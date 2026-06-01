@@ -16,15 +16,10 @@ as validated by direct comparison against pure MMA
 As a verification benchmark, the implementation achieves
 RMSE~$=\rmseTopOpt$ for a linear concentration gradient
 on an $80\times20$ mesh.
-The linear target serves primarily as a sanity check;
-the more demanding Gaussian peak target
-(RMSE~$=\rmseGaussian$, 600 iterations) demonstrates
-that the framework can approximate localised profiles
-requiring non-trivial flow routing.
-The sigmoid target (RMSE~$=\rmseSigmoid$) is not well
-approximated by the porous surrogate at this resolution,
-as the sharp midpoint transition exceeds the diffusive
-capacity of the Brinkman model at $\Pe\sim10^3$.
+The linear target serves as a sanity check;
+the hybrid OC/MMA schedule is validated by direct comparison
+against pure MMA (RMSE~$=\rmsePureMMA$ vs.\ $\rmseShortRun$
+at 600 iterations, Table~\ref{tab:mma_comparison}).
 The optimisation is not mesh-convergent: finer meshes find
 different local minima (RMSE~$=\rmseHiRes$--$\rmseHiResScaled$).
 \texttt{micro\-grad} optimises within the Brinkman--SIMP porous-medium model;
