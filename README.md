@@ -1,197 +1,228 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
+# micrograd
 
-[![ORCID](https://img.shields.io/badge/ORCID-0009-0000-7558-8580-green)](https://orcid.org/0009-0000-7558-8580)
-
-markdown
-# micrograd – Topology optimisation of microfluidic gradient generators
-
-[![CI](https://github.com/nisongmonyimba278-byte/micrograd/actions/workflows/ci.yml/badge.svg)](https://github.com/nisongmonyimba278-byte/micrograd/actions)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20479523.svg)](https://doi.org/10.5281/zenodo.20479523)
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0000--7558--8580-green)](https://orcid.org/0009-0000-7558-8580)
+[![CI](https://github.com/NisongMonyimba/micrograd/actions/workflows/ci.yml/badge.svg)](https://github.com/NisongMonyimba/micrograd/actions)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Automated inverse design of microfluidic concentration gradient generators for arbitrary outlet profiles.**
+**An open-source FEniCSx framework for adjoint-based topology optimisation of porous microfluidic mixers.**
 
-<p align="center">
-  <img src="docs/si/S12_gallery.pdf" width="800" alt="Gallery of target profiles">
-</p>
-
----
-
-## What does this do?
-
-Given a **desired concentration profile** at the outlet of a microfluidic chip, this framework automatically discovers the channel geometry that produces it – with **no pre‑prescribed architecture**.  The optimised designs outperform the classic “Christmas tree” generator by **99.7 % in hydraulic resistance** (1.77×10¹¹ → 4.48×10⁸ Pa·s/m³) while maintaining superior concentration fidelity.
-
-The code solves a density‑based topology optimisation problem with coupled Brinkman flow and convection‑diffusion, uses continuous adjoint sensitivity for efficient gradient computation, and validates the results with full Navier–Stokes simulations and 3D extrusion.
+Nisong Monyimba · Vincent Pizziconi · Aurel Coza
+School of Biological and Health Systems Engineering, Arizona State University, Tempe AZ USA
 
 ---
 
-## Installation & reproduction
+## What this does
 
-Choose the method that best fits your operating system.
+`micrograd` finds a spatially-varying permeability field inside a microfluidic channel such that the outlet concentration profile matches a user-specified target. It solves a density-based topology optimisation problem on a coupled Brinkman–convection-diffusion system using:
 
-### Option 1 – Docker (recommended for Windows, works everywhere)
+- **Continuous adjoint** for gradient computation — two PDE solves regardless of mesh size
+- **SUPG stabilisation** of both forward and adjoint equations at Pe ~ 10²–10⁵
+- **Hybrid OC/MMA continuation schedule** with Helmholtz PDE filtering and Heaviside projection
+- **End-to-end reproducibility** via Docker, GitHub Actions CI, and Zenodo archival
 
-This method uses a pre‑built FEniCSx Docker image that already contains **all** dependencies (FEniCSx, PETSc, MPI, Gmsh, PyVista).  No Conda or manual setup is needed.
+The primary benchmark achieves **RMSE = 0.058** for a linear gradient target on an 80×20 mesh in approximately one hour on a standard laptop (Intel Core i7, 16 GB RAM, single thread, no GPU).
 
-1. **Install Docker Desktop**  
-   Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/) for your operating system.  
-   *If Docker is missing, the reproduction script can install it automatically on Windows via `winget` or the official installer.*
+> **Scope and limitation:** the optimised permeability field is a porous-medium surrogate operating within the Brinkman–SIMP model — it is **not a manufacturable binary design**. Hard-thresholding to binary permeability increases RMSE by +356% because the porous optimum exploits diffusive transport through intermediate-density regions that have no binary analogue. Users requiring binary geometries should apply robust projection ([Wang et al. 2011](https://doi.org/10.1007/s00158-010-0602-y)) during optimisation.
 
-2. **Run the pipeline**  
-   Open a terminal (PowerShell on Windows, bash on Linux/macOS) in the `micrograd` folder and execute:
+---
 
-   ```bash
-   # Windows PowerShell
-   .un_docker.ps1
-   
-   # Linux / macOS (bash)
-   bash run_docker.sh
-This single command will:
+## Reproduce all results
 
-Pull the official dolfinx/dolfinx image.
+```bash
+git clone https://github.com/NisongMonyimba/micrograd
+cd micrograd
+docker run --rm -v ${PWD}:/root/micrograd \
+  -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
+  dolfinx/dolfinx:v0.7.3 bash -c \
+  "cd /root/micrograd && bash run_all.sh"
+```
 
-Install micrograd and optional packages (gcma, chaospy) inside a container.
+This single command pulls the official FEniCSx Docker image, installs `micrograd`, and executes the complete pipeline. All figures and result files are written directly to the repository tree. Runtime: ~1 hour, no GPU required.
 
-Execute every analysis script in the correct order (unit tests → mesh convergence → filter sensitivity → … → Pareto sweep).
+All results are permanently archived at Zenodo: **DOI: [10.5281/zenodo.20479523](https://doi.org/10.5281/zenodo.20479523)**
 
-Collect all figures, tables, and the Supplementary Information package into your figures/ and docs/si/ folders.
+---
 
-Stop and remove the container when finished.
+## Quick start
 
-All outputs appear directly on your machine – no file copying needed.
+**Single optimisation run (linear gradient, 1400 iterations):**
 
-Option 2 – Conda (native Linux / macOS / Windows)
-If you already have Conda installed and prefer a native environment:
+```bash
+docker run --rm -v ${PWD}:/root/micrograd \
+  dolfinx/dolfinx:v0.7.3 bash -c \
+  "cd /root/micrograd && python scripts/optimize.py --target linear --iter 1400"
+```
 
-Create the environment
+**Interactive Jupyter notebook:**
 
-bash
-conda env create -f environment.yaml
-conda activate micrograd-env
-pip install -e .
-Run the complete reproduction
+```bash
+docker run --rm -p 8888:8888 -v ${PWD}:/root/micrograd \
+  dolfinx/dolfinx:v0.7.3 bash -c \
+  "cd /root/micrograd && jupyter notebook --ip=0.0.0.0"
+```
 
-bash
-# Windows PowerShell
-.un_all.ps1
+**Python API:**
 
-# Linux / macOS (if you create a bash equivalent – see run_all.sh)
-bash run_all.sh
-The script will detect missing optional packages (gcma, chaospy) and skip the corresponding steps gracefully.
-
-Quick start
-After installing the package, you can run a single optimisation in a few lines:
-
-python
+```python
 from micrograd import GradientGeneratorOptimizer
 
-# Target a linear gradient from 0 to 1 across the 500 µm outlet
 opt = GradientGeneratorOptimizer(
-    target_expr=lambda x: x[1] / 500e-6,
-    Lx=2000e-6, Ly=500e-6, nx=80, ny=20
+    target_expr=lambda x: x[1] / 500e-6,   # linear gradient
+    Lx=2000e-6, Ly=500e-6,                  # 2 mm x 0.5 mm domain
+    nx=80, ny=20                             # primary mesh
 )
-opt.run(max_iter=80)
-opt.plot()
-opt.export_stl("my_channel.stl")
-Jupyter notebook available at notebooks/topopt_gradient_generator.ipynb.
+opt.run(max_iter=600)
+print(f"RMSE = {opt.rmse:.4f}")
+```
 
-What the reproduction pipeline runs
-Step	Description	Output
-1	Core unit tests	pytest output
-2	Mesh convergence study	figures/convergence_*.png, figures/convergence_metrics.csv
-3	Filter radius sensitivity	figures/filter_*.png, figures/filter_metrics.csv
-4	Stabilisation validation	docs/si/S3_stabilization_outlet.pdf, S3_stabilization_rmse.csv
-5	Gallery of target profiles	figures/gallery_target_profiles.pdf
-6	Main figures (linear + Christmas tree + 3D)	figures/outlet_profile.pdf, figures/bar_chart_resistance.pdf, figures/3d_channel_render.png, …
-7	Supplementary Information package	docs/si/ – all figures, tables, CSVs
-8	OC vs. MMA comparison	docs/si/S4_optimizer_comparison.pdf, S4_comparison.csv
-9	Uncertainty quantification (polynomial chaos)	uq/uq_outlet_envelope.pdf, uq_mean_profile.csv
-10	Multi‑objective Pareto front	pareto/pareto_resistance_vs_rmse.pdf, pareto_data.csv
-11	Full test suite	pytest tests/ -v
-All files are placed directly into the repository structure – no extra export steps required.
+---
 
-Key features
-Density‑based topology optimisation – coupled Brinkman (Darcy) flow + convection‑diffusion
+## Key results
 
-Continuous adjoint sensitivity – cheap gradient computation independent of design variables
+| Schedule | Mesh | Iterations | RMSE | Gray fraction | Notes |
+|----------|------|-----------|------|---------------|-------|
+| Hybrid OC/MMA, β=128 | 80×20 | 1400 | **0.058** | 0.074 | Primary result |
+| Hybrid OC/MMA, β=16 | 80×20 | 600 | 0.079 | 0.443 | Short run |
+| Hybrid OC/MMA | 160×40 | 600 | 0.091 | 0.676 | Mesh sensitivity |
+| Hybrid OC/MMA | 160×40 | 2400 | 0.107 | 0.557 | Multi-modal confirmed |
+| Pure MMA | 80×20 | 600 | 0.304 | 0.412 | Validates hybrid schedule |
 
-Design regularisation – Helmholtz PDE filter & smooth Heaviside projection
+The hybrid OC/MMA schedule is **3.8× better RMSE** than pure MMA at the same iteration budget. Pure MMA stagnates near the initial objective because it cannot escape the uniform-density plateau at β=1; OC's bisection-based update provides the large initial displacement needed.
 
-Optimisation algorithms – Optimality Criteria (OC) & Method of Moving Asymptotes (MMA)
+The optimisation is **not mesh-convergent**: finer meshes find different local minima (RMSE 0.091–0.107 on 160×40), a known characteristic of non-convex topology optimisation.
 
-Continuation strategies – volume fraction (0.7→0.5) and Heaviside sharpening (β 1→16)
+---
 
-Navier–Stokes validation – body‑fitted remeshing (Gmsh) with full NS simulation
+## Implementation contributions
 
-3D extrusion & validation – 3D Navier–Stokes on extruded channel
+### 1. Continuous adjoint for coupled Brinkman–convection-diffusion
 
-Uncertainty quantification – polynomial chaos expansion for fabrication robustness (±10 % width)
+The adjoint system is derived analytically, yielding:
 
-Multi‑objective Pareto front – trade‑off between pressure drop and concentration error
+- The coupling term **−λ∇c** in the flow adjoint equation
+- The Dirichlet outlet BC **λ = c_target − c** derived directly from the misfit functional
+- Explicit sensitivity expression usable by OC/MMA without solving Mĝ = g
 
-Manufacturability checks – minimum feature size (distance transform) against 10 µm lithography limit
+This derivation is not previously published for this coupled system in FEniCSx.
 
-Christmas tree generator – direct comparison with Jeon et al. (2005)
+### 2. SUPG-stabilised adjoint
 
-Fully open‑source – MIT license, CI‑tested, pip‑installable, Jupyter notebook included
+The same element-wise stabilisation parameter τ is used for both forward and adjoint transport equations. Reduces outlet oscillation amplitude from 0.4 to < 10⁻³ and outlet slope change to < 2% across Pe ~ 10²–10⁵.
 
-Project structure
-text
+### 3. Modular continuation schedule
+
+Five components, each addressing a diagnosed failure mode:
+
+| Component | Failure mode | Effect |
+|-----------|-------------|--------|
+| Helmholtz PDE filter | Checkerboard instability | Smooth, mesh-independent ρ̃ |
+| Heaviside β-continuation | Gray-zone lock-in | Drives ρ̄ → {0,1} gradually |
+| α_max ramping | Early stagnation | Maintains OC step size |
+| Hybrid OC/MMA | MMA plateau at β=1 | OC escapes; MMA stabilises |
+| Sinusoidal initialisation | Symmetry trapping | Breaks left-right symmetry |
+
+Gray fraction reduces from 0.443 (β=16, 600 iter) to 0.074 (β=128, 1400 iter).
+
+### 4. End-to-end reproducibility at laptop scale
+
+- Single Docker command reproduces all results
+- GitHub Actions CI validates every commit inside `dolfinx/dolfinx:v0.7.3`
+- Zenodo DOI for permanent archival
+- Runtime: ~1 hour, no GPU required
+
+---
+
+## Why continuous adjoint instead of dolfin-adjoint?
+
+The discrete adjoint via [dolfin-adjoint](https://www.dolfin-adjoint.org/) would provide exact gradient magnitudes automatically. The continuous adjoint was chosen for three reasons:
+
+1. The derivation makes adjoint BCs **explicit**: λ = c_target − c on Γ_out, derived directly from the misfit functional.
+2. The coupling term **−λ∇c** is physically interpretable as the sensitivity of concentration to velocity changes.
+3. The L² Riesz representative is **directly usable by OC and MMA** without solving Mĝ = g, reducing implementation complexity.
+
+The discrete adjoint and L-BFGS are identified as future work.
+
+---
+
+## Adjoint verification
+
+| Test | Mesh | Result | Interpretation |
+|------|------|--------|---------------|
+| Taylor remainder (FD slope) | 80×20 | 2.07 | Fréchet differentiability confirmed |
+| Pearson correlation with FD | 80×20 | 0.88 | Correct descent direction |
+
+The large relative magnitude error (~3303%) is expected: the assembled sensitivity is the L² Riesz representative g, not the Euclidean gradient ĝ = M⁻¹g. Solving Mĝ = g with the consistent mass matrix would eliminate this error. For OC and MMA, only gradient direction matters.
+
+---
+
+## Repository structure
 micrograd/
-├── micrograd/                 # Core package
-│   ├── solver.py              # Brinkman + convection‑diffusion forward solver
+├── micrograd/
+│   ├── solver.py              # Brinkman + convection-diffusion forward solver
 │   ├── adjoint.py             # Continuous adjoint and sensitivity
-│   ├── optimizer.py           # OC & MMA updaters
-│   ├── gradient_optimizer.py  # Main topology optimisation class
-│   ├── validation.py          # Navier–Stokes validation, metrics
-│   ├── validation_3d.py       # 3D extrusion & validation
-│   ├── experimental_metrics.py# Pressure drop, Re, Pe, mixing length, …
-│   ├── manufacturability.py   # Min feature size, robust projection
-│   ├── christmas_tree.py      # Christmas tree simulator
-│   ├── uncertainty_quantification.py  # PCE‑based UQ
-│   ├── multiobjective.py      # Pareto sweep
-│   └── … (mesh, utilities, postprocess, etc.)
-├── examples/                  # Standalone examples
-├── tests/                     # Unit tests (pytest)
-├── notebooks/                 # Jupyter notebook demo
-├── docs/                      # Sphinx documentation + SI
-├── manuscript/                # LaTeX manuscript + figures
-├── presentation/              # Beamer slide deck
-├── run_all.ps1               # Native Conda pipeline (Windows)
-├── run_docker.ps1            # Docker pipeline (Windows, auto‑installs Docker)
-├── environment.yaml           # Exact Conda environment
-├── setup.py                   # pip‑installable package
-└── README.md
-Documentation
-API Reference – https://micrograd.readthedocs.io (autogenerated from docstrings)
+│   ├── optimizer.py           # OC and MMA updaters
+│   └── utilities.py           # Helmholtz filter, Heaviside projection, RMSE
+├── scripts/
+│   ├── optimize.py            # Single optimisation run (--target, --iter)
+│   ├── mesh_convergence.py    # 4-mesh convergence study
+│   └── extra_profiles.py      # Additional target profiles
+├── tests/                     # pytest test suite (CI-validated)
+├── notebooks/                 # Jupyter interactive walkthrough
+├── manuscript/                # LaTeX source, figures, cover letter
+│   ├── main.tex
+│   ├── macros.tex             # All numerical results as macros
+│   └── figures/
+├── figures/                   # Generated output figures
+├── run_all.sh                 # Full reproduction script
+└── submission_checklist.sh    # Pre-submission status checker
+---
 
-Supplementary Information – https://yourusername.github.io/micrograd/si/
+## Manuscript
 
-Manuscript draft – manuscript/manuscript.pdf
+**Title:** `micrograd`: An open-source FEniCSx framework for adjoint-based topology optimisation of porous microfluidic mixers using Brinkman–convection-diffusion equations
 
-Citing this work
-If you use micrograd in your research, please cite:
+**Authors:** Nisong Monyimba, Vincent Pizziconi, Aurel Coza
 
-bibtex
-@article{monyimba2025micrograd,
-  title   = {Topology optimisation of microfluidic concentration gradient generators
-             for arbitrary outlet profiles},
-  author  = {Monyimba, Nisong},
-  year    = {2025},
-  journal = {in preparation}
+**Target journal:** *Engineering with Computers* (Springer)
+
+**Preprint:** arXiv cs.NA *(submitted)*
+
+```bibtex
+@software{micrograd2025zenodo,
+  author    = {Monyimba, Nisong and Pizziconi, Vincent and Coza, Aurel},
+  title     = {{micrograd: Topology optimisation of microfluidic
+                concentration gradient generators (v1.0.0)}},
+  year      = {2026},
+  publisher = {Zenodo},
+  version   = {1.0.0},
+  doi       = {10.5281/zenodo.20479523},
+  url       = {https://github.com/NisongMonyimba/micrograd},
+  note      = {Zenodo: 10.5281/zenodo.20479523}
 }
-The code is permanently archived on Zenodo with DOI 10.5281/zenodo.XXXXXXX.
+```
 
-License
-MIT – see LICENSE file.
+---
 
-Contributing
-Contributions are welcome! Please open an issue or pull request on GitHub. For major changes, please discuss them first.
+## Requirements
 
-Contact
-Nisong Monyimba – nmonyimb@asu.edu
-GitHub: https://github.com/yourusername/micrograd
+**Recommended:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) — pulls `dolfinx/dolfinx:v0.7.3` automatically, no other setup needed.
 
-text
+**Native install:** FEniCSx 0.7.3, PETSc, petsc4py, numpy, scipy, matplotlib.
 
-> **Note**: DOI badge will be updated automatically after first release is archived on Zenodo.
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+---
+
+## Contact
+
+**Nisong Monyimba**
+School of Biological and Health Systems Engineering, Arizona State University
+Email: nisongmonyimba278@gmail.com
+ORCID: [0009-0000-7558-8580](https://orcid.org/0009-0000-7558-8580)
+GitHub: [NisongMonyimba](https://github.com/NisongMonyimba)
