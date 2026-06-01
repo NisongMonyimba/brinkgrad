@@ -73,14 +73,13 @@ is identified as future work.
 \begin{table}[h]
 \centering
 \caption{Adjoint gradient verification.
-         FD slope $\approx 2$: confirms Fr\'{e}chet differentiability
-         of $J$ (Taylor remainder test).
-         Pearson correlation $\geq 0.80$: the $L^2$ Riesz
-         representative captures the correct descent direction.
-         Rel.~err: magnitude mismatch between the Riesz
-         representative and the Euclidean gradient
-         (expected for continuous adjoint; see Limitation~L1,
-Section~\ref{sec:limitations}).}
+         FD slope $\approx 2$: confirms Fr\'{e}chet differentiability.
+         Pearson corr.\ $\geq 0.80$: correct descent direction.
+         Rel.~err: magnitude mismatch between $L^2$ Riesz
+         representative $g$ and Euclidean gradient $\hat{g}=M^{-1}g$.
+         The 3303\% error on the primary mesh is the expected
+         consequence of the lumped mass approximation $g/m_i\neq M^{-1}g$,
+         not an implementation defect (see text and Limitation~L1).}
 \label{tab:adjoint_verif}
 \begin{tabular}{@{}lcccc@{}}
 \toprule
