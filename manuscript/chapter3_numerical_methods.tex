@@ -56,10 +56,15 @@ via Lagrange multiplier bisection (OC) and dual bisection (MMA).
 \label{sec:continuation}
 Each component of the continuation schedule is documented
 in Table~\ref{tab:continuation} with its motivation.
-The hybrid OC/MMA schedule is a heuristic engineering choice:
-OC is faster in the early uniform-density phase;
-MMA is more stable during late-phase $\beta$-sharpening.
-Pure MMA throughout is a valid and simpler alternative.
+The hybrid OC/MMA schedule is validated by direct comparison:
+pure MMA throughout stagnates near the initial objective
+(RMSE~$=\rmsePureMMA$, gray fraction $\grayPureMMA$
+after 600 iterations, Table~\ref{tab:mma_comparison}),
+because MMA cannot escape the uniform-density plateau
+without the larger OC move at $\beta=1$.
+OC with its bisection-based update provides the large
+initial displacement needed; MMA then stabilises
+the late-phase $\beta$-sharpening.
 The framework is fully modular: any component can be
 disabled by setting its parameter to the trivial value
 (e.g.\ $r_{\rm filter}\to0$, $\beta\equiv1$,
@@ -78,7 +83,7 @@ pure OC or pure MMA).
 Helmholtz PDE filter & Mesh-dependent checkerboard & Smooth, mesh-independent $\rho_f$ \\
 Heaviside projection ($\beta$-continuation) & Premature gray-zone lock-in & Drives $\bar\rho\to\{0,1\}$ gradually \\
 $\alpha_{\max}$ ramping & All-solid early stagnation & Avoids non-fluid local minima \\
-Hybrid OC/MMA & Empirical: OC faster early, MMA more stable at high $\beta$ & Practical engineering choice; pure MMA is a valid alternative \\
+Hybrid OC/MMA & Pure MMA stagnates at $J\approx J_0$ for 600 iter (RMSE~$=\rmsePureMMA$, Table~\ref{tab:mma_comparison}); OC escapes the initial plateau & Validated by direct comparison \\ 
 Sinusoidal initialisation & Bias toward uniform $\rho=V^*$ & Breaks symmetry, aids branching topology \\
 \bottomrule
 \end{tabular}
@@ -142,6 +147,25 @@ Starting low ensures flow can propagate through intermediate-density
 regions while topology develops; the cap at $10^5$ is chosen based
 on a sensitivity sweep showing it maximises the OC update signal
 (OC signal $\propto$ sens\_std / mean\_mass).
+
+
+\begin{table}[h]
+\centering\small
+\caption{Hybrid OC/MMA vs.\ pure MMA: 600-iteration comparison
+         on the $80\times20$ mesh, linear gradient target.
+         Pure MMA stagnates near the initial objective;
+         the hybrid schedule is validated by this comparison.}
+\label{tab:mma_comparison}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Schedule & RMSE & $J_{\rm best}$ & Gray fraction \\
+\midrule
+Pure MMA (600 iter) & $\rmsePureMMA$ & $2.78\times10^{-3}$ & $\grayPureMMA$ \\
+Hybrid OC/MMA (600 iter) & $\rmseShortRun$ & $\ensuremath{1.77\times10^{-3}}$ & $\grayShortRun$ \\
+Hybrid OC/MMA (1400 iter) & $\rmseTopOpt$ & $\finalJ$ & $\grayFrac$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Definition and reporting of outlet RMSE}
 \label{sec:metrics}

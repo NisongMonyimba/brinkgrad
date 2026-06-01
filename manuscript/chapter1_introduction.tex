@@ -105,13 +105,16 @@ Open source & partial & --- & --- & \checkmark & \checkmark \\
           Heaviside projection
           (Section~\ref{sec:verification}).
 
-    \item \textbf{Documented heuristic continuation schedule.}
+    \item \textbf{Empirically validated continuation schedule.}
           A five-component schedule (Helmholtz filtering,
           Heaviside $\beta$-sharpening, $\alpha_{\max}$ ramping,
-          hybrid OC/MMA, sinusoidal initialisation) is documented
-          with its empirical motivation (Table~\ref{tab:continuation}).
-          The hybrid OC/MMA split is a heuristic engineering choice;
-          pure MMA is a valid simpler alternative.
+          hybrid OC/MMA, sinusoidal initialisation) with each
+          component's motivation documented
+          (Table~\ref{tab:continuation}).
+          The hybrid OC/MMA split is validated by direct comparison:
+          pure MMA gives RMSE~$=\rmsePureMMA$ vs.
+          RMSE~$=\rmseShortRun$ for the hybrid
+          (Table~\ref{tab:mma_comparison}).
 
     \item \textbf{Open-source reproducible implementation.}
           \texttt{micrograd} is released under the MIT licence

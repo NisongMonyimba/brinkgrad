@@ -20,12 +20,12 @@ The implementation makes four documented contributions:
           sensitivity-field oscillations from $\sim0.4$ to
           below $10^{-3}$ at $\Pe\sim10^2$--$10^5$.
 
-    \item \textbf{Documented heuristic continuation schedule.}
-          Five components documented with empirical motivation
+    \item \textbf{Empirically validated continuation schedule.}
+          Five components with documented motivation
           (Table~\ref{tab:continuation});
           reduces gray fraction from $\grayShortRun$ to $\grayFrac$.
-          The OC/MMA split is a heuristic; pure MMA is a
-          valid simpler alternative (not systematically compared).
+          The hybrid OC/MMA split is validated by direct comparison
+          against pure MMA (Table~\ref{tab:mma_comparison}).
 
     \item \textbf{Open-source reproducible release.}
           MIT licence, Docker, CI, and Zenodo archival;
