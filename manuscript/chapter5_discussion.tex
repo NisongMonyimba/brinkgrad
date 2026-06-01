@@ -227,8 +227,8 @@ on every commit.
           For OC and MMA, only gradient direction matters
           (Pearson corr.\ $\geq 0.80$; validated by
           Table~\ref{tab:mma_comparison});
-          methods needing exact magnitude (L-BFGS)
-          require the discrete adjoint (future work).
+          methods needing exact magnitude
+          (e.g.\ L-BFGS) require a discrete adjoint.
     \item \textbf{Porous-medium optimum and binary gap.}
           The surrogate RMSE~$=\rmseTopOpt$ is the optimum
           within the Brinkman--SIMP porous-medium model, not the
@@ -242,13 +242,11 @@ on every commit.
           Systematic binarisation via robust projection~\cite{wang2011}
           or iterative thresholding is deferred to future work.
     \item \textbf{Brinkman approximation.}
-          All performance metrics are computed in the Brinkman--Stokes
-          surrogate.
-          At $\Da \approx 4\times10^{-6} \ll 1$ in solid regions, the
-          surrogate accurately represents impermeability~\cite{borrvall2003}.
-          Body-fitted Navier--Stokes validation
-          (\texttt{ns\_validation.py}) requires \texttt{pyvista}
-          and \texttt{gmsh} not in the standard Docker image;
+          All metrics are computed in the Brinkman--Stokes surrogate.
+          At $\Da\approx4\times10^{-6}\ll1$, the surrogate
+          represents impermeability accurately~\cite{borrvall2003}.
+          Body-fitted NS validation (\texttt{ns\_validation.py})
+          requires \texttt{pyvista}/\texttt{gmsh};
           deferred to a companion study.
     \item \textbf{L2: The OC/MMA schedule is empirically validated
           but not theoretically proven optimal.}
