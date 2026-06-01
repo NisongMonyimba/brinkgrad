@@ -6,6 +6,13 @@
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
 \usepackage{cite}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small\textit{micrograd: FEniCSx topology optimisation}}
+\lhead{\small Monyimba, Pizziconi, Coza}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
 \usepackage[nopatch=eqnum]{microtype}
 % Author affiliation — replace ORCID placeholder before submission
 % \usepackage{authblk}  % uncomment if journal requires authblk
@@ -15,7 +22,8 @@
 \title{\texttt{micrograd}: An open-source FEniCSx framework for adjoint-based topology optimisation of porous microfluidic mixers using Brinkman--convection-diffusion equations}
 \author{Nisong Monyimba$^{1}$\thanks{ORCID:
   \href{https://orcid.org/0009-0000-7558-8580}{0009-0000-7558-8580}},
-  Vincent Pizziconi$^{1}$, Aurel Coza$^{1}$\\
+  Vincent Pizziconi$^{1}$\thanks{ORCID: to be added by co-author},
+  Aurel Coza$^{1}$\thanks{ORCID: to be added by co-author}\\
 \small $^{1}$School of Biological and Health Systems Engineering,\\
 \small Arizona State University, Tempe, AZ, USA\\
 \small \texttt{nisongmonyimba278@gmail.com}}
