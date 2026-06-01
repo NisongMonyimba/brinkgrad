@@ -80,16 +80,10 @@ $L_x/U_c \approx 20\,\text{s}$.
 The ratio $t_{\mathrm{diff}}/t_{\mathrm{flow}} \approx 3000$
 confirms that diffusive leakage through solid regions is negligible in
 steady state, even for intermediate grey densities.
-\begin{equation}
-  \delta \approx \sqrt{\frac{D_{\rm fluid}\,L_y}{u_{\rm max}}} \approx 4\,\mu{\rm m}.
-  \label{eq:delta}
-\end{equation}
-
-
 This conclusion is verified quantitatively: re-solving the forward
 problem on the hard-thresholded thresholded-permeability design ($\rho \in \{0,1\}$,
 $D = 0$ in solid) produces an RMSE change of $+\binaryGapPct\%$
-relative to the grey design (Section~\ref{sec:thresholding}, Table~S5.1).
+relative to the grey design (Section~\ref{sec:thresholding}).
 This large gap is mechanistically expected for a mixing objective
 (Section~\ref{sec:thresholding}): the grey Brinkman design exploits
 diffusive transport through intermediate-density elements that have
@@ -133,6 +127,16 @@ Darcy number & $\Da$ & $4\times10^{-6}$ & Impermeability valid ($\Da\ll1$) \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+The diffusion sublayer thickness at the outlet is
+\begin{equation}
+  \delta \approx \sqrt{\frac{D_{\rm fluid}\,L_y}{u_{\rm max}}} \approx 4\,\mu{\rm m},
+  \label{eq:delta}
+\end{equation}
+which is underresolved by a factor of $\approx6\times$ at
+$\Delta y=25\,\mu$m; SUPG eliminates spurious oscillations
+but does not recover sub-grid diffusion structure
+(Section~\ref{sec:mesh_limitation}).
 
 \subsection{Optimisation problem}
 The design is driven by a multi-objective cost functional that simultaneously penalises viscous dissipation (a proxy for pressure drop) and the deviation of the outlet concentration from a user-specified target \(c_{\text{target}}\):
