@@ -1,4 +1,4 @@
-We present \texttt{micrograd}, an open-source FEniCSx implementation
+We present \texttt{micro\-grad}, an open-source FEniCSx implementation
 of density-based topology optimisation for coupled Brinkman--convection-diffusion systems.
 The implementation integrates a continuous adjoint for a multi-objective
 cost functional coupling viscous dissipation and outlet concentration mismatch,
@@ -27,7 +27,7 @@ as the sharp midpoint transition exceeds the diffusive
 capacity of the Brinkman model at $\Pe\sim10^3$.
 The optimisation is not mesh-convergent: finer meshes find
 different local minima (RMSE~$=\rmseHiRes$--$\rmseHiResScaled$).
-\texttt{micrograd} optimises within the Brinkman--SIMP porous-medium model;
+\texttt{micro\-grad} optimises within the Brinkman--SIMP porous-medium model;
 the optimised permeability field is \emph{not} a manufacturable design.
 Hard-thresholding to binary permeability increases RMSE by $\binaryGapPct\%$,
 confirming that the surrogate exploits gray-zone diffusion unavailable
