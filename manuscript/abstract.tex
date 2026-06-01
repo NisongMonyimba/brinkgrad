@@ -28,9 +28,10 @@ Brinkman--SIMP porous-medium model;
 the optimised permeability field is \emph{not} a manufacturable design.
 Hard-thresholding to binary permeability increases RMSE by $\binaryGapPct\%$,
 confirming that the surrogate exploits gray-zone diffusion unavailable
-in physical geometries.
-Users requiring manufacturable designs should apply robust projection
-methods~\cite{wang2011} during optimisation.
+in physical geometries;
+therefore, the optimised permeability field is not a manufacturable design.
+Users requiring binary geometries should apply robust
+projection~\cite{wang2011} during optimisation.
 The complete pipeline reproduces in approximately one hour
 from a single Docker command, archived with
 a Zenodo DOI~\cite{micrograd2025zenodo}.
