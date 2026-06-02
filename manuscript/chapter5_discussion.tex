@@ -54,7 +54,7 @@ but are outside the scope of this implementation paper.
 \subsection{Scope and computational cost}
 This paper presents a surrogate-based optimisation framework;
 the contribution is the continuous adjoint derivation, SUPG-stabilised
-implementation, continuation strategies, and reproducibility infrastructure,
+implementation, configuration settings, and reproducibility infrastructure,
 not a directly physically realisable device design.
 The Brinkman--SIMP model produces continuously graded permeability
 distributions that exploit diffusive mixing through intermediate-density
@@ -74,7 +74,7 @@ manufacturable geometries.
 The framework is therefore a tool for studying the behaviour of
 porous-medium flow-transport topology optimisation --- the
 achievable RMSE within the surrogate model, the effect of
-continuation strategies, and the sensitivity to mesh resolution
+configuration settings, and the sensitivity to mesh resolution
 and volume fraction.
 Users requiring binary designs should apply
 robust projection~\cite{wang2011} or iterative thresholding
