@@ -300,6 +300,29 @@ All results & \texttt{bash run\_all.sh} \\
 \end{tabular}
 \end{table}
 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{../figures/software_architecture.pdf}
+\caption{Software architecture of \texttt{micrograd}.
+         \emph{All constituent techniques are established}:
+         continuous adjoint~\cite{borrvall2003,othmer2008},
+         SUPG stabilisation~\cite{brooks1982,donea2003},
+         Brinkman--SIMP~\cite{borrvall2003},
+         Helmholtz filtering~\cite{lazarov2016},
+         Heaviside projection~\cite{wang2011},
+         OC~\cite{bendsoe2003}, MMA~\cite{svanberg1987}.
+         The contribution of this work is their \emph{integration}
+         into a single documented, tested, and reproducible FEniCSx
+         framework for coupled flow-transport topology optimisation
+         (Layer~0--4, top to bottom).
+         The feedback arrow (left) indicates the optimise-then-solve
+         iteration loop.
+         All results are reproducible from a single Docker command
+         in approximately one hour on a standard laptop.}
+\label{fig:architecture}
+\end{figure}
+
 The full pipeline (all results) is reproduced by
 (tested with DOLFINx~v0.7.3; newer versions v0.8.x+ are expected to work):
 \begin{lstlisting}[language=bash,breaklines=true]
