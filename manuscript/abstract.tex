@@ -7,11 +7,6 @@ following standard practice~\cite{donea2003} at
 $\Pe\sim10^2$--$10^5$,
 and a modular continuation schedule that reduces the gray-zone fraction
 from $\grayShortRun$ to $\grayFrac$ over $\nIterPrimary$ iterations.
-Gradient direction is verified by finite-difference Taylor test (slope $\approx 2.0$)
-and Pearson correlation $\geq 0.80$ with finite-difference gradients;
-the OC and MMA optimisers depend only on gradient sign, confirmed numerically
-as validated by direct comparison against pure MMA
-(Table~\ref{tab:mma_comparison}).
 
 As a verification benchmark, the implementation achieves
 RMSE~$=\rmseTopOpt$ for a linear concentration gradient
@@ -29,7 +24,7 @@ Brinkman--SIMP porous-medium model;
 the optimised permeability field is \emph{not} a manufacturable design.
 Hard-thresholding to binary permeability increases RMSE by $+\binaryGapPct\%$,
 confirming that the surrogate exploits gray-zone diffusion unavailable
-in physical geometries;
+in physical geometries.
 Users requiring binary geometries should apply robust
 projection~\cite{wang2011} during optimisation.
 The complete pipeline reproduces in $\approx$1 hour
