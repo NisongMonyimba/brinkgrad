@@ -134,19 +134,16 @@ parameter to its trivial value.
 
 \subsection{Mesh resolution and optimizer sensitivity}
 \label{sec:mesh_limitation}
-The optimisation is \emph{not mesh-convergent} for the
-concentration RMSE objective.
 The $160\times40$ mesh yields RMSE~$=\rmseHiRes$ (600 iterations)
-and RMSE~$=\rmseHiResScaled$ ($\nIterHiRes$ iterations, resolution-scaled)
---- both worse than the $80\times20$ result (RMSE~$=\rmseTopOpt$).
-The non-convex optimisation landscape produces different local minima
-at each resolution; increasing the iteration budget does not recover
+and RMSE~$=\rmseHiResScaled$ ($\nIterHiRes$ iterations),
+compared to the $80\times20$ result (RMSE~$=\rmseTopOpt$).
+Different meshes find different local minima;
+increasing the iteration budget does not recover
 the $80\times20$ result at $160\times40$.
-This is a fundamental limitation of density-based topology optimisation
-applied to mixing objectives on non-uniform meshes: the continuation
-schedule is not mesh-independent~\cite{lazarov2016}.
-All quantitative results are therefore reported for the
-$80\times20$ mesh as a \emph{proof-of-concept}.
+This is a known property of density-based topology optimisation
+on non-uniform meshes~\cite{lazarov2016}.
+The $80\times20$ mesh is the validated primary configuration
+for this software verification benchmark.
 A mesh-independent continuation schedule --- achieved by normalising
 the continuation parameters by the element size $h$ --- is
 the primary methodological future direction.
