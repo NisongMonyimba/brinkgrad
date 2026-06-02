@@ -494,6 +494,45 @@ Open-source licence          & MIT     & \url{https://github.com/NisongMonyimba/
 
 
 
+
+\subsection{Software validation}
+\label{sec:sw_validation}
+
+Software validation, distinct from numerical gradient verification
+(Section~\ref{sec:verification}), confirms that the software
+executes correctly and reproducibly across environments and
+over time.
+Three complementary validation mechanisms are employed.
+
+\paragraph{Reproducibility validation.}
+All results in this paper were generated inside the
+\texttt{dolfinx/dolfinx:v0.7.3} Docker container
+on a standard laptop (8-core CPU, 16 GB RAM, Ubuntu 22.04).
+The JSON result files in \texttt{results/} record the exact
+RMSE, gray-zone fraction, and convergence history for each run.
+Re-running \texttt{bash run\_all.sh} from a clean clone
+produces results matching the archived JSON files to
+floating-point precision, confirming bit-reproducibility
+within the pinned Docker environment.
+
+\paragraph{Regression validation.}
+The CI pipeline (Section~\ref{sec:software_architecture})
+runs a 20-iteration mini-optimisation on the $20\times5$ mesh
+and asserts $J_{\rm best} < J_{\rm init}$ on every commit
+(Test~7 in Table~\ref{tab:sw_metrics}).
+This regression test detects any code change that breaks
+optimisation monotonicity, including changes to the
+adjoint sign, filter implementation, or optimiser update.
+
+\paragraph{API surface validation.}
+Tests 1--6 verify the full public API surface:
+import integrity, forward-solver bounds ($c\in[0,1]$),
+adjoint descent direction, OC volume constraint,
+MMA volume constraint, and the $\alpha$ floor.
+All 15 tests pass on every push to the \texttt{main} branch,
+as shown by the CI badge in the repository README.
+
+
 The full pipeline (all results) is reproduced by
 (tested with DOLFINx~v0.7.3; newer versions v0.8.x+ are expected to work):
 \begin{lstlisting}[language=bash,breaklines=true]

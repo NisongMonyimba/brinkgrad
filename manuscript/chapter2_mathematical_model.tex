@@ -289,24 +289,13 @@ previously used in the implementation, which is non-differentiable and
 alters the adjoint right-hand side.
 
 
-\paragraph{Why continuous adjoint rather than discrete adjoint.}
-The continuous adjoint is chosen over the discrete adjoint
-(e.g.\ dolfin-adjoint~\cite{farrell2013}) for three reasons.
-First, the derivation provides explicit analytical insight into
-the adjoint boundary conditions: the Dirichlet outlet condition
+\paragraph{Adjoint formulation.}
+The present implementation uses the continuous adjoint,
+which makes the coupling term $-\lambda\nabla c$
+and the misfit-derived Dirichlet outlet condition
 $\lambda = c_{\rm target} - c$ on $\Gamma_{\rm out}$
-and the homogeneous conditions elsewhere follow directly from
-the misfit functional, making the physical interpretation transparent.
-Second, the coupling term $-\lambda\nabla c$ in the flow adjoint
-equation~\eqref{eq:adj_flow_mom} is explicit; a discrete adjoint
-would produce this term automatically but would obscure its
-physical origin as the sensitivity of the concentration field
-to changes in the velocity.
-Third, the $L^2$ Riesz representative produced by the continuous
-adjoint is directly usable by sign-based optimisers (OC, MMA)
-without solving $M\hat{g}=g$, reducing implementation complexity.
-The discrete adjoint would provide exact gradient magnitudes
-and is identified as future work for use with gradient-based
-line-search methods (e.g.\ L-BFGS).
+explicit in the UFL source.
+A discrete adjoint~\cite{farrell2013} providing exact gradient
+magnitudes is identified as future work.
 
 % SUPG stabilisation moved to Section 3 (numerical methods)
