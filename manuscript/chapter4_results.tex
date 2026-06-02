@@ -159,8 +159,17 @@ relative to a reference solution on a $160\times40$ mesh.
 Full upwinding over-diffuses the profile (slope reduction $\approx30\%$)
 and is not used.
 
-\section{Benchmark results}
+\section{Verification benchmark results}
 \label{sec:results}
+
+The numerical values reported in this section
+(RMSE, hydraulic resistance, gray-zone fraction)
+are verification outputs confirming that the software
+executes correctly on the linear benchmark problem.
+They are not claims of optimal physical performance;
+the linear concentration gradient target is chosen
+for verifiability, not engineering difficulty.
+
 
 \begin{figure}[h]
     \centering
@@ -226,8 +235,9 @@ A 600-iteration run yields RMSE~$=\rmseShortRun$ in under 30 minutes.
 
 \subsection{Porous-medium scope: thresholding study}
 \label{sec:thresholding}
-The primary result uses a $\nIterPrimary$-iteration hybrid OC/MMA run
-with $\beta$-continuation to $\beta=\betaMax$.
+The primary verification run uses $\nIterPrimary$ iterations
+with the hybrid OC/MMA default configuration
+and $\beta$-continuation to $\beta=\betaMax$.
 The gray-zone fraction ($0.05 < \bar\rho < 0.95$) is
 $\grayFrac$ and the fluid volume fraction is $\fluidVol$.
 For reference, a shorter 600-iteration run (continuation to $\beta=16$ only)

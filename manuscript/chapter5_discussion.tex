@@ -1,6 +1,55 @@
 \section{Discussion}
 \label{sec:discussion}
 
+\subsection{Software verification suite}
+\label{sec:sw_verif_suite}
+
+The following five verification tests confirm that the software
+executes as intended.
+Each test is a software check, not a claim of physical optimality.
+
+\begin{enumerate}
+    \item \textbf{Linear gradient benchmark.}
+          The software produces RMSE~$=\rmseTopOpt$ on the
+          $80\times20$ mesh with the default configuration,
+          confirming that the adjoint, filter, and optimiser
+          pipeline executes without error and reduces the
+          objective from its initial value.
+
+    \item \textbf{OC/MMA comparison.}
+          Replacing the hybrid OC/MMA schedule with pure MMA
+          produces RMSE~$=\rmsePureMMA$ vs.\
+          RMSE~$=\rmseShortRun$ for the hybrid at 600 iterations
+          (Table~\ref{tab:mma_comparison}),
+          confirming that the default OC/MMA configuration
+          functions as documented.
+
+    \item \textbf{Gradient verification.}
+          The Taylor remainder test (slope $\approx2.0$)
+          and Pearson direction correlation ($\geq0.80$)
+          confirm correct adjoint implementation
+          (Table~\ref{tab:adjoint_verif}).
+
+    \item \textbf{Volume fraction sweep.}
+          RMSE is minimised near $V^*=0.5$
+          (Table~\ref{tab:vstar}),
+          confirming that the volume constraint is correctly
+          enforced by the OC bisection algorithm.
+
+    \item \textbf{Porous-medium scope check.}
+          Threshold-projection to binary permeability
+          increases RMSE by $+\binaryGapPct\%$
+          (Supplementary~S5),
+          confirming that the framework operates within
+          the Brinkman--SIMP porous-medium model as documented.
+\end{enumerate}
+
+All five verification tests pass on the primary $80\times20$ mesh.
+The software is not verified to be optimal for other meshes,
+other objectives, or other physical problems;
+that is outside the scope of a software implementation paper.
+
+
 \subsection{What this paper contributes and what it does not}
 \label{sec:contribution_clarity}
 
