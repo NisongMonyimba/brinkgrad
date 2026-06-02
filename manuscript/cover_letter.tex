@@ -48,8 +48,8 @@ We apply SUPG consistently to both equations and verify gradient accuracy
 via finite-difference Taylor test (slope $\approx 2.0$) and direction test
 (Pearson correlation $\geq 0.80$ with finite-difference gradients).
 
-\item \textbf{Continuation strategies for robust convergence.}
-Five nested continuation strategies --- Helmholtz PDE filtering,
+\item \textbf{Documented default configuration.}
+Five modular settings --- Helmholtz PDE filtering,
 Heaviside $\beta$-continuation to $\beta=128$, logarithmic
 $\alpha_{\max}$ ramping, hybrid OC/MMA scheduling, and volume-fraction
 targeting --- reduce the gray-zone fraction from $0.443$ (at $\beta=16$)
@@ -89,7 +89,7 @@ PDE-constrained optimisation, and stabilised finite element methods.
 The paper builds on the Borrvall--Petersson~(2003) framework published in
 Engineering with Computers and extends it to coupled flow-transport
 systems with a SUPG-stabilised adjoint, open-source
-reproducibility infrastructure, and a modular continuation schedule ---
+reproducibility infrastructure, and a documented default configuration ---
 topics that align directly with the journal's focus on computational
 engineering methodology and reproducible software frameworks.
 

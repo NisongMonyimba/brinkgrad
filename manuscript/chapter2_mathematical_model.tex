@@ -37,7 +37,7 @@ Following Borrvall \& Petersson~\cite{borrvall2003}, we use the convex interpola
     \label{eq:alpha}
 \end{equation}
 with \(\alpha_{\min}=10^{-4}\) (residual permeability to keep the problem well-posed) and \(\alpha_{\max}\) ramped from \(10^{3}\) to \(10^{5}\) during optimisation (see Section~\ref{sec:methods}).
-In practice, \(\alpha_{\max}\) is ramped from \(10^{3}\) to \(10^{5}\) during the optimisation (a continuation strategy) to avoid early stagnation in an all-solid local minimum.
+In practice, \(\alpha_{\max}\) is ramped from \(10^{3}\) to \(10^{5}\) during the optimisation to avoid early stagnation in an all-solid local minimum.
 
 Boundary conditions for the velocity are no-slip on the walls (\(\mathbf{u}=\mathbf{0}\)) and a prescribed pressure on the inlets and outlet:
 \begin{equation}

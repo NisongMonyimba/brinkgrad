@@ -34,7 +34,7 @@ complement~\cite{elman2014}; scalability results are in
 Supplementary Information~S1.
 
 \subsection{Optimisation algorithm}
-The design is updated using a hybrid optimisation strategy.
+The design is updated using the hybrid OC/MMA configuration.
 In the topology-formation phase (iterations~0--299), the
 Optimality Criteria (OC) method~\cite{bendsoe2003} is used:
 \begin{equation}
@@ -52,7 +52,7 @@ A convergence comparison is in not reported.
 The volume constraint is enforced explicitly in both update rules
 via Lagrange multiplier bisection (OC) and dual bisection (MMA).
 
-\subsection{Continuation strategies}
+\subsection{Default configuration and continuation settings}
 \label{sec:continuation}
 Each component of the continuation schedule is documented
 in Table~\ref{tab:continuation} with its motivation.
@@ -72,13 +72,13 @@ pure OC or pure MMA).
 
 \begin{table}[h]
 \centering\small
-\caption{Continuation strategies: diagnosed failure mode,
+\caption{Default configuration settings: addressed failure mode,
          remedy, and effect on primary result.
          Each component is modular and independently disableable.}
 \label{tab:continuation}
 \begin{tabular}{@{}p{2.6cm}p{3.4cm}p{4.4cm}@{}}
 \toprule
-\textbf{Strategy} & \textbf{Failure mode} & \textbf{Effect} \\
+\textbf{Setting} & \textbf{Failure mode addressed} & \textbf{Effect} \\
 \midrule
 Helmholtz PDE filter & Mesh-dependent checkerboard & Smooth, mesh-independent $\rho_f$ \\
 Heaviside projection ($\beta$-continuation) & Premature gray-zone lock-in & Drives $\bar\rho\to\{0,1\}$ gradually \\
@@ -91,7 +91,7 @@ Sinusoidal initialisation & Bias toward uniform $\rho=V^*$ & Breaks symmetry, ai
 
 
 \label{sec:continuation}
-Five nested continuation strategies ensure reliable convergence to
+The five default settings work together to ensure reliable convergence to
 connected, near-thresholded-permeability designs.
 
 \paragraph{Volume fraction continuation.}
