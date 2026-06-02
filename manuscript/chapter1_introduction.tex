@@ -81,47 +81,49 @@ Open source & partial & --- & --- & \checkmark & \checkmark \\
 
 \subsection*{Contributions}
 
+All techniques used --- continuous adjoint, SUPG stabilisation,
+Brinkman--SIMP, Helmholtz filtering, Heaviside projection, OC, MMA ---
+are established methods from the literature.
+The contribution of this paper is their integration into a complete,
+documented, tested, and reproducible open-source FEniCSx framework
+for coupled flow-transport topology optimisation.
+Specifically:
+
 \begin{enumerate}
-    \item \textbf{Continuous adjoint implementation for coupled
-          Brinkman--convection-diffusion.}
-          We derive and implement the continuous adjoint for the
-          coupled system with a multi-objective cost functional,
-          including the momentum--concentration coupling term
-          $-\lambda\nabla c$ and a Dirichlet outlet condition
-          derived from the misfit functional.
-          While the adjoint structure follows standard Lagrangian
-          methodology~\cite{borrvall2003,othmer2008}, a complete
-          open-source FEniCSx implementation for this coupled system
-          has not been previously published
-          (Section~\ref{sec:adjoint}).
+    \item \textbf{Open-source implementation of coupled
+          Brinkman--convection-diffusion topology optimisation in FEniCSx.}
+          A complete, installable Python package implementing the
+          coupled forward problem, continuous adjoint
+          (including the coupling term $-\lambda\nabla c$
+          and misfit-derived Dirichlet outlet condition),
+          and sensitivity computation.
+          No equivalent open-source FEniCSx implementation
+          for this coupled system has been previously published
+          (Table~\ref{tab:comparison}, Section~\ref{sec:adjoint}).
 
-    \item \textbf{SUPG-stabilized adjoint implementation in FEniCSx.}
-          We implement the stabilised forward and adjoint solvers
-          and verify gradient accuracy via finite-difference Taylor
-          test (slope $\approx 2.0$) and direction test
-          (correlation $\geq 0.80$), confirming consistently implemented
-          chain-rule propagation through Helmholtz filter and
-          Heaviside projection
-          (Section~\ref{sec:verification}).
+    \item \textbf{Documented implementation of stabilised
+          forward and adjoint transport at $\Pe\sim10^2$--$10^5$.}
+          The standard SUPG stabilisation~\cite{brooks1982,donea2003}
+          is applied consistently to both forward and adjoint
+          transport equations and verified by finite-difference
+          Taylor test (slope $\approx 2.0$, Pearson
+          correlation $\geq 0.80$; Section~\ref{sec:verification}).
 
-    \item \textbf{Empirically validated continuation schedule.}
-          A five-component schedule (Helmholtz filtering,
-          Heaviside $\beta$-sharpening, $\alpha_{\max}$ ramping,
-          hybrid OC/MMA, sinusoidal initialisation) with each
-          component's motivation documented
-          (Table~\ref{tab:continuation}).
-          The hybrid OC/MMA split is validated by direct comparison:
-          pure MMA gives RMSE~$=\rmsePureMMA$ vs.
-          RMSE~$=\rmseShortRun$ for the hybrid
-          (Table~\ref{tab:mma_comparison}).
-
-    \item \textbf{Open-source reproducible implementation.}
-          \texttt{micrograd} is released under the MIT licence
-          with Docker, GitHub Actions CI, and Zenodo archival.
-          All figures and results in this paper are recoverable
-          from a single command in approximately one hour
-          on a standard laptop
+    \item \textbf{Reproducible software architecture.}
+          Docker container, GitHub Actions CI on every commit,
+          Zenodo archival, pytest suite, and Jupyter notebook.
+          All results in this paper are reproducible from a single
+          command in approximately one hour on a standard laptop
           (Section~\ref{sec:reproducibility}).
+
+    \item \textbf{Verification and software-validation suite.}
+          Gradient verification (Taylor remainder, direction test),
+          mesh sensitivity study (four meshes),
+          binary-gap quantification ($+\binaryGapPct\%$),
+          and OC/MMA schedule validation by direct comparison
+          (pure MMA: RMSE~$=\rmsePureMMA$
+          vs.\ hybrid: RMSE~$=\rmseShortRun$;
+          Table~\ref{tab:mma_comparison}).
 \end{enumerate}
 
 \paragraph{Nature of contribution.}

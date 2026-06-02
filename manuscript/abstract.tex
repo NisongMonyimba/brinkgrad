@@ -1,15 +1,19 @@
-We present \texttt{micro\-grad}, an open-source FEniCSx
-\emph{software implementation} of density-based topology optimisation
-for coupled Brinkman--convection-diffusion systems.
-The primary contribution is the implementation itself:
-a documented, tested, and reproducible adjoint-based framework
-that does not currently exist in the open-source literature.
-The implementation integrates a continuous adjoint for a multi-objective
-cost functional coupling viscous dissipation and outlet concentration mismatch,
-SUPG stabilisation of both forward and adjoint transport equations
+We present \texttt{micro\-grad}, a complete open-source reference
+implementation that integrates established techniques
+(continuous adjoint, SUPG stabilisation, Brinkman--SIMP,
+Helmholtz filtering, Heaviside projection, OC/MMA)
+into a reproducible FEniCSx framework for
+coupled flow-transport topology optimisation.
+The contribution is the integration and documentation:
+no equivalent open-source FEniCSx implementation
+for coupled Brinkman--convection-diffusion
+has been previously published.
+The framework implements a multi-objective cost functional
+coupling viscous dissipation and outlet concentration mismatch,
+with SUPG-stabilised forward and adjoint transport
 following standard practice~\cite{donea2003} at
 $\Pe\sim10^2$--$10^5$,
-and a modular continuation schedule that reduces the gray-zone fraction
+and a modular continuation schedule reducing the gray-zone fraction
 from $\grayShortRun$ to $\grayFrac$ over $\nIterPrimary$ iterations.
 
 As a verification benchmark, the implementation achieves
