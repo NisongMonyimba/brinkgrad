@@ -323,6 +323,144 @@ All results & \texttt{bash run\_all.sh} \\
 \label{fig:architecture}
 \end{figure}
 
+\subsection{Software architecture}
+\label{sec:software_architecture}
+
+Figure~\ref{fig:architecture} summarises the five-layer software architecture.
+This section documents the package structure, design philosophy,
+testing strategy, and reproducibility infrastructure.
+
+\paragraph{Package structure.}
+\texttt{micrograd} is a single flat Python package
+(\texttt{micrograd/}) with one public entry point:
+
+\begin{lstlisting}[language=Python,breaklines=true]
+from micrograd import GradientGeneratorOptimizer
+opt = GradientGeneratorOptimizer(nx=80, ny=20,
+    target_expr=lambda x: x[1]/500e-6,
+    w_f=1e-3, w_c=50.0, V_star=0.5)
+opt.run(max_iter=1400)
+\end{lstlisting}
+
+\noindent
+The internal modules and their responsibilities are:
+
+\begin{itemize}\itemsep2pt
+    \item \texttt{solver.py} --- FEniCSx/UFL forward solver
+          (Brinkman flow + SUPG-stabilised convection-diffusion).
+    \item \texttt{adjoint.py} --- continuous adjoint solver,
+          sensitivity assembly $g_i=\int(\partial J/\partial\bar\rho)\psi_i\,\mathrm{d}x$,
+          and Euclidean gradient via mass-system solve $M\hat{g}=g$.
+    \item \texttt{optimizer.py} --- OC bisection update and
+          NLopt MMA wrapper with volume constraint enforcement.
+    \item \texttt{utilities.py} --- Helmholtz PDE filter,
+          Heaviside projection, $\alpha(\bar\rho)$ interpolation,
+          $D_{\mathrm{eff}}(\bar\rho)$, and shared physical constants.
+    \item \texttt{gradient\_optimizer.py} --- top-level
+          \texttt{GradientGeneratorOptimizer} class orchestrating
+          the full optimisation loop with the default configuration schedule.
+    \item \texttt{taylor\_test.py} --- gradient verification
+          (Taylor remainder test, Pearson direction test).
+    \item \texttt{postprocess.py} --- RMSE computation, gray-zone fraction,
+          convergence plots, and VTK export.
+    \item \texttt{binary\_validation.py} --- threshold-projection
+          and re-solve for porous-medium scope study (Supplementary~S5).
+    \item \texttt{mesh.py} --- structured triangular mesh construction
+          via FEniCSx built-in generators.
+\end{itemize}
+
+\paragraph{Design philosophy.}
+The package follows three principles consistent with the
+Engineering with Computers software paper format:
+
+\begin{enumerate}\itemsep2pt
+    \item \textbf{Modularity.}
+          Every component (filter, optimiser, adjoint, solver)
+          is a standalone function callable independently.
+          Users can substitute any component --- e.g.\ replace
+          \texttt{oc\_update} with a custom optimiser ---
+          without modifying other modules.
+          Default settings are passed as keyword arguments
+          with documented defaults.
+
+    \item \textbf{Reproducibility by design.}
+          All randomness is seeded; all hyperparameters are
+          exposed as arguments with defaults matching the
+          published results; all outputs (RMSE, gray fraction,
+          convergence history) are written to \texttt{results/}
+          as JSON for programmatic access.
+
+    \item \textbf{FEniCSx-native implementation.}
+          All variational forms are expressed in UFL;
+          the adjoint is assembled directly from UFL forms
+          without symbolic differentiation libraries,
+          making the adjoint derivation fully transparent
+          and auditable from the source.
+\end{enumerate}
+
+\paragraph{Testing strategy.}
+The \texttt{tests/} directory contains a pytest suite with
+eight tests covering the full API surface:
+
+\begin{itemize}\itemsep2pt
+    \item \textbf{Test~1} (import): all public symbols importable.
+    \item \textbf{Test~2} (forward solver): concentration field
+          finite, $c\in[0,1]$ after one forward solve.
+    \item \textbf{Test~3} (adjoint direction): gradient descent
+          step reduces $J$ --- verifies sign correctness.
+    \item \textbf{Test~4} (OC update): volume constraint
+          $|V-V^*|<0.02$ enforced after one OC step.
+    \item \textbf{Test~5} (MMA update): three MMA steps,
+          no NaN, volume near $V^*=0.5$.
+    \item \textbf{Test~6} (alpha floor): \texttt{alpha()} has
+          $\geq10^{-4}$ floor even when $\alpha_{\min}=0$
+          (prevents singular Stokes systems in binary limit).
+    \item \textbf{Test~7} (mini-optimisation): 20-iteration run
+          on $20\times5$ mesh, $J$ decreases from initialisation.
+    \item \textbf{Test~8} (MMA state reset): \texttt{reset\_mma\_state()}
+          correctly clears internal NLopt state between runs.
+\end{itemize}
+
+\noindent
+All tests run inside the official \texttt{dolfinx/dolfinx:v0.7.3}
+Docker container on every push to the \texttt{main} branch
+via GitHub Actions~\cite{GitHubActions2024}.
+
+\paragraph{Continuous integration.}
+The CI workflow (\texttt{.github/workflows/ci.yml}) executes
+a three-stage pipeline on every commit:
+(i)~install dependencies and \texttt{micrograd} in editable mode
+inside the FEniCSx container;
+(ii)~run the pytest import suite (\texttt{tests/test\_import.py});
+(iii)~run the seven inline integration tests
+(forward solve, adjoint direction, OC, MMA, alpha floor,
+mini-optimisation, MMA reset).
+The CI badge reflects the current \texttt{main} branch status.
+
+\paragraph{Reproducibility infrastructure.}
+Four mechanisms ensure end-to-end reproducibility:
+
+\begin{enumerate}\itemsep2pt
+    \item \textbf{Docker.}
+          The official \texttt{dolfinx/dolfinx:v0.7.3} image
+          pins FEniCSx, PETSc, and all numerical dependencies.
+          Newer versions (v0.8.x+) are expected to be compatible.
+    \item \textbf{Single-command reproduction.}
+          \texttt{bash run\_all.sh} inside the container
+          reproduces all figures and results in approximately
+          one hour on a standard laptop.
+    \item \textbf{Zenodo archival.}
+          The repository is archived at
+          DOI:~\href{https://doi.org/10.5281/zenodo.20479523}%
+          {10.5281/zenodo.20479523}~\cite{micrograd2025zenodo},
+          providing a permanent, citable snapshot of the
+          exact version used for the results in this paper.
+    \item \textbf{Open-source licence.}
+          Released under the MIT licence at
+          \url{https://github.com/NisongMonyimba/micrograd}.
+\end{enumerate}
+
+
 The full pipeline (all results) is reproduced by
 (tested with DOLFINx~v0.7.3; newer versions v0.8.x+ are expected to work):
 \begin{lstlisting}[language=bash,breaklines=true]
