@@ -119,7 +119,7 @@ Specifically:
     \item \textbf{Verification and software-validation suite.}
           Gradient verification (Taylor remainder, direction test),
           mesh sensitivity study (four meshes),
-          binary-gap quantification ($+\binaryGapPct\%$),
+          binary gap quantification (Supplementary~S5),
           and OC/MMA schedule validation by direct comparison
           (pure MMA: RMSE~$=\rmsePureMMA$
           vs.\ hybrid: RMSE~$=\rmseShortRun$;
@@ -143,10 +143,10 @@ this work is entirely independent and unrelated.}
 operates within the Brinkman--SIMP porous-medium surrogate
 on a fixed $80\times20$ mesh.
 Two limitations are explicitly acknowledged and quantified:
-(i)~the optimised permeability field is not a manufacturable design ---
-hard-thresholding to binary permeability increases RMSE by $+\binaryGapPct\%$
-because the porous optimum exploits gray-zone diffusion
-unavailable in binary geometries; and
+(i)~the benchmark demonstrates optimisation within the
+Brinkman--SIMP porous-medium model;
+binary-constrained optimisation lies outside the present scope
+(thresholding results: Supplementary~S5); and
 (ii)~finer meshes find different local minima
 (RMSE $0.091$--$0.107$ on $160\times40$
 vs.\ $\rmseTopOpt$ on the $80\times20$ primary mesh),

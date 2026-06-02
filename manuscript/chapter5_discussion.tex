@@ -76,7 +76,7 @@ porous-medium flow-transport topology optimisation --- the
 achievable RMSE within the surrogate model, the effect of
 continuation strategies, and the sensitivity to mesh resolution
 and volume fraction.
-Users requiring binary manufacturable designs should apply
+Users requiring binary designs should apply
 robust projection~\cite{wang2011} or iterative thresholding
 during optimisation; both are identified as future work
 (Section~\ref{sec:limitations}).
@@ -263,7 +263,7 @@ on every commit.
           Table~\ref{tab:mma_comparison});
           methods needing exact magnitude
           require a discrete adjoint (e.g.\ L-BFGS).
-    \item \textbf{Porous-medium optimum and binary gap.}
+    \item \textbf{L2: Porous-medium scope and binary realisation.}
           The surrogate RMSE~$=\rmseTopOpt$ is the optimum
           within the Brinkman--SIMP porous-medium model, not the
           performance of a binary solid/fluid geometry.

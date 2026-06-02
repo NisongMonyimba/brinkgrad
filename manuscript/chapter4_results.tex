@@ -222,7 +222,7 @@ A 600-iteration run yields RMSE~$=\rmseShortRun$ in under 30 minutes.
 \end{figure}
 
 
-\subsection{Thresholding robustness and binary gap}
+\subsection{Porous-medium scope: thresholding study}
 \label{sec:thresholding}
 The primary result uses a $\nIterPrimary$-iteration hybrid OC/MMA run
 with $\beta$-continuation to $\beta=\betaMax$.
@@ -247,7 +247,7 @@ re-solve the forward problem in two configurations
 \end{enumerate}
 Both configurations show RMSE increases of $+\binaryGapPct\%$.
 This large gap confirms that the optimised design is \emph{not}
-a manufacturable geometry: the optimiser exploits diffusive transport
+a binary geometry: the optimiser exploits diffusive transport
 through intermediate-density Brinkman elements that have no binary
 physical counterpart.
 The surrogate RMSE~$=\rmseTopOpt$ therefore represents the

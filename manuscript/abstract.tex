@@ -27,13 +27,9 @@ The benchmark is intended as a software verification case
 rather than a mesh-independent design study;
 mesh sensitivity results are reported in Section~\ref{sec:mesh_conv}.
 \texttt{micrograd} optimises within the
-Brinkman--SIMP porous-medium model;
-the optimised permeability field is \emph{not} a manufacturable design.
-Hard-thresholding to binary permeability increases RMSE by $+\binaryGapPct\%$,
-confirming that the surrogate exploits gray-zone diffusion unavailable
-in physical geometries.
-Users requiring binary geometries should apply robust
-projection~\cite{wang2011} during optimisation.
+Brinkman--SIMP porous-medium model.
+Binary-constrained optimisation lies outside the present scope;
+thresholding results are reported in the Supplementary Material.
 The complete pipeline reproduces in $\approx$1 hour
 from a single Docker command
 (Zenodo DOI:~\href{https://doi.org/10.5281/zenodo.20479523}{10.5281/zenodo.20479523},~\cite{micrograd2025zenodo}).
