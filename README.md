@@ -254,6 +254,7 @@ micrograd/
 ## Requirements
 
 **Recommended:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) — pulls `dolfinx/dolfinx:v0.7.3` automatically, no other setup needed.
+Tested with DOLFINx v0.7.3; newer versions (v0.8.x+) are expected to work.
 
 **Native install:** FEniCSx 0.7.3, PETSc, petsc4py, numpy, scipy, matplotlib.
 
@@ -262,6 +263,14 @@ micrograd/
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+---
+
+## Known issues
+
+See [KNOWN_ISSUES.md](KNOWN_ISSUES.md) for documented limitations:
+binary gap (+356%), mesh non-convergence, adjoint magnitude error,
+empirical OC/MMA switch, 2D-only scope, DOLFINx v0.7.3 pin.
 
 ---
 

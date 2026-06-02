@@ -25,6 +25,7 @@ docker run --rm -v ${PWD}:/root/micrograd \
 To reproduce only the primary linear gradient result (Figure~2,
 approximately 1 hour):
 \begin{lstlisting}[language=bash,breaklines=true]
+# Tested with DOLFINx v0.7.3; newer versions (v0.8.x+) expected to work
 docker run --rm -v ${PWD}:/root/micrograd \
   dolfinx/dolfinx:v0.7.3 bash -c \
   "cd /root/micrograd && \
