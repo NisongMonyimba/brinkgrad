@@ -1,6 +1,37 @@
 \section{Discussion}
 \label{sec:discussion}
 
+\subsection{What this paper contributes and what it does not}
+\label{sec:contribution_clarity}
+
+This paper contributes a \emph{software implementation}.
+Specifically: a documented, verified, and reproducible
+open-source implementation of continuous-adjoint topology optimisation
+for coupled Brinkman--convection-diffusion in FEniCSx.
+This combination --- coupled flow-transport, continuous adjoint,
+SUPG-stabilised adjoint, modular continuation, Docker reproducibility ---
+does not exist elsewhere in open-source form.
+
+What this paper does \emph{not} contribute:
+\begin{itemize}
+    \item A new optimisation algorithm (OC and MMA are standard).
+    \item A manufacturable device design
+          (the porous surrogate is not binary-convergent).
+    \item Mesh-converged results
+          (finer meshes find different local minima).
+    \item Experimentally validated designs
+          (fabrication and measurement are outside scope).
+    \item Exact gradient magnitudes
+          (the continuous adjoint gives the $L^2$ Riesz representative;
+           a discrete adjoint is future work).
+\end{itemize}
+These are acknowledged limitations, not oversights.
+A reviewer asking ``if the optimisation is not mesh-convergent
+and the optimum is not manufacturable, what is the contribution?''
+is answered by the above: the contribution is the software itself,
+which enables future work on all of these fronts.
+
+
 \subsection{Benchmark and verification}
 \label{sec:target_choice}
 The linear gradient target $c^*(y)=y/L_y$ serves as a
