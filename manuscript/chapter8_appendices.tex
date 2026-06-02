@@ -125,9 +125,10 @@ On the $80\times20$ mesh, the Euclidean gradient error is larger
 the adjoint computes $\partial J/\partial\bar\rho$ (filtered density)
 rather than $\partial J/\partial\rho$ (raw density), so the
 single-DOF FD test does not account for filter propagation.
-This is a known characteristic of filtered topology optimisation
-sensitivity analysis~\cite{lazarov2016}, not an implementation error.
-For OC and MMA (direction-only), this has no effect on convergence.
+This reflects the filter chain in filtered topology optimisation
+sensitivity analysis~\cite{lazarov2016}.
+OC and MMA use only gradient direction; convergence is
+validated by the pure-MMA comparison (Table~\ref{tab:mma_comparison}).
 
 \paragraph{Continuous vs.\ discrete adjoint.}
 The assembled sensitivity is a continuous adjoint

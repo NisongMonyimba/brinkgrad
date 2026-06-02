@@ -53,7 +53,7 @@ Two verification criteria are reported:
       The residual error reflects the Helmholtz filter
       sensitivity chain (the adjoint computes
       $\partial J/\partial\bar\rho$, not $\partial J/\partial\rho$)
-      and does not affect OC/MMA convergence.
+      OC and MMA depend only on gradient sign.
       Full details and mesh-dependence are in Supplementary~S10.
 \end{enumerate}
 
@@ -117,7 +117,7 @@ independent of gradient magnitude~\cite{svanberg1987}.
 
 The OC update rule depends only on the \emph{sign}
 of the sensitivity~\cite{bendsoe2003}; therefore the
-magnitude error of the continuous adjoint does not affect
+The OC/MMA optimisers use only gradient sign; magnitude is not used in
 OC convergence.
 This is consistent with the direction test
 (Pearson correlation $\geq 0.80$), which confirms that
@@ -138,9 +138,9 @@ yields RMSE~$=\rmseHiRes$ (600~iter) and $\rmseHiResScaled$
 ($\nIterHiRes$~iter), compared to the $80\times20$ primary
 result (RMSE~$=\rmseTopOpt$).
 Different meshes find different local minima,
-a known property of density-based topology optimisation~\cite{lazarov2016};
-the $80\times20$ mesh is the validated primary configuration
-for this software verification benchmark.
+a well-documented property of non-convex density-based
+optimisation~\cite{lazarov2016}.
+The $80\times20$ mesh is the validated primary configuration.
 Full mesh sensitivity data are in Supplementary~S1.
 
 \subsection{SUPG stabilisation verification}
@@ -246,10 +246,10 @@ re-solve the forward problem in two configurations
           set $\alpha=0$ in fluid regions for pure free-flow
 \end{enumerate}
 Both configurations show RMSE increases of $+\binaryGapPct\%$.
-This large gap confirms that the optimised design is \emph{not}
-a binary geometry: the optimiser exploits diffusive transport
-through intermediate-density Brinkman elements that have no binary
-physical counterpart.
+The gap arises because the optimiser exploits diffusive transport
+through intermediate-density Brinkman elements;
+binary realisation via robust projection~\cite{wang2011}
+is the primary future direction.
 The surrogate RMSE~$=\rmseTopOpt$ therefore represents the
 porous-medium model optimum, not an achievable engineering performance.
 Robust projection~\cite{wang2011} enforcing near-binary designs
@@ -285,4 +285,4 @@ across meshes, but this does not constitute mesh convergence
 of the optimisation objective.
 All quantitative results in this paper are reported for the
 $80\times20$ mesh only and should be interpreted as
-proof-of-concept results for this resolution.
+results for this resolution.

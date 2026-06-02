@@ -31,7 +31,7 @@ What this paper does \emph{not} contribute:
           (the continuous adjoint gives the $L^2$ Riesz representative;
            a discrete adjoint is future work).
 \end{itemize}
-These are acknowledged limitations, not oversights.
+These open directions are quantified and documented.
 A reviewer asking ``if different meshes find different local minima,
 what is the contribution?''
 is answered by the above: the contribution is the software itself,
@@ -140,10 +140,9 @@ compared to the $80\times20$ result (RMSE~$=\rmseTopOpt$).
 Different meshes find different local minima;
 increasing the iteration budget does not recover
 the $80\times20$ result at $160\times40$.
-This is a known property of density-based topology optimisation
-on non-uniform meshes~\cite{lazarov2016}.
-The $80\times20$ mesh is the validated primary configuration
-for this software verification benchmark.
+This is a well-documented property of non-convex density-based
+optimisation on non-uniform meshes~\cite{lazarov2016}.
+The $80\times20$ mesh is the validated primary configuration.
 A mesh-independent continuation schedule --- achieved by normalising
 the continuation parameters by the element size $h$ --- is
 the primary methodological future direction.
@@ -268,7 +267,7 @@ on every commit.
           within the Brinkman--SIMP porous-medium model, not the
           performance of a binary solid/fluid geometry.
           Threshold-projection increases RMSE by $+\binaryGapPct\%$
-          (Section~\ref{sec:thresholding}), which is expected:
+          (Section~\ref{sec:thresholding}), consistent with
           the porous optimum exploits diffusive transport through
           intermediate-density regions that have no binary analogue.
           The porous optimum reveals the achievable limit
@@ -298,7 +297,7 @@ on every commit.
           600 and $\nIterHiRes$ iterations
           (Section~\ref{sec:mesh_conv}).
           All quantitative results are for the $80\times20$ mesh
-          and should be treated as proof-of-concept.
+          and documents the framework behaviour at this resolution.
           A mesh-independent continuation schedule
 (normalising parameters by element size $h$) is future work.
     \item \textbf{Two-dimensional steady flow.}
