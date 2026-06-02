@@ -304,6 +304,7 @@ The full pipeline (all results) is reproduced by:
 \begin{lstlisting}[language=bash,breaklines=true]
 git clone https://github.com/NisongMonyimba/micrograd
 cd micrograd
+# Tested with DOLFINx v0.7.3; newer versions (v0.8.x+) expected to work
 docker run --rm -v ${PWD}:/root/micrograd \
   -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
   dolfinx/dolfinx:v0.7.3 bash -c \
