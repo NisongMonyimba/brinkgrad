@@ -141,7 +141,7 @@ to future work.
 \subsection*{S5: Thresholding Robustness and Binary Gap Analysis}
 \label{sec:s5}
 
-The optimised design has a grey-zone fraction of $\grayFrac$ (measured at $\beta=64$, 1000-iteration continuation) at
+The optimised design has a gray-zone fraction of $\grayFrac$ (measured at $\beta=64$, 1000-iteration continuation) at
 $\beta=\betaMax$, reflecting the physical reality that the linear
 gradient target is achieved by distributed diffusive mixing through
 intermediate-density Brinkman elements.
@@ -157,9 +157,9 @@ gives the results in Table~\ref{tab:binary_val}.
 \label{tab:binary_val}
 \begin{tabular}{@{}lccc@{}}
 \toprule
-\textbf{Design} & \textbf{RMSE} & \textbf{$\Delta$RMSE vs grey} & \textbf{Method} \\
+\textbf{Design} & \textbf{RMSE} & \textbf{$\Delta$RMSE vs gray} & \textbf{Method} \\
 \midrule
-Grey Brinkman   & $\rmseTopOpt$         & ---              & Smooth $\alpha(\bar\rho)$ \\
+Gray Brinkman   & $\rmseTopOpt$         & ---              & Smooth $\alpha(\bar\rho)$ \\
 Binary Brinkman & $\rmseBinaryBrinkman$ & $+\binaryGapPct\%$ & $\bar\rho\in\{0,1\}$, smooth $\alpha$ \\
 \bottomrule
 \end{tabular}

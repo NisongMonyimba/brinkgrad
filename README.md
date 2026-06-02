@@ -52,7 +52,7 @@ All results are permanently archived at Zenodo: **DOI: [10.5281/zenodo.20479523]
 ```bash
 docker run --rm -v ${PWD}:/root/micrograd \
   dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/micrograd && python scripts/optimize.py --target linear --iter 1400"
+  "cd /root/micrograd && python examples/linear_target.py"
 ```
 
 **Interactive Jupyter notebook:**
@@ -158,25 +158,71 @@ The large relative magnitude error (~3303%) is expected: the assembled sensitivi
 ---
 
 ## Repository structure
+
+```
 micrograd/
-├── micrograd/
-│   ├── solver.py              # Brinkman + convection-diffusion forward solver
-│   ├── adjoint.py             # Continuous adjoint and sensitivity
-│   ├── optimizer.py           # OC and MMA updaters
-│   └── utilities.py           # Helmholtz filter, Heaviside projection, RMSE
-├── scripts/
-│   ├── optimize.py            # Single optimisation run (--target, --iter)
-│   ├── mesh_convergence.py    # 4-mesh convergence study
-│   └── extra_profiles.py      # Additional target profiles
-├── tests/                     # pytest test suite (CI-validated)
-├── notebooks/                 # Jupyter interactive walkthrough
-├── manuscript/                # LaTeX source, figures, cover letter
-│   ├── main.tex
-│   ├── macros.tex             # All numerical results as macros
-│   └── figures/
-├── figures/                   # Generated output figures
-├── run_all.sh                 # Full reproduction script
-└── submission_checklist.sh    # Pre-submission status checker
+├── micrograd/                        # Core Python package
+│   ├── solver.py                     # Brinkman + convection-diffusion forward solver
+│   ├── adjoint.py                    # Continuous adjoint and sensitivity
+│   ├── optimizer.py                  # OC and MMA updaters
+│   ├── utilities.py                  # Helmholtz filter, Heaviside projection, RMSE
+│   ├── gradient_optimizer.py         # Main topology optimisation class
+│   ├── taylor_test.py                # Gradient verification (Taylor remainder)
+│   ├── stabilization_validation.py   # SUPG verification
+│   ├── convergence_study.py          # Mesh convergence study
+│   ├── binary_validation.py          # Hard-thresholding and binary gap
+│   ├── manufacturability.py          # Minimum feature size checks
+│   ├── postprocess.py                # Figures and result export
+│   ├── scalability.py                # Timing and scaling benchmarks
+│   ├── validation.py                 # Navier-Stokes validation (optional)
+│   ├── christmas_tree.py             # Christmas-tree reference generator
+│   ├── multiobjective.py             # Multi-objective sweep utilities
+│   ├── uncertainty_quantification.py # PCE-based UQ (optional)
+│   ├── filter_sensitivity.py         # Filter radius sensitivity
+│   ├── experimental_metrics.py       # Pe, Re, Da computation
+│   ├── mesh.py                       # Mesh generation helpers
+│   ├── compatibility.py              # FEniCSx version compatibility
+│   └── __init__.py
+├── examples/
+│   ├── linear_target.py              # Linear gradient (primary benchmark)
+│   ├── double_peak_target.py         # Double-peak concentration target
+│   ├── gallery_targets.py            # Multiple target profiles
+│   └── run_convergence_study.py      # 4-mesh convergence sweep
+├── tests/
+│   ├── test_import.py                # Import and smoke tests
+│   └── __init__.py
+├── manuscript/                       # LaTeX source (submit-ready)
+│   ├── main.tex                      # Master document
+│   ├── macros.tex                    # All numerical results as macros
+│   ├── references.bib
+│   ├── abstract.tex
+│   ├── chapter1_introduction.tex
+│   ├── chapter2_mathematical_model.tex
+│   ├── chapter3_numerical_methods.tex
+│   ├── chapter4_results.tex
+│   ├── chapter5_discussion.tex
+│   ├── chapter6_conclusion.tex
+│   ├── chapter7_data_availability.tex
+│   ├── chapter8_appendices.tex
+│   ├── cover_letter.tex
+│   └── figures/                      # Manuscript figures (PDF)
+├── figures/                          # Generated output figures (PDF + PNG)
+├── docs/
+│   ├── si/                           # Supplementary information figures (PDF)
+│   ├── api.rst                       # API documentation source
+│   └── conf.py                       # Sphinx config
+├── .github/
+│   └── workflows/ci.yml              # GitHub Actions CI pipeline
+├── setup.py                          # pip-installable package
+├── environment.yaml                  # Conda environment spec
+├── run_all.sh                        # Full reproduction script
+├── submission_checklist.sh           # Pre-submission manuscript checker
+├── generate_macros.py                # Auto-generate macros.tex from results
+├── CITATION.cff                      # Machine-readable citation
+├── LICENSE                           # MIT
+└── README.md
+```
+
 ---
 
 ## Manuscript
