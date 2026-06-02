@@ -10,26 +10,16 @@ packages are bundled in the official container.
 
 \paragraph{Step 2: Clone and run.}
 \begin{lstlisting}[language=bash,breaklines=true]
-# Clone the repository
 git clone https://github.com/NisongMonyimba/micrograd
 cd micrograd
-
-# Reproduce all results (approx. 3-4 hours)
-docker run --rm -v ${PWD}:/root/micrograd \
-  -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
-  dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/micrograd && bash run_all.sh"
+docker run --rm -v ${PWD}:/root/micrograd -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg dolfinx/dolfinx:v0.7.3 bash -c "cd /root/micrograd && bash run_all.sh"
 \end{lstlisting}
 
 \paragraph{Step 3: Quick start (single result).}
 To reproduce only the primary linear gradient result (Figure~2,
 approximately 1 hour):
 \begin{lstlisting}[language=bash,breaklines=true]
-# Tested with DOLFINx v0.7.3; newer versions (v0.8.x+) expected to work
-docker run --rm -v ${PWD}:/root/micrograd \
-  dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/micrograd && \
-   python scripts/optimize.py --target linear --iter 1400"
+docker run --rm -v ${PWD}:/root/micrograd dolfinx/dolfinx:v0.7.3 bash -c "cd /root/micrograd && python scripts/optimize.py --target linear --iter 1400"
 \end{lstlisting}
 
 \paragraph{Step 4: Modify parameters.}
@@ -49,9 +39,7 @@ python scripts/optimize.py --target linear --nx 160 --ny 40
 An interactive walkthrough is available in
 \path{notebooks/quickstart.ipynb}:
 \begin{lstlisting}[language=bash,breaklines=true]
-docker run --rm -p 8888:8888 -v ${PWD}:/root/micrograd \
-  dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/micrograd && jupyter notebook --ip=0.0.0.0"
+docker run --rm -p 8888:8888 -v ${PWD}:/root/micrograd dolfinx/dolfinx:v0.7.3 bash -c "cd /root/micrograd && jupyter notebook --ip=0.0.0.0"
 \end{lstlisting}
 
 \paragraph{Expected outputs.}

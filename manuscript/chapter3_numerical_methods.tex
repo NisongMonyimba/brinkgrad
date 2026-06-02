@@ -301,12 +301,9 @@ All results & \texttt{bash run\_all.sh} \\
 \end{table}
 
 The full pipeline (all results) is reproduced by:
+Tested with DOLFINx~v0.7.3; newer versions (v0.8.x+) are expected to work.
 \begin{lstlisting}[language=bash,breaklines=true]
 git clone https://github.com/NisongMonyimba/micrograd
 cd micrograd
-# Tested with DOLFINx v0.7.3; newer versions (v0.8.x+) expected to work
-docker run --rm -v ${PWD}:/root/micrograd \
-  -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
-  dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/micrograd && bash run_all.sh"
+docker run --rm -v ${PWD}:/root/micrograd -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg dolfinx/dolfinx:v0.7.3 bash -c "cd /root/micrograd && bash run_all.sh"
 \end{lstlisting}
