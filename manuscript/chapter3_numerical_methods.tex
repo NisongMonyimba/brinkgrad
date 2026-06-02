@@ -460,6 +460,39 @@ Four mechanisms ensure end-to-end reproducibility:
           \url{https://github.com/NisongMonyimba/micrograd}.
 \end{enumerate}
 
+\paragraph{Software quality metrics.}
+Table~\ref{tab:sw_metrics} summarises the quantitative
+software quality indicators for the \texttt{micrograd} package.
+
+\begin{table}[h]
+\centering
+\caption{Software quality metrics for \texttt{micrograd} v1.0.0.
+         LOC counts non-empty, non-comment source lines
+         in \texttt{micrograd/*.py}.
+         Unit tests are in \texttt{tests/test\_import.py};
+         integration tests run inline in the CI pipeline.}
+\label{tab:sw_metrics}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+\textbf{Metric} & \textbf{Value} & \textbf{Notes} \\
+\midrule
+Lines of code (LOC)          & 1{,}892 & \texttt{micrograd/*.py}, non-empty non-comment \\
+Public functions / classes   & 68      & across 9 modules \\
+Unit tests                   & 8       & \texttt{tests/test\_import.py}, pytest \\
+CI integration tests         & 7       & inline in \texttt{ci.yml}, full API coverage \\
+Total automated tests        & 15      & run on every \texttt{main} branch push \\
+CI workflows                 & 1       & \texttt{.github/workflows/ci.yml} \\
+Example scripts              & 5       & \texttt{examples/}: linear, double-peak, \\
+                             &         & gallery, Christmas-tree, convergence study \\
+Reproducibility script       & 1       & \texttt{run\_all.sh} (52 lines, Docker-native) \\
+Docker image                 & Yes     & \texttt{dolfinx/dolfinx:v0.7.3} (pinned) \\
+Zenodo archival              & Yes     & DOI:~\href{https://doi.org/10.5281/zenodo.20479523}{10.5281/zenodo.20479523} \\
+Open-source licence          & MIT     & \url{https://github.com/NisongMonyimba/micrograd} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
 
 The full pipeline (all results) is reproduced by
 (tested with DOLFINx~v0.7.3; newer versions v0.8.x+ are expected to work):
