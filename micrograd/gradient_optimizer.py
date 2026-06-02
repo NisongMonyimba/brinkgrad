@@ -75,7 +75,7 @@ class GradientGeneratorOptimizer:
             # Clamp concentration to physical range to suppress Peclet oscillations
             c_h.x.array[:] = np.clip(c_h.x.array, 0.0, 1.0)
             c_h.x.scatter_forward()
-            J, sens_vec = adjoint_and_sensitivity(
+            J, sens_vec, _g_hat = adjoint_and_sensitivity(
                 self.msh, self.boundary_data, self.rho_phys, u_h, c_h,
                 self.target_expr, w_f=self.w_f, w_c=self.w_c)
 

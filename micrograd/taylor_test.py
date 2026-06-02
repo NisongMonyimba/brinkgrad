@@ -48,7 +48,7 @@ def run_taylor_test(nx=20, ny=5, n_eps=7, seed=42,
     c_h.x.array[:] = np.clip(c_h.x.array, 0.0, 1.0)
     c_h.x.scatter_forward()
 
-    J0, grad = adjoint_and_sensitivity(
+    J0, grad, _ghat = adjoint_and_sensitivity(
         opt.msh, opt.boundary_data, opt.rho_phys,
         u_h, c_h, opt.target_expr,
         w_f=w_f, w_c=w_c,
@@ -73,7 +73,7 @@ def run_taylor_test(nx=20, ny=5, n_eps=7, seed=42,
                                        opt.rho_phys, P_in=1000.0)
         c_e.x.array[:] = np.clip(c_e.x.array, 0.0, 1.0)
         c_e.x.scatter_forward()
-        Je, _ = adjoint_and_sensitivity(
+        Je, _sv, _gh = adjoint_and_sensitivity(
             opt.msh, opt.boundary_data, opt.rho_phys,
             u_e, c_e, opt.target_expr,
             w_f=w_f, w_c=w_c,

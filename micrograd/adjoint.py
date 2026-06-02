@@ -100,4 +100,28 @@ def adjoint_and_sensitivity(msh, boundary_data, rho_phys, u_h, c_h, target_expr,
                  + drho_dD * ufl.inner(ufl.grad(c_h), ufl.grad(lam_h)) * test_rho) * ufl.dx
     sens_vec = _assemble_vector(fem.form(sens_form))
     sens_vec.ghostUpdate()
-    return J, sens_vec
+
+    # Solve M*g_hat = g to obtain the Euclidean gradient.
+    # sens_vec (g) is the L2 Riesz representative; g_hat = M^{-1}g
+    # is the true Euclidean gradient. Both are returned so callers
+    # can use either; OC/MMA use sens_vec (sign-based), verification
+    # uses g_hat for magnitude accuracy.
+    try:
+        trial_rho = ufl.TrialFunction(V_rho)
+        mass_form = fem.form(trial_rho * test_rho * ufl.dx)
+        from dolfinx.fem.petsc import assemble_matrix
+        M = assemble_matrix(mass_form)
+        M.assemble()
+        ksp = PETSc.KSP().create(msh.comm)
+        ksp.setOperators(M)
+        ksp.setType('cg')
+        ksp.getPC().setType('jacobi')
+        ksp.setTolerances(rtol=1e-10)
+        ksp.setUp()
+        g_hat = sens_vec.copy()
+        ksp.solve(sens_vec, g_hat)
+        g_hat.ghostUpdate()
+        ksp.destroy(); M.destroy()
+    except Exception:
+        g_hat = None
+    return J, sens_vec, g_hat

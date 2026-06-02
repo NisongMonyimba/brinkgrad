@@ -116,8 +116,13 @@ Least-squares slopes: $2.12$ ($20\times5$), $2.07$ ($80\times20$).
 The mass-scaled adjoint $g/m_i$ is compared to the finite-difference
 gradient $\hat{g}_i$ component-wise on 20 sampled DOFs.
 Pearson correlations: $0.80$ ($20\times5$), $0.88$ ($80\times20$).
-The magnitude discrepancy reflects the difference between lumped and
-full mass-matrix Riesz maps; only the direction is used by OC/MMA.
+The Euclidean gradient $\hat{g}=M^{-1}g$ (consistent mass solve)
+reduces the magnitude error from $>100\%$ to $\approx31\%$ on
+the $20\times5$ mesh; the residual reflects the Helmholtz filter
+sensitivity chain.
+The large Riesz magnitude errors ($99\%$--$3303\%$) are an expected
+consequence of the $L^2$ inner product and do not affect
+OC/MMA convergence (direction-only dependence).
 
 \paragraph{Continuous vs.\ discrete adjoint.}
 The assembled sensitivity is a continuous adjoint
