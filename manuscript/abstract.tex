@@ -20,7 +20,8 @@ The linear target serves as a sanity check;
 the hybrid OC/MMA schedule is validated by direct comparison
 against pure MMA (RMSE~$=\rmsePureMMA$ vs.\ $\rmseShortRun$
 at 600 iterations, Table~\ref{tab:mma_comparison}).
-The optimisation is not mesh-convergent;
+The optimisation is not mesh-convergent
+and the surrogate is porous-medium only (not binary-convergent);
 finer meshes find different local minima
 (RMSE\ 0.091--0.107 on finer meshes).
 \texttt{micrograd} optimises within the
@@ -29,9 +30,8 @@ the optimised permeability field is \emph{not} a manufacturable design.
 Hard-thresholding to binary permeability increases RMSE by $+\binaryGapPct\%$,
 confirming that the surrogate exploits gray-zone diffusion unavailable
 in physical geometries;
-therefore, the optimised permeability field is not a manufacturable design.
 Users requiring binary geometries should apply robust
 projection~\cite{wang2011} during optimisation.
-The complete pipeline reproduces in approximately one hour
-from a single Docker command and archived at
-Zenodo (DOI:~\href{https://doi.org/10.5281/zenodo.20479523}{10.5281/zenodo.20479523},~\cite{micrograd2025zenodo}).
+The complete pipeline reproduces in $\approx$1 hour
+from a single Docker command
+(Zenodo DOI:~\href{https://doi.org/10.5281/zenodo.20479523}{10.5281/zenodo.20479523},~\cite{micrograd2025zenodo}).
