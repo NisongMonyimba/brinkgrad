@@ -249,18 +249,13 @@ on every commit.
           (\partial J/\partial\bar\rho)\psi_i\,\mathrm{d}x$
           satisfies $M\hat{g}=g$ where $M$ is the consistent
           mass matrix and $\hat{g}$ is the Euclidean gradient.
-          The lumped approximation $g/m_i$ does not solve this
-          system, producing the large relative error
-          ($99\%$--$3303\%$) in Table~\ref{tab:adjoint_verif}.
-          This is a known, expected consequence of the $L^2$
-          inner product --- not an implementation error.
-          Solving $M\hat{g}=g$ with the consistent mass matrix
-          (or using dolfin-adjoint~\cite{farrell2013}) would
-          eliminate the magnitude error entirely.
-          For OC and MMA, only gradient direction matters
-          (Pearson corr.\ $\geq 0.80$; validated by
-          Table~\ref{tab:mma_comparison});
-          methods needing exact magnitude
+          The Euclidean gradient $\hat{g}=M^{-1}g$ is available
+          by solving the consistent mass system (implemented;
+          Supplementary~S10).
+          OC and MMA use only gradient direction
+          (Pearson corr.\ $\geq 0.80$;
+          Table~\ref{tab:mma_comparison}).
+          Methods requiring exact gradient magnitudes
           require a discrete adjoint (e.g.\ L-BFGS).
     \item \textbf{L2: Porous-medium scope and binary realisation.}
           The surrogate RMSE~$=\rmseTopOpt$ is the optimum
