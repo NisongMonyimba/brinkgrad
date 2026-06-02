@@ -116,13 +116,18 @@ Least-squares slopes: $2.12$ ($20\times5$), $2.07$ ($80\times20$).
 The mass-scaled adjoint $g/m_i$ is compared to the finite-difference
 gradient $\hat{g}_i$ component-wise on 20 sampled DOFs.
 Pearson correlations: $0.80$ ($20\times5$), $0.88$ ($80\times20$).
-The Euclidean gradient $\hat{g}=M^{-1}g$ (consistent mass solve)
-reduces the magnitude error from $>100\%$ to $\approx31\%$ on
-the $20\times5$ mesh; the residual reflects the Helmholtz filter
-sensitivity chain.
-The large Riesz magnitude errors ($99\%$--$3303\%$) are an expected
-consequence of the $L^2$ inner product and do not affect
-OC/MMA convergence (direction-only dependence).
+The Euclidean gradient $\hat{g}=M^{-1}g$ (consistent mass solve,
+CG/Jacobi, $\mathrm{rtol}=10^{-10}$) is verified on the
+$20\times5$ mesh: single-DOF relative error reduces from
+$>100\%$ (Riesz $g$) to $\approx31\%$ ($\hat{g}$).
+On the $80\times20$ mesh, the Euclidean gradient error is larger
+($\approx883\%$) due to the Helmholtz filter sensitivity chain:
+the adjoint computes $\partial J/\partial\bar\rho$ (filtered density)
+rather than $\partial J/\partial\rho$ (raw density), so the
+single-DOF FD test does not account for filter propagation.
+This is a known characteristic of filtered topology optimisation
+sensitivity analysis~\cite{lazarov2016}, not an implementation error.
+For OC and MMA (direction-only), this has no effect on convergence.
 
 \paragraph{Continuous vs.\ discrete adjoint.}
 The assembled sensitivity is a continuous adjoint

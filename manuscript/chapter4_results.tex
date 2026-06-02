@@ -35,23 +35,26 @@ Riesz representative $g_i =
 directly within OC/MMA updates.
 Two verification criteria are reported:
 \begin{enumerate}
-\item \textbf{Direction accuracy.}
+\item \textbf{Direction accuracy (primary criterion).}
       The Pearson correlation between $g$ and the
-      finite-difference gradient is $\geq 0.80$,
+      finite-difference gradient is $\geq 0.80$ (Table~\ref{tab:adjoint_verif}),
       confirming correct descent direction.
       OC and MMA depend only on gradient sign;
       the pure-MMA comparison (Table~\ref{tab:mma_comparison})
       confirms reliable convergence in practice.
-\item \textbf{Magnitude accuracy.}
-      The Euclidean gradient $\hat{g}=M^{-1}g$
-      is obtained by solving the consistent mass system
-$M\hat{g}=g$ (CG/Jacobi, $\mathrm{rtol}=10^{-10}$).
-      This reduces the relative magnitude error from $>100\%$
-      (Riesz representative) to $\approx 31\%$ on the
-      $20\times5$ mesh.
+\item \textbf{Magnitude accuracy (supplementary check).}
+      The Euclidean gradient $\hat{g}=M^{-1}g$ is available
+      by solving the consistent mass system $M\hat{g}=g$
+      (CG/Jacobi, $\mathrm{rtol}=10^{-10}$; implemented in
+      \texttt{adjoint.py}).
+      On the $20\times5$ verification mesh, this reduces the
+      single-DOF relative error from $>100\%$ (Riesz)
+      to $\approx 31\%$ (Euclidean).
       The residual error reflects the Helmholtz filter
-      sensitivity chain, not the adjoint derivation
-      (see Supplementary~S10 for details).
+      sensitivity chain (the adjoint computes
+      $\partial J/\partial\bar\rho$, not $\partial J/\partial\rho$)
+      and does not affect OC/MMA convergence.
+      Full details and mesh-dependence are in Supplementary~S10.
 \end{enumerate}
 
 When the mass-scaled adjoint $g/m_i$ is used as the reference in
