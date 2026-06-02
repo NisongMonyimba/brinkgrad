@@ -208,7 +208,7 @@ micrograd/
 │   └── figures/                      # Manuscript figures (PDF)
 ├── figures/                          # Generated output figures (PDF + PNG)
 ├── docs/
-│   ├── si/                           # Supplementary information figures (PDF)
+│   ├── si/                           # docs/si/ — supplementary figures (PDF)
 │   ├── api.rst                       # API documentation source
 │   └── conf.py                       # Sphinx config
 ├── .github/
