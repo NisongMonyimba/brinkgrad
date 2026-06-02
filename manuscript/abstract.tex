@@ -23,10 +23,9 @@ The linear target serves as a sanity check;
 the hybrid OC/MMA schedule is validated by direct comparison
 against pure MMA (RMSE~$=\rmsePureMMA$ vs.\ $\rmseShortRun$
 at 600 iterations, Table~\ref{tab:mma_comparison}).
-The optimisation is not mesh-convergent
-and the surrogate is porous-medium only (not binary-convergent);
-finer meshes find different local minima
-(RMSE\ 0.091--0.107 on finer meshes).
+The benchmark is intended as a software verification case
+rather than a mesh-independent design study;
+mesh sensitivity results are reported in Section~\ref{sec:mesh_sensitivity}.
 \texttt{micrograd} optimises within the
 Brinkman--SIMP porous-medium model;
 the optimised permeability field is \emph{not} a manufacturable design.

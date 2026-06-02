@@ -21,7 +21,8 @@ What this paper does \emph{not} contribute:
 \begin{itemize}
     \item A new optimisation algorithm (OC and MMA are standard).
     \item A manufacturable device design
-          (the porous surrogate is not binary-convergent).
+          (the porous surrogate is not binary;
+           binary realisation is future work).
     \item Mesh-converged results
           (finer meshes find different local minima).
     \item Experimentally validated designs
@@ -31,10 +32,10 @@ What this paper does \emph{not} contribute:
            a discrete adjoint is future work).
 \end{itemize}
 These are acknowledged limitations, not oversights.
-A reviewer asking ``if the optimisation is not mesh-convergent
-and the optimum is not manufacturable, what is the contribution?''
+A reviewer asking ``if different meshes find different local minima,
+what is the contribution?''
 is answered by the above: the contribution is the software itself,
-which enables future work on all of these fronts.
+which enables systematic future studies on mesh-independent continuation.
 
 
 \subsection{Benchmark and verification}
@@ -293,7 +294,7 @@ on every commit.
           This validates the OC early-phase use empirically.
           The theoretically optimal switch point and a
           systematic schedule search are future work.
-    \item \textbf{L3: The optimisation is not mesh-convergent.}
+    \item \textbf{L3: Mesh sensitivity — resolution-dependent local minima.}
           The concentration RMSE objective does not converge
           with mesh refinement: the $160\times40$ mesh finds
           different local minima with higher RMSE at both

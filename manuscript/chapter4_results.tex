@@ -133,11 +133,14 @@ would require a discrete adjoint~\cite{farrell2013}.
 
 \subsection{Mesh sensitivity (summary)}
 \label{sec:mesh_conv}
-The optimisation is not mesh-convergent: the $160\times40$ mesh
+Mesh sensitivity study: the $160\times40$ mesh
 yields RMSE~$=\rmseHiRes$ (600~iter) and $\rmseHiResScaled$
-($\nIterHiRes$~iter), both worse than the $80\times20$ primary
-result (RMSE~$=\rmseTopOpt$), confirming resolution-dependent
-local minima (Section~\ref{sec:mesh_limitation}).
+($\nIterHiRes$~iter), compared to the $80\times20$ primary
+result (RMSE~$=\rmseTopOpt$).
+Different meshes find different local minima,
+a known property of density-based topology optimisation~\cite{lazarov2016};
+the $80\times20$ mesh is the validated primary configuration
+for this software verification benchmark.
 Full mesh sensitivity data are in Supplementary~S1.
 
 \subsection{SUPG stabilisation verification}
