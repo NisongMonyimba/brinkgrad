@@ -124,6 +124,16 @@ continuous adjoint, and production-grade software engineering
 
 
 \subsection{Benchmark and verification}
+\paragraph{Target flexibility.}
+The three example scripts \texttt{linear\_target.py},
+\texttt{step\_profile\_target.py}, and
+\texttt{double\_peak\_target.py} demonstrate that
+\texttt{micrograd} supports arbitrary concentration targets
+by changing a single parameter (\texttt{target\_expr}).
+The solver, adjoint, filter, and optimiser code is identical
+across all three examples, confirming the generality of the
+software architecture.
+
 \label{sec:target_choice}
 The linear gradient target $c^*(y)=y/L_y$ serves as a
 verification benchmark: the RMSE~$=\rmseTopOpt$ result
