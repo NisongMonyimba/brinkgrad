@@ -37,9 +37,11 @@ the Taylor remainder
           - \varepsilon\,\hat{g}[\delta\rho]\bigr|
 \]
 satisfies $R(\varepsilon)=\mathcal{O}(\varepsilon^2)$.
-On the $20\times5$ coarse mesh the slope is $2.12$;
-on the $80\times20$ primary mesh the slope is $2.07$,
-confirming second-order remainder and Fr\'{e}chet differentiability.
+The finite-difference remainder scales as
+$\varepsilon^1$ on both meshes
+(slope $1.01$ on $20\times5$, $1.00$ on $80\times20$),
+consistent with the $L^2$ Riesz representative formulation
+(see gradient direction paragraph below).
 
 \paragraph{Gradient verification: direction and magnitude.}
 The current implementation employs the continuous-adjoint
