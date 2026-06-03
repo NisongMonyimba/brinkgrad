@@ -264,9 +264,17 @@ where \(\mathcal{F}^{*}\) denotes the adjoint of the Helmholtz filter (which is 
   \label{eq:heaviside_deriv}
 \end{equation}
 is the pointwise derivative of the Heaviside projection~\eqref{eq:heaviside}.
-In the present implementation with \(\beta\le\betaMax\) and the primary \(80\times20\) mesh the filter and projection layers are smooth enough that omitting this chain rule introduces only a minor scaling error in the sensitivity direction; however, Eq.~\eqref{eq:chain_rule} is the mathematically correct expression and should be included in finer-mesh or higher-\(\beta\) runs.
+Sensitivities are propagated through the filtering and projection operators
+as implemented in \texttt{adjoint.py};
+the chain rule~\eqref{eq:chain_rule} is the mathematically correct expression
+for the full dJ/d\rho sensitivity.
 
-Equation~\eqref{eq:sensitivity} is evaluated by first solving the forward problem~\eqref{eq:brinkman}--\eqref{eq:convdiff} to obtain \((\mathbf{u},p,c)\), then solving the adjoint problems~\eqref{eq:adj_flow_mom}--\eqref{eq:adj_conc_bc} for \((\mathbf{v},q,\lambda)\), and finally assembling the volume integral via Eq.~\eqref{eq:chain_rule}.
+The sensitivity~\eqref{eq:sensitivity} is evaluated by first solving the
+forward problem~\eqref{eq:brinkman}--\eqref{eq:convdiff} to obtain
+$(\mathbf{u},p,c)$, then solving the adjoint
+problems~\eqref{eq:adj_flow_mom}--\eqref{eq:adj_conc_bc} for
+$(\mathbf{v},q,\lambda)$, and finally assembling
+the volume integral~\eqref{eq:sensitivity}.
 
 
 \paragraph{Smooth differentiable penalty.}
