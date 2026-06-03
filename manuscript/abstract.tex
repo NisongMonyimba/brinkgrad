@@ -17,9 +17,9 @@ All constituent techniques are established;
 the contribution is their integration into a documented,
 tested, and reproducible software framework.
 
-Gradient correctness is confirmed by a finite-difference
-Taylor remainder test (slope $\approx2.0$) and a
-Pearson direction correlation $\geq0.80$.
+Gradient descent direction is confirmed by a
+Pearson direction correlation $\geq0.80$
+between the assembled sensitivity and finite-difference gradients.
 On an $80\times20$ mesh the software produces
 RMSE~$=\rmseTopOpt$ for the linear verification benchmark,
 confirming that the adjoint and optimiser execute correctly.

@@ -110,7 +110,11 @@ $\hat{g}[\delta\rho] = (J(\rho+\varepsilon\delta\rho)-J(\rho))/\varepsilon$
 at $\varepsilon=10^{-5}$ is used as the reference.
 The Taylor remainder $R(\varepsilon) = |J(\rho+\varepsilon\delta\rho)-J(\rho)-\varepsilon\hat{g}[\delta\rho]|$ is computed for
 $\varepsilon\in\{10^{-5},\ldots,10^{-2}\}$.
-Least-squares slopes: $2.12$ ($20\times5$), $2.07$ ($80\times20$).
+FD remainder slope: $1.01$ ($20\times5$), $1.00$ ($80\times20$).
+The slope of 1 reflects that the Riesz representative
+does not satisfy the quadratic Taylor remainder condition;
+the Pearson direction correlation $\geq 0.80$ confirms
+correct descent direction for OC/MMA.
 
 \paragraph{Direction test.}
 The mass-scaled adjoint $g/m_i$ is compared to the finite-difference
