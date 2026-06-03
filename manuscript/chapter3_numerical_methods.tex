@@ -470,32 +470,38 @@ software quality indicators for the \texttt{brinkgrad} package.
 \begin{table}[h]
 \centering
 \caption{Software quality metrics for \texttt{brinkgrad} v1.0.0.
-         LOC counts non-empty, non-comment source lines
-         in \texttt{brinkgrad/*.py}.
-         Unit tests are in \texttt{tests/test\_import.py};
-         integration tests run inline in the CI pipeline.}
+         LOC breakdown separates core algorithmic code (386 lines)
+         from utilities (297) and extended modules (1{,}220).
+         Tests and examples are listed separately from the package total.}
 \label{tab:sw_metrics}
 \begin{tabular}{@{}lrl@{}}
 \toprule
 \textbf{Metric} & \textbf{Value} & \textbf{Notes} \\
 \midrule
-Lines of code (LOC)          & 1{,}892 & \texttt{brinkgrad/*.py}, non-empty non-comment \\
-Public functions / classes   & 68      & across 9 modules \\
-Unit tests                   & 8       & \texttt{tests/test\_import.py}, pytest \\
-CI integration tests         & 7       & inline in \texttt{ci.yml}, full API coverage \\
-Total automated tests        & 15      & run on every \texttt{main} branch push \\
-CI workflows                 & 1       & \texttt{.github/workflows/ci.yml} \\
-Example scripts              & 7       & \texttt{examples/}: linear, step, double-peak, \\
-                             &         & gallery, Christmas-tree, convergence study, \\
-                             &         & robust projection demo \\
-Reproducibility script       & 1       & \texttt{run\_all.sh} (52 lines, Docker-native) \\
-Docker image                 & Yes     & \texttt{dolfinx/dolfinx:v0.7.3} (pinned) \\
-Zenodo archival              & Yes     & DOI:~\href{https://doi.org/10.5281/zenodo.20479523}{10.5281/zenodo.20479523} \\
-Open-source licence          & MIT     & \href{https://github.com/NisongMonyimba/micrograd}{GitHub} \\
-Runtime (80$\times$20, 1 iter) & $\sim$1\,s & 8-core laptop, Docker container \\
-Peak memory (20$\times$5, 50 iter) & 29.5\,MB & \texttt{tracemalloc} measurement \\
-Test coverage                & 8.7\%  & import-level; full pipeline via CI \\
-Runtime dependencies         & 3       & \texttt{numpy}, \texttt{scipy}, \texttt{matplotlib} \\
+\multicolumn{3}{@{}l}{\textit{LOC breakdown (non-empty, non-comment)}} \\
+Core (solver + adjoint + optimiser) & 386  & 4 files: \texttt{solver}, \texttt{adjoint}, \texttt{optimizer}, \texttt{gradient\_optimizer} \\
+Utilities (filter/mesh/postprocess) & 297  & 6 files: \texttt{utilities}, \texttt{mesh}, \texttt{postprocess}, \texttt{manufacturability}, etc. \\
+Extended modules                    & 1{,}220 & 12 files: validation, scalability, experimental \\
+\textbf{Package total} (\texttt{brinkgrad/*.py}) & \textbf{1{,}903} & \\
+Examples (\texttt{examples/*.py})  & 206  & 7 user-facing scripts \\
+Tests (\texttt{tests/*.py})        & 35   & pytest unit tests \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Software quality}} \\
+Public functions / classes   & 68   & across 9 modules \\
+Unit tests                   & 8    & \texttt{tests/test\_import.py}, pytest \\
+CI integration tests         & 7    & inline in \texttt{ci.yml} \\
+Total automated tests        & 15   & run on every \texttt{main} push \\
+Test coverage                & 8.7\% & import-level; full pipeline via CI \\
+Runtime dependencies         & 3    & \texttt{numpy}, \texttt{scipy}, \texttt{matplotlib} \\
+Runtime (80$\times$20, 1 iter) & $\sim$1\,s & 8-core laptop \\
+Peak memory (20$\times$5, 50 iter) & 29.5\,MB & \texttt{tracemalloc} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Reproducibility}} \\
+Docker image                 & Yes  & \texttt{dolfinx/dolfinx:v0.7.3} (pinned) \\
+Reproducibility script       & 1    & \texttt{run\_all.sh} (52 lines) \\
+CI workflows                 & 1    & \texttt{.github/workflows/ci.yml} \\
+Zenodo archival              & Yes  & DOI:~\href{https://doi.org/10.5281/zenodo.20479523}{10.5281/zenodo.20479523} \\
+Open-source licence          & MIT  & \href{https://github.com/NisongMonyimba/brinkgrad}{GitHub} \\
 \bottomrule
 \end{tabular}
 \end{table}
