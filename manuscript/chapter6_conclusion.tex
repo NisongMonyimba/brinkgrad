@@ -48,8 +48,10 @@ The optimised design exploits the continuous permeability field of the
 Brinkman model;
 \texttt{micrograd} demonstrates optimisation within the Brinkman--SIMP
 porous-medium model.
-Binary-constrained optimisation and robust projection
-are the primary future directions (Supplementary~S5).
+The three-field robust projection~\cite{wang2011} is implemented
+in \texttt{micrograd.manufacturability.robust\_projection()}
+and demonstrated in \texttt{examples/robust\_projection\_demo.py};
+integration into the optimisation loop is the primary future direction.
 
 \paragraph{Future work.}
 The principal open directions are:

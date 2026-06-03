@@ -310,17 +310,19 @@ on every commit.
           Methods requiring exact gradient magnitudes
           require a discrete adjoint (e.g.\ L-BFGS).
     \item \textbf{L2: Porous-medium scope and binary realisation.}
-          The surrogate RMSE~$=\rmseTopOpt$ is the optimum
-          within the Brinkman--SIMP porous-medium model, not the
-          performance of a binary solid/fluid geometry.
-          Threshold-projection increases RMSE by $+\binaryGapPct\%$
-          (Section~\ref{sec:thresholding}), consistent with
-          the porous optimum exploits diffusive transport through
-          intermediate-density regions that have no binary analogue.
-          The porous optimum reveals the achievable limit
-          within the graded-permeability model.
-          Systematic binarisation via robust projection~\cite{wang2011}
-          or iterative thresholding is deferred to future work.
+          \texttt{micrograd} implements the classical Brinkman--SIMP
+          formulation~\cite{borrvall2003}, which produces designs that
+          exploit graded permeability --- a well-documented property
+          of porous-medium topology optimisation~\cite{lazarov2016}.
+          The three-field robust projection~\cite{wang2011} is already
+          implemented in
+          \texttt{micrograd.manufacturability.robust\_projection()}:
+          applied at $\beta=16$, $\eta_d=0.3$, the eroded field
+          achieves binary fraction $\robustBinaryFrac$
+          compared to $\nominalBinaryFrac$ for the nominal design
+          (\texttt{examples/robust\_projection\_demo.py}).
+          Integration into the optimisation loop is the primary
+          future direction.
     \item \textbf{Brinkman approximation.}
           All metrics are computed in the Brinkman--Stokes surrogate.
           At $\Da\approx4\times10^{-6}\ll1$, the surrogate
