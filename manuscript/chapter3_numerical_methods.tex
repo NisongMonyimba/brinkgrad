@@ -58,12 +58,14 @@ Each component of the continuation schedule is documented
 in Table~\ref{tab:continuation} with its motivation.
 The hybrid OC/MMA schedule is validated by direct comparison:
 pure MMA throughout stagnates near the initial objective
-(RMSE~$=\rmsePureMMA$, gray fraction $\grayPureMMA$
-after 600 iterations, Table~\ref{tab:mma_comparison}),
+(RMSE~$=\rmsePureMMA$, Table~\ref{tab:mma_comparison}),
 because MMA cannot escape the uniform-density plateau
 without the larger OC move at $\beta=1$.
-OC with its bisection-based update provides the large
-initial displacement needed; MMA then stabilises
+Pure OC (600 iter) achieves RMSE~$=0.0053$, comparable
+to the hybrid schedule (RMSE~$=\rmseShortRun$),
+confirming that OC alone is sufficient for this problem;
+the hybrid schedule is retained as the default
+configuration for generalisation to other problems
 the late-phase $\beta$-sharpening.
 The framework is fully modular: any component can be
 disabled by setting its parameter to the trivial value
@@ -83,7 +85,7 @@ pure OC or pure MMA).
 Helmholtz PDE filter & Mesh-dependent checkerboard & Smooth, mesh-independent $\rho_f$ \\
 Heaviside projection ($\beta$-continuation) & Premature gray-zone lock-in & Drives $\bar\rho\to\{0,1\}$ gradually \\
 $\alpha_{\max}$ ramping & All-solid early stagnation & Avoids non-fluid local minima \\
-Hybrid OC/MMA & Pure MMA stagnates at $J\approx J_0$ for 600 iter (RMSE~$=\rmsePureMMA$, Table~\ref{tab:mma_comparison}); OC escapes the initial plateau & Validated by direct comparison \\ 
+OC optimiser & Pure MMA stagnates at $J\approx J_0$ for 600 iter (RMSE~$=\rmsePureMMA$, Table~\ref{tab:mma_comparison}); pure OC and hybrid OC/MMA both converge & Validated by three-way comparison \\ 
 Sinusoidal initialisation & Bias toward uniform $\rho=V^*$ & Breaks symmetry, aids branching topology \\
 \bottomrule
 \end{tabular}
@@ -152,17 +154,18 @@ on a sensitivity sweep showing it maximises the OC update signal
 \begin{table}[h]
 \centering\small
 \caption{Hybrid OC/MMA vs.\ pure MMA: 600-iteration comparison
-         on the $80\times20$ mesh, linear gradient target.
-         Pure MMA stagnates near the initial objective;
-         the hybrid schedule is validated by this comparison.}
+         on the $20\times5$ mesh, linear gradient target, 600 iterations.
+         Pure OC performs comparably to the hybrid schedule;
+         pure MMA stagnates near the initial objective.
+         All results are software verification outputs.}
 \label{tab:mma_comparison}
-\begin{tabular}{@{}lccc@{}}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-Schedule & RMSE & $J_{\rm best}$ & Gray fraction \\
+Schedule & RMSE & Method & Converges? & Notes \\
 \midrule
-Pure MMA (600 iter) & $\rmsePureMMA$ & $2.78\times10^{-3}$ & $\grayPureMMA$ \\
-Hybrid OC/MMA (600 iter) & $\rmseShortRun$ & $\ensuremath{1.77\times10^{-3}}$ & $\grayShortRun$ \\
-Hybrid OC/MMA (1400 iter) & $\rmseTopOpt$ & $\finalJ$ & $\grayFrac$ \\
+Pure MMA (600 iter)      & $\rmsePureMMA$ & nlopt MMA & No  & stagnates at $J\approx J_0$ \\
+Pure OC (600 iter)       & $0.0053$        & OC bisect & Yes & comparable to hybrid \\
+Hybrid OC/MMA (600 iter) & $\rmseShortRun$ & OC+MMA   & Yes & similar to pure OC \\
 \bottomrule
 \end{tabular}
 \end{table}
