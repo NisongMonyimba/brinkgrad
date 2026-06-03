@@ -33,14 +33,27 @@ def measure_min_feature_size(rho_phys, V_rho, threshold=0.5, resolution=1e-6,
     return {"min_width_m":min_width, "avg_width_m":avg_width, "min_width_um":min_width*1e6, "avg_width_um":avg_width*1e6, "fab_ok":ok, "fab_limit_um":fab_limit_um}
 
 def robust_projection(rho_filt, beta, eta_d, V_rho):
-    import ufl; from dolfinx import fem
-    def heaviside(rho, beta, eta):
-        return (ufl.tanh(beta*eta) + ufl.tanh(beta*(rho-eta))) / (ufl.tanh(beta*eta) + ufl.tanh(beta*(1.0-eta)))
-    eroded_expr = heaviside(rho_filt, beta, eta_d)
-    nominal_expr = heaviside(rho_filt, beta, 0.5)
-    dilated_expr = heaviside(rho_filt, beta, 1.0-eta_d)
-    eroded, nominal, dilated = fem.Function(V_rho), fem.Function(V_rho), fem.Function(V_rho)
-    eroded.interpolate(lambda x: np.clip(eroded_expr.eval(x), 0, 1))
-    nominal.interpolate(lambda x: np.clip(nominal_expr.eval(x), 0, 1))
-    dilated.interpolate(lambda x: np.clip(dilated_expr.eval(x), 0, 1))
+    """Three-field robust projection: eroded, nominal, dilated.
+    Wang et al. (2011) doi:10.1007/s00158-010-0602-y
+    eta_d: dilation threshold (e.g. 0.3); eroded uses 1-eta_d.
+    """
+    import ufl
+    from dolfinx import fem
+    try:
+        _pts = V_rho.element.interpolation_points
+        if callable(_pts): _pts = _pts()
+    except Exception:
+        _pts = V_rho.element.interpolation_points()
+
+    def _heaviside_expr(rho, b, eta):
+        return (ufl.tanh(b*eta) + ufl.tanh(b*(rho-eta))) / (
+                ufl.tanh(b*eta) + ufl.tanh(b*(1.0-eta)))
+
+    eroded  = fem.Function(V_rho)
+    nominal = fem.Function(V_rho)
+    dilated = fem.Function(V_rho)
+    for fn, eta in [(eroded, 1.0-eta_d), (nominal, 0.5), (dilated, eta_d)]:
+        expr = _heaviside_expr(rho_filt, float(beta), eta)
+        fn.interpolate(fem.Expression(expr, _pts))
+        fn.x.scatter_forward()
     return eroded, nominal, dilated
