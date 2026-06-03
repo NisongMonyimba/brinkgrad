@@ -22,6 +22,16 @@ the Brinkman--SIMP modelling framework~\cite{borrvall2003}.
 
 \subsection{Brinkman--Darcy flow}
 \label{sec:brinkman}
+
+\paragraph{Notation for the design variable.}
+The design variable $\rho(\mathbf{x})\in[0,1]$ is a continuous
+\emph{permeability interpolation parameter}, not a physical porosity.
+$\rho=1$ corresponds to $\alpha\approx0$ (fluid-like permeability);
+$\rho=0$ corresponds to $\alpha=\alpha_{\max}$ (solid-like impermeability).
+This parameterisation follows the SIMP-style penalisation
+of Borrvall \& Petersson~\cite{borrvall2003}.
+
+
 The steady, incompressible flow of a Newtonian fluid through the design domain is modelled by the Brinkman equations~\cite{borrvall2003}:
 \begin{subequations}
 \label{eq:brinkman}

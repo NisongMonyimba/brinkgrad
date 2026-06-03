@@ -111,8 +111,11 @@ at $\varepsilon=10^{-5}$ is used as the reference.
 The Taylor remainder $R(\varepsilon) = |J(\rho+\varepsilon\delta\rho)-J(\rho)-\varepsilon\hat{g}[\delta\rho]|$ is computed for
 $\varepsilon\in\{10^{-5},\ldots,10^{-2}\}$.
 FD remainder slope: $1.01$ ($20\times5$), $1.00$ ($80\times20$).
-The slope of 1 reflects that the Riesz representative
-does not satisfy the quadratic Taylor remainder condition;
+The slope of 1 indicates first-order accuracy of the gradient approximation.
+Quadratic Taylor remainder (slope 2) requires the exact discrete gradient
+$\hat{g}=M^{-1}g$; the Riesz representative $g$ gives slope 1
+because $\langle g,\delta\rho\rangle_{\mathbb{R}^N} \ne
+\langle g,\delta\rho\rangle_{L^2}$.
 the Pearson direction correlation $\geq 0.80$ confirms
 correct descent direction for OC/MMA.
 

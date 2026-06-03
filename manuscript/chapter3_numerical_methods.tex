@@ -535,6 +535,41 @@ Additional UFL inequality constraints
 are passed directly to the MMA sub-problem.
 All 68 public functions are documented in the API reference.
 
+
+\subsection{Practical usability}
+\label{sec:usability}
+
+\paragraph{Time-to-first-result.}
+A new user can obtain results from a fresh clone in the following steps:
+\begin{enumerate}
+    \item \texttt{git clone https://github.com/NisongMonyimba/brinkgrad}
+          ($<$1 min on broadband)
+    \item \texttt{docker pull dolfinx/dolfinx:v0.7.3}
+          (approximately 3.2\,GB; 5--20 min depending on connection)
+    \item \texttt{pip install -e . --no-deps -q} inside the container
+          ($<$30 s)
+    \item Run a 20-iteration quick-start:
+          \texttt{python examples/linear\_target.py} ($\approx$30 s
+          on an 8-core laptop)
+\end{enumerate}
+Total time from clone to first figure: approximately 10--25 minutes,
+dominated by the Docker pull.
+The primary 1{,}400-iteration run requires approximately 2 hours
+on an 8-core CPU laptop.
+
+\paragraph{Hardware requirements.}
+The software has been tested on:
+\begin{itemize}
+    \item 8-core x86-64 laptop (16\,GB RAM): all examples pass
+    \item GitHub Actions Ubuntu runner (2-core, 7\,GB RAM):
+          CI regression test (1 iteration) completes in $<$60\,s
+\end{itemize}
+A minimum of 4\,GB RAM is recommended for the $20\times5$ mesh;
+the $80\times20$ primary mesh requires approximately 8\,GB.
+ARM architectures (e.g.\ Raspberry Pi) are not tested;
+the \texttt{dolfinx/dolfinx:v0.7.3} image is \texttt{amd64} only.
+
+
 \subsection{Software validation}
 \label{sec:sw_validation}
 
