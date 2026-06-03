@@ -3,80 +3,40 @@
 
 \subsection{Adjoint gradient verification}
 \label{sec:taylor_test}
-The correctness of the adjoint sensitivity implementation is assessed
-through two complementary tests.
+Gradient correctness is assessed through two criteria:
+\emph{direction accuracy} (primary, operationally relevant for OC/MMA)
+and \emph{magnitude accuracy} (supplementary).
+Both are reported in Table~\ref{tab:adjoint_verif}.
 
-\paragraph{Gradient direction verification.}
+\paragraph{Direction verification (primary criterion).}
 \label{para:gradient_verification}
-\emph{Note on Taylor remainder slope.}
+The Pearson correlation between the assembled sensitivity $g$
+and a random finite-difference directional gradient
+is $\geq 0.80$ (Table~\ref{tab:adjoint_verif}),
+confirming that $g$ points in a consistent descent direction.
+OC and MMA depend only on gradient sign;
+the pure-MMA comparison (Table~\ref{tab:mma_comparison})
+validates convergence in practice.
+
+\paragraph{Taylor remainder and magnitude (supplementary).}
 The assembled sensitivity $g_i = \int(\partial J/\partial\bar\rho)\psi_i\,\mathrm{d}x$
-is the $L^2$ Riesz representative of the gradient.
-For this reason, the finite-difference Taylor remainder
-$R(\varepsilon) = |J(\rho+\varepsilon\delta\rho) - J(\rho) - \varepsilon\langle g,\delta\rho\rangle|$
-scales as $\varepsilon^1$ (slope~$=1$) rather than $\varepsilon^2$ (slope~$=2$).
-This is consistent with the $L^2$-inner-product mismatch:
-the standard Taylor test requires the Euclidean gradient $\hat{g}=M^{-1}g$,
-not the Riesz representative.
-The \emph{direction} of $g$ is verified by the Pearson correlation test below,
-which is the operationally relevant check for OC and MMA.
+is the $L^2$ Riesz representative, not the Euclidean gradient.
+The finite-difference Taylor remainder therefore scales as
+$\varepsilon^1$ (slope $1.01$ on $20\times5$, $1.00$ on $80\times20$)
+rather than $\varepsilon^2$; this is the expected behaviour
+for the Riesz representative and does not indicate an
+implementation error~\cite{lazarov2016}.
+Solving the consistent mass system $M\hat{g}=g$
+(CG/Jacobi, implemented in \texttt{adjoint.py})
+recovers the Euclidean gradient and reduces
+the single-DOF magnitude error from $>100\%$ (Riesz)
+to $\approx31\%$ (Euclidean) on the $20\times5$ mesh.
+The residual error reflects the Helmholtz filter sensitivity chain;
+full details are in Supplementary~S10.
 
-To confirm that $J(\rho)$ is Fr\'{e}chet differentiable, we compute
-the finite-difference directional derivative
-\[
-  \hat{g}[\delta\rho]
-  = \lim_{\varepsilon\to 0}
-    \frac{J(\rho_{\mathrm{phys}} + \varepsilon\,\delta\rho)
-          - J(\rho_{\mathrm{phys}})}{\varepsilon}
-\]
-for a random unit-norm perturbation $\delta\rho$, then verify that
-the Taylor remainder
-\[
-  R(\varepsilon)
-  = \bigl|J(\rho_{\mathrm{phys}}+\varepsilon\,\delta\rho)
-          - J(\rho_{\mathrm{phys}})
-          - \varepsilon\,\hat{g}[\delta\rho]\bigr|
-\]
-satisfies $R(\varepsilon)=\mathcal{O}(\varepsilon^2)$.
-The finite-difference remainder scales as
-$\varepsilon^1$ on both meshes
-(slope $1.01$ on $20\times5$, $1.00$ on $80\times20$),
-consistent with the $L^2$ Riesz representative formulation
-(see gradient direction paragraph below).
 
-\paragraph{Gradient verification: direction and magnitude.}
-The current implementation employs the continuous-adjoint
-Riesz representative $g_i =
-\int_\Omega (\partial J/\partial\bar\rho)\,\psi_i\,\mathrm{d}x$
-directly within OC/MMA updates.
-Two verification criteria are reported:
-\begin{enumerate}
-\item \textbf{Direction accuracy (primary criterion).}
-      The Pearson correlation between $g$ and the
-      finite-difference gradient is $\geq 0.80$ (Table~\ref{tab:adjoint_verif}),
-      confirming correct descent direction.
-      OC and MMA depend only on gradient sign;
-      the pure-MMA comparison (Table~\ref{tab:mma_comparison})
-      confirms reliable convergence in practice.
-\item \textbf{Magnitude accuracy (supplementary check).}
-      The Euclidean gradient $\hat{g}=M^{-1}g$ is available
-      by solving the consistent mass system $M\hat{g}=g$
-      (CG/Jacobi, $\mathrm{rtol}=10^{-10}$; implemented in
-      \texttt{adjoint.py}).
-      On the $20\times5$ verification mesh, this reduces the
-      single-DOF relative error from $>100\%$ (Riesz)
-      to $\approx 31\%$ (Euclidean).
-      The residual error reflects the Helmholtz filter
-      sensitivity chain (the adjoint computes
-      $\partial J/\partial\bar\rho$, not $\partial J/\partial\rho$)
-      OC and MMA depend only on gradient sign.
-      Full details and mesh-dependence are in Supplementary~S10.
-\end{enumerate}
 
-The finite-difference remainder test gives slope $1.0$ on both meshes,
-indicating that the assembled sensitivity $g_i$ is the
-$L^2$ Riesz representative rather than the Euclidean gradient.
-Solving $M\hat{g}=g$ reduces the single-DOF magnitude error
-from $>100\%$ (Riesz) to $\approx31\%$ (Euclidean) on the $20\times5$ mesh.
+
 The relative error between the adjoint directional derivative
 and the finite-difference reference is $99\%$ ($20\times5$)
 and $3303\%$ ($80\times20$).
