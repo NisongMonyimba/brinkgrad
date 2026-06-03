@@ -11,9 +11,13 @@ Both are reported in Table~\ref{tab:adjoint_verif}.
 \paragraph{Direction verification (primary criterion).}
 \label{para:gradient_verification}
 The Pearson correlation between the assembled sensitivity $g$
-and a random finite-difference directional gradient
-is $\geq 0.80$ (Table~\ref{tab:adjoint_verif}),
-confirming that $g$ points in a consistent descent direction.
+and a random finite-difference directional derivative
+is $\geq 0.80$ (Table~\ref{tab:adjoint_verif}).
+The directional test uses a random unit-norm perturbation
+$\delta\rho\in\mathbb{R}^N$ applied to all $N$ design variables
+simultaneously, so the comparison is full-domain, not sampled.
+This confirms that $g$ points in a consistent descent direction
+for the full coupled system.
 OC and MMA depend only on gradient sign;
 the pure-MMA comparison (Table~\ref{tab:mma_comparison})
 validates convergence in practice.

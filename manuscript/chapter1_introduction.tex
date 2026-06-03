@@ -8,7 +8,7 @@ problems~\cite{makhija2015}, and unsteady flows~\cite{kreissl2011}.
 The Brinkman--SIMP approach replaces solid regions with a high-permeability
 porous medium, enabling gradient-based optimisation of fluid topology
 without remeshing.
-Its application to microfluidics is particularly attractive because the
+Microfluidic systems provide a natural benchmark application because the
 small length scales of soft-lithography devices make manual re-design
 expensive and simulation-driven optimisation increasingly accessible~\cite{whitesides2006}.
 
@@ -103,8 +103,14 @@ Specifically:
           (including the coupling term $-\lambda\nabla c$
           and misfit-derived Dirichlet outlet condition),
           and sensitivity computation.
-          No equivalent open-source FEniCSx implementation
-          for this coupled system has been previously published
+          Existing frameworks (dolfin-adjoint~\cite{farrell2013},
+          cashocs~\cite{blauth2023}) provide general adjoint
+          capabilities but lack: (i)~a pre-configured implementation
+          of the coupled Brinkman--CD system with SUPG stabilisation
+          at $\Pe\sim10^2$--$10^5$; (ii)~a default configuration
+          with failure-mode documentation; (iii)~end-to-end
+          Docker/CI reproducibility; and (iv)~a concentration-mismatch
+          objective with explicit adjoint derivation
           (Table~\ref{tab:comparison}, Section~\ref{sec:adjoint}).
 
     \item \textbf{Documented implementation of stabilised
