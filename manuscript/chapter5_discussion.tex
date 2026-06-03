@@ -79,6 +79,50 @@ discrete adjoint for gradient-based line search, and body-fitted NS validation -
 are natural next steps enabled by the modular architecture.
 
 
+
+\subsection{Software design comparison}
+\label{sec:sw_comparison}
+
+Table~\ref{tab:comparison} (Section~\ref{sec:intro}) positions
+\texttt{micrograd} against established frameworks.
+Three design choices differentiate \texttt{micrograd}
+from the closest alternatives.
+
+\paragraph{Versus dolfin-adjoint~\cite{farrell2013}.}
+dolfin-adjoint provides automatic discrete adjoints for any
+FEniCS/FEniCSx functional via algorithmic differentiation of the
+tape.
+\texttt{micrograd} instead derives and implements the continuous
+adjoint manually, making the adjoint boundary conditions and
+coupling terms explicit in the UFL source.
+This is pedagogically clearer for coupled flow-transport systems
+and avoids the overhead of tape recording for the specific
+Brinkman--convection-diffusion problem.
+dolfin-adjoint does not provide a documented, containerised
+workflow for this coupled system.
+
+\paragraph{Versus cashocs~\cite{blauth2023}.}
+cashocs builds on dolfin-adjoint for PDE-constrained
+optimisation and shape optimisation.
+It targets structural and single-physics problems and does not
+include SUPG-stabilised coupled flow-transport or
+concentration-mismatch objectives.
+\texttt{micrograd} fills this specific gap with a pinned Docker
+environment, 15 automated tests, and Zenodo archival.
+
+\paragraph{Versus MATLAB 88-line and top88 codes.}
+Classical MATLAB topology optimisation codes~\cite{andreassen2011}
+target structural compliance and are not transferable to
+FEniCSx or microfluidic transport problems.
+\texttt{micrograd} provides the equivalent entry point
+for coupled flow-transport problems in the Python/FEniCSx ecosystem.
+
+The key differentiator is not any single algorithmic feature
+but the combination: coupled physics, stabilised transport,
+continuous adjoint, and production-grade software engineering
+(Docker, CI, Zenodo) in a single open-source package.
+
+
 \subsection{Benchmark and verification}
 \label{sec:target_choice}
 The linear gradient target $c^*(y)=y/L_y$ serves as a

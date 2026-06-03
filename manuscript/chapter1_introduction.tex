@@ -62,19 +62,25 @@ Table~\ref{tab:comparison} positions \texttt{micrograd} relative to existing fra
          published results use different domain geometries, boundary
          conditions, and objective definitions.}
 \label{tab:comparison}
-\begin{tabular}{@{}p{2.4cm}p{1.4cm}p{1.4cm}p{1.4cm}p{1.4cm}p{1.4cm}@{}}
+\begin{tabular}{@{}p{2.8cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}p{1.1cm}@{}}
 \toprule
-\textbf{Feature} & BP03 & Na22 & Fe24 & dolfin- & \textbf{ours} \\
- & \cite{borrvall2003} & \cite{na2022} & \cite{feppon2024} & adj.~\cite{farrell2013} & \\
+\textbf{Feature} & BP03 & Na22 & Fe24 & dolfin- & cashocs & \textbf{ours} \\
+ & \cite{borrvall2003} & \cite{na2022} & \cite{feppon2024} & adj.~\cite{farrell2013} & \cite{blauth2023} & \\
 \midrule
-Coupled flow-transport & --- & \checkmark & \checkmark & --- & \checkmark \\
-Concentration-mismatch obj. & --- & \checkmark & --- & --- & \checkmark \\
-SUPG adjoint stabilisation & --- & --- & --- & --- & \checkmark \\
-Continuous adjoint & \checkmark & --- & \checkmark & --- & \checkmark \\
-Discrete adjoint & --- & --- & --- & \checkmark & future work \\
-FEniCSx implementation & --- & --- & --- & \checkmark & \checkmark \\
-Docker + CI reproducibility & --- & --- & --- & --- & \checkmark \\
-Open source & partial & --- & --- & \checkmark & \checkmark \\
+\multicolumn{7}{@{}l}{\textit{Physics}} \\
+Coupled flow-transport    & {---} & \checkmark & \checkmark & {---} & {---} & \checkmark \\
+Conc.-mismatch objective  & {---} & \checkmark & {---}       & {---} & {---} & \checkmark \\
+SUPG adjoint stabilisation& {---} & {---}       & {---}       & {---} & {---} & \checkmark \\
+Continuous adjoint        & \checkmark & {---}  & \checkmark & {---} & \checkmark & \checkmark \\
+Discrete adjoint          & {---} & {---}       & {---}       & \checkmark & \checkmark & future \\
+\midrule
+\multicolumn{7}{@{}l}{\textit{Software engineering}} \\
+FEniCSx backend           & {---} & {---}       & {---}       & \checkmark & \checkmark & \checkmark \\
+Docker image (pinned)     & {---} & {---}       & {---}       & {---} & {---} & \checkmark \\
+CI / automated tests      & {---} & {---}       & {---}       & {---} & {---} & \checkmark \\
+Zenodo archival (DOI)     & {---} & {---}       & {---}       & {---} & {---} & \checkmark \\
+Jupyter examples          & {---} & {---}       & {---}       & {---} & \checkmark & \checkmark \\
+Open source (MIT)         & partial & {---}     & {---}       & \checkmark & \checkmark & \checkmark \\
 \bottomrule
 \end{tabular}
 \end{table}
