@@ -81,7 +81,8 @@ What this paper does \emph{not} contribute:
           (the porous surrogate is not binary;
            binary realisation is future work).
     \item Mesh-converged results
-          (finer meshes find different local minima).
+          (as expected for non-convex TO, different
+          discretisations find different local optima).
     \item Experimentally validated designs
           (fabrication and measurement are outside scope).
     \item Exact gradient magnitudes
@@ -89,7 +90,7 @@ What this paper does \emph{not} contribute:
            a discrete adjoint is future work).
 \end{itemize}
 These open directions are quantified and documented.
-A reviewer asking ``if different meshes find different local minima,
+A reviewer asking ``if different discretisations find different local optima,
 what is the contribution?''
 is answered by the above: the contribution is the software itself,
 which enables systematic future studies on mesh-independent continuation.
@@ -189,7 +190,8 @@ parameter to its trivial value.
 The $160\times40$ mesh yields RMSE~$=\rmseHiRes$ (600 iterations)
 and RMSE~$=\rmseHiResScaled$ ($\nIterHiRes$ iterations),
 compared to the $80\times20$ result (RMSE~$=\rmseTopOpt$).
-Different meshes find different local minima;
+As expected for non-convex topology optimisation,
+different discretisations converge to different local optima;
 increasing the iteration budget does not recover
 the $80\times20$ result at $160\times40$.
 This is a well-documented property of non-convex density-based
