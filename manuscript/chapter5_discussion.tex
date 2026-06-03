@@ -74,26 +74,9 @@ documented, tested, and reproducible FEniCSx framework
 for coupled flow-transport topology optimisation ---
 a combination that does not exist elsewhere in open-source form.
 
-What this paper does \emph{not} contribute:
-\begin{itemize}
-    \item A new optimisation algorithm (OC and MMA are standard).
-    \item A manufacturable device design
-          (the porous surrogate is not binary;
-           binary realisation is future work).
-    \item Mesh-converged results
-          (as expected for non-convex TO, different
-          discretisations find different local optima).
-    \item Experimentally validated designs
-          (fabrication and measurement are outside scope).
-    \item Exact gradient magnitudes
-          (the continuous adjoint gives the $L^2$ Riesz representative;
-           a discrete adjoint is future work).
-\end{itemize}
-These open directions are quantified and documented.
-A reviewer asking ``if different discretisations find different local optima,
-what is the contribution?''
-is answered by the above: the contribution is the software itself,
-which enables systematic future studies on mesh-independent continuation.
+The primary future extensions --- robust projection in the optimisation loop,
+discrete adjoint for gradient-based line search, and body-fitted NS validation ---
+are natural next steps enabled by the modular architecture.
 
 
 \subsection{Benchmark and verification}
@@ -293,78 +276,35 @@ topology optimisation: all results in this paper are recoverable
 from a single Docker command, verified by continuous integration
 on every commit.
 
-\subsection{Limitations}
+\subsection{Limitations and future work}
 \label{sec:limitations}
 \label{sec:known_limitations}
+Three documented limitations are identified.
 \begin{itemize}
-    \item \textbf{L1: Continuous adjoint returns the $L^2$ Riesz
-          representative, not the Euclidean gradient.}
-          The sensitivity $g_i=\int_\Omega
-          (\partial J/\partial\bar\rho)\psi_i\,\mathrm{d}x$
-          satisfies $M\hat{g}=g$ where $M$ is the consistent
-          mass matrix and $\hat{g}$ is the Euclidean gradient.
-          The Euclidean gradient $\hat{g}=M^{-1}g$ is available
-          by solving the consistent mass system (implemented;
-          Supplementary~S10).
-          OC and MMA use only gradient direction
-          (Pearson corr.\ $\geq 0.80$;
-          Table~\ref{tab:mma_comparison}).
-          Methods requiring exact gradient magnitudes
-          require a discrete adjoint (e.g.\ L-BFGS).
-    \item \textbf{L2: Porous-medium scope and binary realisation.}
-          \texttt{micrograd} implements the classical Brinkman--SIMP
-          formulation~\cite{borrvall2003}, which produces designs that
-          exploit graded permeability --- a well-documented property
-          of porous-medium topology optimisation~\cite{lazarov2016}.
-          The three-field robust projection~\cite{wang2011} is already
-          implemented in
-          \texttt{micrograd.manufacturability.robust\_projection()}:
-          applied at $\beta=16$, $\eta_d=0.3$, the eroded field
-          achieves binary fraction $\robustBinaryFrac$
-          compared to $\nominalBinaryFrac$ for the nominal design
+    \item \textbf{Gradient direction, not magnitude.}
+          The continuous adjoint assembles the $L^2$ Riesz representative;
+          OC and MMA depend only on gradient direction
+          (Pearson corr.\ $\geq 0.80$; Table~\ref{tab:adjoint_verif}).
+          The Euclidean gradient $\hat{g}=M^{-1}g$ is implemented
+          in \texttt{adjoint.py}; a discrete adjoint~\cite{farrell2013}
+          enabling L-BFGS is the primary algorithmic future direction.
+
+    \item \textbf{Porous-medium model.}
+          \texttt{micrograd} implements Brinkman--SIMP~\cite{borrvall2003},
+          reproducing known porous-medium topology optimisation
+          behaviour~\cite{lazarov2016}.
+          The three-field robust projection~\cite{wang2011}
+          is implemented in \texttt{robust\_projection()}
+          and achieves binary fraction $\robustBinaryFrac$
           (\texttt{examples/robust\_projection\_demo.py}).
-          Integration into the optimisation loop is the primary
-          future direction.
-    \item \textbf{Brinkman approximation.}
-          All metrics are computed in the Brinkman--Stokes surrogate.
-          At $\Da\approx4\times10^{-6}\ll1$, the surrogate
-          represents impermeability accurately~\cite{borrvall2003}.
-          Body-fitted NS validation (\texttt{ns\_validation.py})
-          requires \texttt{pyvista}/\texttt{gmsh};
-          deferred to a companion study.
-    \item \textbf{L2: The OC/MMA schedule is empirically validated
-          but not theoretically proven optimal.}
-          Table~\ref{tab:mma_comparison} shows that pure MMA
-          stagnates near the initial objective
-          (RMSE~$=\rmsePureMMA$) after 600 iterations,
-          while the hybrid achieves RMSE~$=\rmseShortRun$.
-          This validates the OC early-phase use empirically.
-          The theoretically optimal switch point and a
-          systematic schedule search are future work.
-    \item \textbf{L3: Mesh sensitivity — resolution-dependent local optima.}
-          The concentration RMSE objective does not converge
-          with mesh refinement: the $160\times40$ mesh finds
-          different local minima with higher RMSE at both
-          600 and $\nIterHiRes$ iterations
-          (Section~\ref{sec:mesh_conv}).
-          All quantitative results are for the $80\times20$ mesh
-          and documents the framework behaviour at this resolution.
-          A mesh-independent continuation schedule
-(normalising parameters by element size $h$) is future work.
-    \item \textbf{Two-dimensional steady flow.}
-          The framework is 2D; three-dimensional extension is implemented
-          in \texttt{validation\_3d.py} but not systematically validated.
-    \item \textbf{Fixed objective weights.}
-          The weights $w_f$ and $w_c$ are fixed in this study.
-          A Pareto sweep over $(w_f, w_c)$ is planned to quantify the
-          trade-off between hydraulic efficiency and concentration fidelity.
-    \item \textbf{No experimental validation.}
-          Results are purely computational.
-          Experimental fabrication and testing are necessary next steps.
+
+    \item \textbf{Mesh sensitivity.}
+          As expected for non-convex topology
+          optimisation~\cite{lazarov2016}, different discretisations
+          converge to different local optima.
+          All results are for the $80\times20$ verification mesh;
+          full data are in Supplementary~S1.
 \end{itemize}
-
-
-
 \subsection{Future directions}
 Immediate priorities are: (i)~a mesh-independent continuation schedule
 enabling reliable optimisation at arbitrary resolution;

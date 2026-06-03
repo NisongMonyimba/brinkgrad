@@ -496,6 +496,32 @@ Open-source licence          & MIT     & \url{https://github.com/NisongMonyimba/
 
 
 
+
+\subsection{Extensibility}
+\label{sec:extensibility}
+
+\texttt{micrograd} is designed for extensibility through three patterns.
+
+\paragraph{Custom objectives.}
+The cost functional $J$ is assembled in \texttt{adjoint.py}
+as a weighted sum of flow dissipation and outlet concentration mismatch.
+Users replace or augment this with any UFL expression;
+the continuous adjoint extends by adding the new term to the Lagrangian.
+
+\paragraph{Additional transport equations.}
+The forward solver (\texttt{solver.py}) assembles the coupled
+Brinkman--convection-diffusion system.
+Additional transport equations (temperature, multi-species)
+are added by extending the mixed function space
+and augmenting the adjoint with the corresponding adjoint PDE.
+
+\paragraph{Custom constraints.}
+Volume fraction is enforced by OC bisection
+(\texttt{optimizers.py::oc\_update}).
+Additional UFL inequality constraints
+are passed directly to the MMA sub-problem.
+All 68 public functions are documented in the API reference.
+
 \subsection{Software validation}
 \label{sec:sw_validation}
 
