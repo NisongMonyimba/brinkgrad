@@ -1,4 +1,4 @@
-# micrograd/mesh.py
+# brinkgrad/mesh.py
 """Mesh generation and boundary markers (FEniCSx ≥ 0.9)."""
 import numpy as np
 import dolfinx

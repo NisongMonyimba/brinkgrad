@@ -12,8 +12,8 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from dolfinx import fem
-from micrograd import GradientGeneratorOptimizer
-from micrograd.utilities import helmholtz_filter, heaviside_projection
+from brinkgrad import GradientGeneratorOptimizer
+from brinkgrad.utilities import helmholtz_filter, heaviside_projection
 
 # ── 1. Run optimiser ────────────────────────────────────────────────────────
 Lx, Ly = 2000e-6, 500e-6

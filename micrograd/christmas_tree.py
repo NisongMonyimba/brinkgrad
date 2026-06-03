@@ -1,4 +1,4 @@
-# micrograd/christmas_tree.py (updated)
+# brinkgrad/christmas_tree.py (updated)
 import numpy as np
 from dolfinx import fem
 from .solver import forward_solve

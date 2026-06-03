@@ -1,6 +1,6 @@
 # Known Issues and Limitations
 
-This file documents known limitations of `micrograd` v1.0.0.
+This file documents known limitations of `brinkgrad` v1.0.0.
 See also Section 6 (Discussion) of the manuscript for full details.
 
 ---
@@ -65,7 +65,7 @@ A systematic schedule search is future work.
 All results are for 2D Brinkman–convection-diffusion.
 3D extrusion and full Navier–Stokes validation are not implemented
 in the current release. Body-fitted NS validation code exists in
-`micrograd/validation.py` but requires `pyvista`/`gmsh` not in
+`brinkgrad/validation.py` but requires `pyvista`/`gmsh` not in
 the standard Docker image.
 
 ---
@@ -80,4 +80,4 @@ please open a GitHub issue.
 ---
 
 *For questions or bug reports, open an issue at
-https://github.com/NisongMonyimba/micrograd/issues*
+https://github.com/NisongMonyimba/brinkgrad/issues*

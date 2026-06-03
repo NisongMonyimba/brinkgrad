@@ -1,4 +1,4 @@
-from micrograd import GradientGeneratorOptimizer
+from brinkgrad import GradientGeneratorOptimizer
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np

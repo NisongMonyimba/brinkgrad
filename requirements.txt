@@ -1,4 +1,4 @@
-# micrograd runtime dependencies
+# brinkgrad runtime dependencies
 # Install inside the pinned Docker image: dolfinx/dolfinx:v0.7.3
 # All FEniCSx dependencies (dolfinx, ufl, basix, ffcx, petsc4py, mpi4py)
 # are pre-installed in the Docker image.

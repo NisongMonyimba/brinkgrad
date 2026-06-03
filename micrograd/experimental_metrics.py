@@ -1,4 +1,4 @@
-# micrograd/experimental_metrics.py (updated)
+# brinkgrad/experimental_metrics.py (updated)
 import numpy as np
 from dolfinx import fem
 import ufl

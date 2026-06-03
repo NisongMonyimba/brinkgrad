@@ -5,7 +5,7 @@ Demonstrates software flexibility: only the target_expr changes.
 Step profile: c*(y) = 1 if y > Ly/2 else 0
 
 This example, together with linear_target.py and double_peak_target.py,
-shows that micrograd supports arbitrary concentration targets by
+shows that brinkgrad supports arbitrary concentration targets by
 changing a single parameter (target_expr).
 
 Usage (inside Docker):
@@ -13,8 +13,8 @@ Usage (inside Docker):
 """
 import numpy as np
 import sys; sys.path.insert(0, '.')
-from micrograd import GradientGeneratorOptimizer
-import micrograd.utilities as _ut
+from brinkgrad import GradientGeneratorOptimizer
+import brinkgrad.utilities as _ut
 
 Lx, Ly = 2000e-6, 500e-6
 _ut.alpha_max = 1e3
@@ -32,4 +32,4 @@ opt.run(max_iter=200, beta_continuation=[4, 8, 16, 32], move=0.2)
 print("\nStep profile optimisation complete.")
 print("Only target_expr changed vs linear_target.py.")
 print("All other solver, adjoint, and optimiser code is identical.")
-print("This demonstrates the software flexibility of micrograd.")
+print("This demonstrates the software flexibility of brinkgrad.")

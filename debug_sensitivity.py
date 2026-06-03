@@ -1,5 +1,5 @@
 import numpy as np
-from micrograd.gradient_optimizer import GradientGeneratorOptimizer
+from brinkgrad.gradient_optimizer import GradientGeneratorOptimizer
 
 # Match the call from linear_target.py (adjust keyword if necessary)
 opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, target='linear')

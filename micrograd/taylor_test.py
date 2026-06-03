@@ -7,15 +7,15 @@ Verifies that the continuous adjoint gradient is correct:
 should decay as eps^2 (second-order) if the gradient is exact.
 
 Usage:
-    python -m micrograd.taylor_test
+    python -m brinkgrad.taylor_test
 """
 import numpy as np
-from micrograd import GradientGeneratorOptimizer
-from micrograd.utilities import helmholtz_filter, heaviside_projection
-from micrograd.solver import forward_solve
-from micrograd.adjoint import adjoint_and_sensitivity
+from brinkgrad import GradientGeneratorOptimizer
+from brinkgrad.utilities import helmholtz_filter, heaviside_projection
+from brinkgrad.solver import forward_solve
+from brinkgrad.adjoint import adjoint_and_sensitivity
 from dolfinx import fem
-import micrograd.utilities as _ut
+import brinkgrad.utilities as _ut
 
 
 def run_taylor_test(nx=20, ny=5, n_eps=7, seed=42,

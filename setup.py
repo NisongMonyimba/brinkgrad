@@ -2,14 +2,14 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="micrograd",
+    name="brinkgrad",
     version="1.0.0",
-    description="Topology optimisation of microfluidic gradient generators for arbitrary outlet profiles",
+    description="Adjoint-based topology optimisation of coupled Brinkman-convection-diffusion systems",
     long_description=open("README.md", "r", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     author="Nisong Monyimba",
     author_email="nmonyimb@asu.edu",
-    url="https://github.com/yourusername/micrograd",  # replace with your actual username
+    url="https://github.com/yourusername/brinkgrad",  # replace with your actual username
     packages=find_packages(),
     install_requires=[
         "numpy>=1.23.2",        # <-- pinned to the Docker image's native version

@@ -230,7 +230,7 @@ Algorithm~1 (Table~\ref{alg:main}) summarises the complete optimisation procedur
 
 \subsection{Practical usage and Jupyter notebook}
 \label{sec:practical}
-\texttt{micrograd} is designed for rapid inverse design exploration.
+\texttt{brinkgrad} is designed for rapid inverse design exploration.
 A typical workflow proceeds in three steps:
 \begin{enumerate}\itemsep2pt
     \item \textbf{Define target}: specify the desired outlet
@@ -249,7 +249,7 @@ The repository includes a Jupyter notebook
 for the linear gradient target in under 30 lines of user code.
 Key API calls are:
 \begin{lstlisting}[language=Python,breaklines=true]
-from micrograd import GradientGeneratorOptimizer
+from brinkgrad import GradientGeneratorOptimizer
 opt = GradientGeneratorOptimizer(
     Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
     target_expr=lambda x: x[1]/500e-6,
@@ -264,7 +264,7 @@ The full $\nIterPrimary$-iteration primary result is reproduced by
 \subsection{Reproducibility and open-source release}
 \label{sec:reproducibility}
 \label{sec:ci}
-The complete pipeline is released as \texttt{micrograd} (MIT licence) at
+The complete pipeline is released as \texttt{brinkgrad} (MIT licence) at
 \url{https://github.com/NisongMonyimba/micrograd}~\cite{micrograd2025zenodo}.
 The repository includes all FEM modules, post-processing tools,
 a Jupyter notebook (\texttt{notebooks/quickstart.ipynb}),
@@ -304,7 +304,7 @@ All results & \texttt{bash run\_all.sh} \\
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{../figures/software_architecture.pdf}
-\caption{Software architecture of \texttt{micrograd}.
+\caption{Software architecture of \texttt{brinkgrad}.
          \emph{All constituent techniques are established}:
          continuous adjoint~\cite{borrvall2003,othmer2008},
          SUPG stabilisation~\cite{brooks1982,donea2003},
@@ -331,11 +331,11 @@ This section documents the package structure, design philosophy,
 testing strategy, and reproducibility infrastructure.
 
 \paragraph{Package structure.}
-\texttt{micrograd} is a single flat Python package
+\texttt{brinkgrad} is a single flat Python package
 (\texttt{micrograd/}) with one public entry point:
 
 \begin{lstlisting}[language=Python,breaklines=true]
-from micrograd import GradientGeneratorOptimizer
+from brinkgrad import GradientGeneratorOptimizer
 opt = GradientGeneratorOptimizer(nx=80, ny=20,
     target_expr=lambda x: x[1]/500e-6,
     w_f=1e-3, w_c=50.0, V_star=0.5)
@@ -429,7 +429,7 @@ via GitHub Actions~\cite{GitHubActions2024}.
 \paragraph{Continuous integration.}
 The CI workflow (\texttt{.github/workflows/ci.yml}) executes
 a three-stage pipeline on every commit:
-(i)~install dependencies and \texttt{micrograd} in editable mode
+(i)~install dependencies and \texttt{brinkgrad} in editable mode
 inside the FEniCSx container;
 (ii)~run the pytest import suite (\texttt{tests/test\_import.py});
 (iii)~run the seven inline integration tests
@@ -462,11 +462,11 @@ Four mechanisms ensure end-to-end reproducibility:
 
 \paragraph{Software quality metrics.}
 Table~\ref{tab:sw_metrics} summarises the quantitative
-software quality indicators for the \texttt{micrograd} package.
+software quality indicators for the \texttt{brinkgrad} package.
 
 \begin{table}[h]
 \centering
-\caption{Software quality metrics for \texttt{micrograd} v1.0.0.
+\caption{Software quality metrics for \texttt{brinkgrad} v1.0.0.
          LOC counts non-empty, non-comment source lines
          in \texttt{micrograd/*.py}.
          Unit tests are in \texttt{tests/test\_import.py};
@@ -504,7 +504,7 @@ Runtime dependencies         & 3       & \texttt{numpy}, \texttt{scipy}, \texttt
 \subsection{Extensibility}
 \label{sec:extensibility}
 
-\texttt{micrograd} is designed for extensibility through three patterns.
+\texttt{brinkgrad} is designed for extensibility through three patterns.
 
 \paragraph{Custom objectives.}
 The cost functional $J$ is assembled in \texttt{adjoint.py}
@@ -572,6 +572,6 @@ The full pipeline (all results) is reproduced by
 (tested with DOLFINx~v0.7.3; newer versions v0.8.x+ are expected to work):
 \begin{lstlisting}[language=bash,breaklines=true]
 git clone https://github.com/NisongMonyimba/micrograd
-cd micrograd
-docker run --rm -v ${PWD}:/root/micrograd -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg dolfinx/dolfinx:v0.7.3 bash -c "cd /root/micrograd && bash run_all.sh"
+cd brinkgrad
+docker run --rm -v ${PWD}:/root/brinkgrad -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg dolfinx/dolfinx:v0.7.3 bash -c "cd /root/brinkgrad && bash run_all.sh"
 \end{lstlisting}

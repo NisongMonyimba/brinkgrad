@@ -1,4 +1,4 @@
-# micrograd/scalability.py
+# brinkgrad/scalability.py
 """Scalability study: iterative solver performance on successive mesh refinements."""
 import time
 import numpy as np

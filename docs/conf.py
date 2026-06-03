@@ -4,7 +4,7 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 
 # Project information
-project = 'micrograd'
+project = 'brinkgrad'
 copyright = '2025, Nisong Monyimba'
 author = 'Nisong Monyimba'
 version = '1.0.0'

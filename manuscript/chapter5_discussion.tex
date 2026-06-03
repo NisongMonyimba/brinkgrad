@@ -37,13 +37,13 @@ Each test is a software check, not a claim of physical optimality.
           enforced by the OC bisection algorithm.
 
     \item \textbf{Porous-medium scope and robust projection.}
-          The \texttt{micrograd} package implements the
+          The \texttt{brinkgrad} package implements the
           classical Brinkman--SIMP formulation and therefore
           reproduces known porous-medium topology optimisation
           behaviour~\cite{borrvall2003}.
           The three-field robust projection of
           Wang et al.~\cite{wang2011} is implemented in
-          \texttt{micrograd.manufacturability.robust\_projection()}
+          \texttt{brinkgrad.manufacturability.robust\_projection()}
           and demonstrated in \texttt{examples/robust\_projection\_demo.py}:
           applied post-optimisation at $\beta=16$, $\eta_d=0.3$,
           the eroded field achieves binary fraction $0.85$
@@ -84,15 +84,15 @@ are natural next steps enabled by the modular architecture.
 \label{sec:sw_comparison}
 
 Table~\ref{tab:comparison} positions
-\texttt{micrograd} against established frameworks.
-Three design choices differentiate \texttt{micrograd}
+\texttt{brinkgrad} against established frameworks.
+Three design choices differentiate \texttt{brinkgrad}
 from the closest alternatives.
 
 \paragraph{Versus dolfin-adjoint~\cite{farrell2013}.}
 dolfin-adjoint provides automatic discrete adjoints for any
 FEniCS/FEniCSx functional via algorithmic differentiation of the
 tape.
-\texttt{micrograd} instead derives and implements the continuous
+\texttt{brinkgrad} instead derives and implements the continuous
 adjoint manually, making the adjoint boundary conditions and
 coupling terms explicit in the UFL source.
 This is pedagogically clearer for coupled flow-transport systems
@@ -107,14 +107,14 @@ optimisation and shape optimisation.
 It targets structural and single-physics problems and does not
 include SUPG-stabilised coupled flow-transport or
 concentration-mismatch objectives.
-\texttt{micrograd} fills this specific gap with a pinned Docker
+\texttt{brinkgrad} fills this specific gap with a pinned Docker
 environment, 15 automated tests, and Zenodo archival.
 
 \paragraph{Versus MATLAB 88-line and top88 codes.}
 Classical MATLAB topology optimisation codes~\cite{andreassen2011}
 target structural compliance and are not transferable to
 FEniCSx or microfluidic transport problems.
-\texttt{micrograd} provides the equivalent entry point
+\texttt{brinkgrad} provides the equivalent entry point
 for coupled flow-transport problems in the Python/FEniCSx ecosystem.
 
 The key differentiator is not any single algorithmic feature
@@ -128,7 +128,7 @@ continuous adjoint, and production-grade software engineering
 The three example scripts \texttt{linear\_target.py},
 \texttt{step\_profile\_target.py}, and
 \texttt{double\_peak\_target.py} demonstrate that
-\texttt{micrograd} supports arbitrary concentration targets
+\texttt{brinkgrad} supports arbitrary concentration targets
 by changing a single parameter (\texttt{target\_expr}).
 The solver, adjoint, filter, and optimiser code is identical
 across all three examples, confirming the generality of the
@@ -164,7 +164,7 @@ Brinkman--SIMP design space.
 The optimised design exploits the continuous permeability field
 within the porous-medium model; this optimum is not
 representable as a binary solid/fluid geometry without performance penalty.
-\texttt{micrograd} optimises within the Brinkman--SIMP
+\texttt{brinkgrad} optimises within the Brinkman--SIMP
 porous-medium model and produces continuously graded permeability
 distributions that are \emph{not} directly realisable as
 manufacturable geometries.
@@ -299,7 +299,7 @@ Short-run optimised ($\beta=16$) & $\rmseShortRun$ & 600 & 30 min \\
 \subsection{Positioning relative to existing frameworks}
 \label{sec:positioning}
 Table~\ref{tab:comparison} (Section~\ref{sec:introduction}) compares
-the architectural features of \texttt{micrograd} against existing
+the architectural features of \texttt{brinkgrad} against existing
 open-source frameworks.
 We highlight three specific advantages.
 
@@ -337,7 +337,7 @@ that the OC/MMA loop reduces the objective
 relative to the uniform initialisation.
 
 \paragraph{Reproducibility.}
-To our knowledge, \texttt{micrograd} is the first fully reproducible
+To our knowledge, \texttt{brinkgrad} is the first fully reproducible
 open-source implementation of coupled Brinkman--convection-diffusion
 topology optimisation: all results in this paper are recoverable
 from a single Docker command, verified by continuous integration
@@ -357,7 +357,7 @@ Three documented limitations are identified.
           enabling L-BFGS is the primary algorithmic future direction.
 
     \item \textbf{Porous-medium model.}
-          \texttt{micrograd} implements Brinkman--SIMP~\cite{borrvall2003},
+          \texttt{brinkgrad} implements Brinkman--SIMP~\cite{borrvall2003},
           reproducing known porous-medium topology optimisation
           behaviour~\cite{lazarov2016}.
           The three-field robust projection~\cite{wang2011}

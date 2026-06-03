@@ -9,12 +9,12 @@ Usage (inside Docker):
 """
 import numpy as np
 import sys; sys.path.insert(0, '.')
-from micrograd import GradientGeneratorOptimizer
-from micrograd.utilities import helmholtz_filter, heaviside_projection
-from micrograd.solver import forward_solve
-from micrograd.adjoint import adjoint_and_sensitivity
-from micrograd.manufacturability import robust_projection
-import micrograd.utilities as _ut
+from brinkgrad import GradientGeneratorOptimizer
+from brinkgrad.utilities import helmholtz_filter, heaviside_projection
+from brinkgrad.solver import forward_solve
+from brinkgrad.adjoint import adjoint_and_sensitivity
+from brinkgrad.manufacturability import robust_projection
+import brinkgrad.utilities as _ut
 import dolfinx.fem as fem, ufl
 
 Lx, Ly = 2000e-6, 500e-6
@@ -59,7 +59,7 @@ for field, label in [(eroded,"eroded"), (nominal_rp,"rp-nominal"), (dilated,"dil
     u2,_,c2 = forward_solve(opt.msh, opt.boundary_data, field, P_in=1000.0)
     compute_metrics(field, c2, label)
 
-print("\nConclusion: robust_projection() is available in micrograd.manufacturability")
+print("\nConclusion: robust_projection() is available in brinkgrad.manufacturability")
 print("The eroded field provides the most binary-feasible design.")
 print("For binary-convergent optimisation, call robust_projection() at each")
 print("iteration and optimise against the worst-case (eroded) field.")

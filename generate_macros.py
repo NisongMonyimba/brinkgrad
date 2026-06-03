@@ -1,4 +1,4 @@
-from micrograd import GradientGeneratorOptimizer
+from brinkgrad import GradientGeneratorOptimizer
 import numpy as np, os, csv, ufl
 
 def main():

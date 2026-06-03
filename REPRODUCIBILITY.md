@@ -1,9 +1,9 @@
-# micrograd Reproducibility Checklist
+# brinkgrad Reproducibility Checklist
 
 ## One-click reproduction (Docker)
 ```bash
-git clone https://github.com/NisongMonyimba/micrograd.git
-cd micrograd
+git clone https://github.com/NisongMonyimba/brinkgrad.git
+cd brinkgrad
 docker run --rm -v $(pwd):/shared dolfinx/dolfinx:v0.7.3 \
     bash -c "cd /shared && pip install -e . --no-deps -q && bash run_all.sh"
 ```
@@ -34,7 +34,7 @@ All results are written to `results/` as JSON files.
 - All result JSON files included in archive
 
 ## CI badge
-![CI](https://github.com/NisongMonyimba/micrograd/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/NisongMonyimba/brinkgrad/actions/workflows/ci.yml/badge.svg)
 
 ## Verification
 The primary result (RMSE = 0.058, 80×20 mesh, 1400 iterations) is

@@ -1,9 +1,9 @@
-# micrograd — Submission Notes
+# brinkgrad — Submission Notes
 
 ## Manuscript
 - **File:** `manuscript/main.pdf` (31 pages, 0 errors)
 - **Cover letter:** `manuscript/cover_letter.pdf`
-- **Title:** `micrograd`: An open-source FEniCSx framework for adjoint-based
+- **Title:** `brinkgrad`: An open-source FEniCSx framework for adjoint-based
   topology optimisation of porous microfluidic mixers using
   Brinkman–convection-diffusion equations
 
@@ -39,11 +39,11 @@
 
 ### ITEM 1: Register Zenodo DOI (5 minutes, free, REQUIRED)
 ```bash
-cd ~/micrograd
-git archive --format=zip HEAD -o micrograd_v1.0.zip
+cd ~/brinkgrad
+git archive --format=zip HEAD -o brinkgrad_v1.0.zip
 # Go to https://zenodo.org → New upload
-# Upload micrograd_v1.0.zip
-# Title: micrograd: FEniCSx topology optimisation of Brinkman-convection-diffusion systems
+# Upload brinkgrad_v1.0.zip
+# Title: brinkgrad: FEniCSx topology optimisation of Brinkman-convection-diffusion systems
 # Authors: Nisong Monyimba (Arizona State University)
 # License: MIT
 # Click 'Reserve DOI' BEFORE publishing
@@ -54,14 +54,14 @@ bash submission_checklist.sh --set-doi 10.5281/zenodo.20479523
 ### ITEM 2: Professional GitHub URL (10 minutes)
 EwC reviewers may question a username with numbers (nisongmonyimba278-byte).
 Options (choose one):
-- Create a GitHub org: github.com/micrograd-fenicsx/micrograd
+- Create a GitHub org: github.com/brinkgrad-fenicsx/brinkgrad
 - Rename your GitHub account to your real name
 - Transfer the repo to a university org if available
 After moving:
 ```bash
 # Update the URL in manuscript
 find manuscript -name '*.tex' -exec sed -i \
-  's|NisongMonyimba/micrograd|YOUR-NEW-ORG/micrograd|g' {} \;
+  's|NisongMonyimba/brinkgrad|YOUR-NEW-ORG/brinkgrad|g' {} \;
 bash submission_checklist.sh --recompile
 git add -A && git commit -m 'update: professional GitHub URL'
 git push origin main

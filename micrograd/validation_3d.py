@@ -1,4 +1,4 @@
-# micrograd/validation_3d.py (compatible with dolfinx v0.7.3)
+# brinkgrad/validation_3d.py (compatible with dolfinx v0.7.3)
 import numpy as np, pyvista as pv, gmsh, dolfinx, ufl, basix.ufl
 from dolfinx import fem, mesh, io
 from dolfinx.fem.petsc import LinearProblem

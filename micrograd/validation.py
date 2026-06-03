@@ -1,4 +1,4 @@
-# micrograd/validation.py
+# brinkgrad/validation.py
 """Navier‑Stokes validation, outlet profile utilities, Reynolds number check (FEniCSx ≥ 0.9)."""
 import numpy as np
 import pyvista as pv

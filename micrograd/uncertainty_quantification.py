@@ -1,4 +1,4 @@
-# micrograd/uncertainty_quantification.py
+# brinkgrad/uncertainty_quantification.py
 """
 Uncertainty quantification for fabrication tolerances using polynomial chaos expansion.
 Assesses the effect of channel width variations on the outlet concentration profile.

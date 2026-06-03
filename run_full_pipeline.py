@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os, sys, subprocess
 
-PROJECT = os.path.expanduser("~/micrograd")
+PROJECT = os.path.expanduser("~/brinkgrad")
 os.chdir(PROJECT)
 
 # alpha_max patch removed — keep original 1e8 for proper channel formation
@@ -12,7 +12,7 @@ os.chdir(PROJECT)
 examples = {}
 
 examples["linear_target.py"] = r"""
-from micrograd import GradientGeneratorOptimizer
+from brinkgrad import GradientGeneratorOptimizer
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
@@ -43,7 +43,7 @@ if __name__=='__main__': main()
 """
 
 examples["double_peak_target.py"] = r"""
-from micrograd import GradientGeneratorOptimizer
+from brinkgrad import GradientGeneratorOptimizer
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
@@ -71,7 +71,7 @@ if __name__=='__main__': main()
 """
 
 examples["gallery_targets.py"] = r"""
-from micrograd import GradientGeneratorOptimizer
+from brinkgrad import GradientGeneratorOptimizer
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
@@ -107,7 +107,7 @@ if __name__=='__main__': main()
 """
 
 examples["christmas_tree_comparison.py"] = r"""
-from micrograd import GradientGeneratorOptimizer, ChristmasTree
+from brinkgrad import GradientGeneratorOptimizer, ChristmasTree
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
@@ -135,7 +135,7 @@ if __name__=='__main__': main()
 """
 
 examples["generate_macros.py"] = r"""
-from micrograd import GradientGeneratorOptimizer, ChristmasTree
+from brinkgrad import GradientGeneratorOptimizer, ChristmasTree
 import numpy as np, os, csv, ufl
 
 def main():

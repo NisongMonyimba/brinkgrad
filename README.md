@@ -1,8 +1,8 @@
-# micrograd
+# brinkgrad
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20479523.svg)](https://doi.org/10.5281/zenodo.20479523)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0000--7558--8580-green)](https://orcid.org/0009-0000-7558-8580)
-[![CI](https://github.com/NisongMonyimba/micrograd/actions/workflows/ci.yml/badge.svg)](https://github.com/NisongMonyimba/micrograd/actions)
+[![CI](https://github.com/NisongMonyimba/brinkgrad/actions/workflows/ci.yml/badge.svg)](https://github.com/NisongMonyimba/brinkgrad/actions)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -15,7 +15,7 @@ School of Biological and Health Systems Engineering, Arizona State University, T
 
 ## What this does
 
-`micrograd` finds a spatially-varying permeability field inside a microfluidic channel such that the outlet concentration profile matches a user-specified target. It solves a density-based topology optimisation problem on a coupled Brinkman–convection-diffusion system using:
+`brinkgrad` finds a spatially-varying permeability field inside a microfluidic channel such that the outlet concentration profile matches a user-specified target. It solves a density-based topology optimisation problem on a coupled Brinkman–convection-diffusion system using:
 
 - **Continuous adjoint** for gradient computation — two PDE solves regardless of mesh size
 - **SUPG stabilisation** of both forward and adjoint equations at Pe ~ 10²–10⁵
@@ -31,15 +31,15 @@ The primary benchmark achieves **RMSE = 0.058** for a linear gradient target on 
 ## Reproduce all results
 
 ```bash
-git clone https://github.com/NisongMonyimba/micrograd
-cd micrograd
-docker run --rm -v ${PWD}:/root/micrograd \
+git clone https://github.com/NisongMonyimba/brinkgrad
+cd brinkgrad
+docker run --rm -v ${PWD}:/root/brinkgrad \
   -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
   dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/micrograd && bash run_all.sh"
+  "cd /root/brinkgrad && bash run_all.sh"
 ```
 
-This single command pulls the official FEniCSx Docker image, installs `micrograd`, and executes the complete pipeline. All figures and result files are written directly to the repository tree. Runtime: ~1 hour, no GPU required.
+This single command pulls the official FEniCSx Docker image, installs `brinkgrad`, and executes the complete pipeline. All figures and result files are written directly to the repository tree. Runtime: ~1 hour, no GPU required.
 
 All results are permanently archived at Zenodo: **DOI: [10.5281/zenodo.20479523](https://doi.org/10.5281/zenodo.20479523)**
 
@@ -50,23 +50,23 @@ All results are permanently archived at Zenodo: **DOI: [10.5281/zenodo.20479523]
 **Single optimisation run (linear gradient, 1400 iterations):**
 
 ```bash
-docker run --rm -v ${PWD}:/root/micrograd \
+docker run --rm -v ${PWD}:/root/brinkgrad \
   dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/micrograd && python examples/linear_target.py"
+  "cd /root/brinkgrad && python examples/linear_target.py"
 ```
 
 **Interactive Jupyter notebook:**
 
 ```bash
-docker run --rm -p 8888:8888 -v ${PWD}:/root/micrograd \
+docker run --rm -p 8888:8888 -v ${PWD}:/root/brinkgrad \
   dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/micrograd && jupyter notebook --ip=0.0.0.0"
+  "cd /root/brinkgrad && jupyter notebook --ip=0.0.0.0"
 ```
 
 **Python API:**
 
 ```python
-from micrograd import GradientGeneratorOptimizer
+from brinkgrad import GradientGeneratorOptimizer
 
 opt = GradientGeneratorOptimizer(
     target_expr=lambda x: x[1] / 500e-6,   # linear gradient
@@ -160,8 +160,8 @@ The large relative magnitude error (~3303%) is expected: the assembled sensitivi
 ## Repository structure
 
 ```
-micrograd/
-├── micrograd/                        # Core Python package
+brinkgrad/
+├── brinkgrad/                        # Core Python package
 │   ├── solver.py                     # Brinkman + convection-diffusion forward solver
 │   ├── adjoint.py                    # Continuous adjoint and sensitivity
 │   ├── optimizer.py                  # OC and MMA updaters
@@ -227,7 +227,7 @@ micrograd/
 
 ## Manuscript
 
-**Title:** `micrograd`: An open-source FEniCSx framework for adjoint-based topology optimisation of porous microfluidic mixers using Brinkman–convection-diffusion equations
+**Title:** `brinkgrad`: An open-source FEniCSx framework for adjoint-based topology optimisation of porous microfluidic mixers using Brinkman–convection-diffusion equations
 
 **Authors:** Nisong Monyimba, Vincent Pizziconi, Aurel Coza
 
@@ -236,15 +236,15 @@ micrograd/
 **Preprint:** arXiv cs.NA *(submitted)*
 
 ```bibtex
-@software{micrograd2025zenodo,
+@software{brinkgrad2025zenodo,
   author    = {Monyimba, Nisong and Pizziconi, Vincent and Coza, Aurel},
-  title     = {{micrograd: Topology optimisation of microfluidic
+  title     = {{brinkgrad: Topology optimisation of microfluidic
                 concentration gradient generators (v1.0.0)}},
   year      = {2026},
   publisher = {Zenodo},
   version   = {1.0.0},
   doi       = {10.5281/zenodo.20479523},
-  url       = {https://github.com/NisongMonyimba/micrograd},
+  url       = {https://github.com/NisongMonyimba/brinkgrad},
   note      = {Zenodo: 10.5281/zenodo.20479523}
 }
 ```

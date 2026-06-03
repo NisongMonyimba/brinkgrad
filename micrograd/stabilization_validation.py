@@ -1,4 +1,4 @@
-# micrograd/stabilization_validation.py
+# brinkgrad/stabilization_validation.py
 """
 Stabilisation validation for convection‑diffusion:
 Compares unstabilised (pure Galerkin), SUPG, and GLS solutions on a given

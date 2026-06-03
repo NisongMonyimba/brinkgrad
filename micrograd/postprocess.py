@@ -1,4 +1,4 @@
-# micrograd/postprocess.py
+# brinkgrad/postprocess.py
 """Visualisation and STL export (FEniCSx ≥ 0.9)."""
 import numpy as np
 import pyvista as pv

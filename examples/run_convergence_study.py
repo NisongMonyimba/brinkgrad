@@ -1,5 +1,5 @@
 import numpy as np, matplotlib.pyplot as plt, os
-from micrograd import GradientGeneratorOptimizer
+from brinkgrad import GradientGeneratorOptimizer
 
 def main():
     os.makedirs('figures', exist_ok=True)
