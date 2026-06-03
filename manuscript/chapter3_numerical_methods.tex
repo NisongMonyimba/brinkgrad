@@ -332,7 +332,7 @@ testing strategy, and reproducibility infrastructure.
 
 \paragraph{Package structure.}
 \texttt{brinkgrad} is a single flat Python package
-(\texttt{micrograd/}) with one public entry point:
+(\texttt{brinkgrad/}) with one public entry point:
 
 \begin{lstlisting}[language=Python,breaklines=true]
 from brinkgrad import GradientGeneratorOptimizer
@@ -468,7 +468,7 @@ software quality indicators for the \texttt{brinkgrad} package.
 \centering
 \caption{Software quality metrics for \texttt{brinkgrad} v1.0.0.
          LOC counts non-empty, non-comment source lines
-         in \texttt{micrograd/*.py}.
+         in \texttt{brinkgrad/*.py}.
          Unit tests are in \texttt{tests/test\_import.py};
          integration tests run inline in the CI pipeline.}
 \label{tab:sw_metrics}
@@ -476,7 +476,7 @@ software quality indicators for the \texttt{brinkgrad} package.
 \toprule
 \textbf{Metric} & \textbf{Value} & \textbf{Notes} \\
 \midrule
-Lines of code (LOC)          & 1{,}892 & \texttt{micrograd/*.py}, non-empty non-comment \\
+Lines of code (LOC)          & 1{,}892 & \texttt{brinkgrad/*.py}, non-empty non-comment \\
 Public functions / classes   & 68      & across 9 modules \\
 Unit tests                   & 8       & \texttt{tests/test\_import.py}, pytest \\
 CI integration tests         & 7       & inline in \texttt{ci.yml}, full API coverage \\
