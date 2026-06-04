@@ -268,7 +268,7 @@ The full $\nIterPrimary$-iteration primary result is reproduced by
 \label{sec:reproducibility}
 \label{sec:ci}
 The complete pipeline is released as \texttt{brinkgrad} (MIT licence) at
-\url{https://github.com/NisongMonyimba/micrograd}~\cite{micrograd2025zenodo}.
+\url{https://github.com/NisongMonyimba/brinkgrad}~\cite{micrograd2025zenodo}.
 The repository includes all FEM modules, post-processing tools,
 a Jupyter notebook (\texttt{notebooks/quickstart.ipynb}),
 a comprehensive test suite, and a continuous integration workflow using GitHub Actions~\cite{GitHubActions2024}
@@ -460,7 +460,7 @@ Four mechanisms ensure end-to-end reproducibility:
           exact version used for the results in this paper.
     \item \textbf{Open-source licence.}
           Released under the MIT licence at
-          \url{https://github.com/NisongMonyimba/micrograd}.
+          \url{https://github.com/NisongMonyimba/brinkgrad}.
 \end{enumerate}
 
 \paragraph{Software quality metrics.}
@@ -617,7 +617,7 @@ is exercised by the CI regression test (Test~7).
 The full pipeline (all results) is reproduced by
 (tested with DOLFINx~v0.7.3; newer versions v0.8.x+ are expected to work):
 \begin{lstlisting}[language=bash,breaklines=true]
-git clone https://github.com/NisongMonyimba/micrograd
+git clone https://github.com/NisongMonyimba/brinkgrad
 cd brinkgrad
 docker run --rm -v ${PWD}:/root/brinkgrad -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg dolfinx/dolfinx:v0.7.3 bash -c "cd /root/brinkgrad && bash run_all.sh"
 \end{lstlisting}

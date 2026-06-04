@@ -10,7 +10,7 @@ packages are bundled in the official container.
 
 \paragraph{Step 2: Clone and run.}
 \begin{lstlisting}[language=bash,breaklines=true]
-git clone https://github.com/NisongMonyimba/micrograd
+git clone https://github.com/NisongMonyimba/brinkgrad
 cd brinkgrad
 docker run --rm -v ${PWD}:/root/brinkgrad -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg dolfinx/dolfinx:v0.7.3 bash -c "cd /root/brinkgrad && bash run_all.sh"
 \end{lstlisting}
