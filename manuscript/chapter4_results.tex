@@ -190,11 +190,15 @@ for verifiability, not engineering difficulty.
 The linear target $c_{\mathrm{target}}(y)=y/L_y$ is chosen as a
 software verification benchmark: it is analytically simple,
 admits a meaningful RMSE metric, and
-verification benchmark: any geometry that partially mixes two
-inlet streams will produce an approximately linear outlet profile
-by diffusion, so this case confirms the implementation is
-functioning correctly rather than demonstrating the framework's
-full capability.
+verification benchmark: the linear profile is achieved primarily
+by passive transverse diffusion
+(void channel RMSE~$\approx0.007$, Table~\ref{tab:context}),
+so this case confirms correct software execution
+rather than demonstrating topology optimisation utility.
+Targets that require active topology --- such as the step profile
+and double-peak targets in \texttt{examples/} --- are natural
+extensions but require further adjoint development
+to beat passive diffusion for this channel geometry.
 After $\nIterPrimary$ iterations on the $80\times20$ mesh,
 the implementation achieves RMSE~$=\rmseTopOpt$
 ($\rmseTopOptPP$\,pp; Eq.~\eqref{eq:rmse}),
