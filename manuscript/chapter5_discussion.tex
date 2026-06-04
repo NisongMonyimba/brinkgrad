@@ -287,15 +287,15 @@ with a physical geometry at this Pe.
          Heuristic and Stokes-only baselines are not implemented;
          comparison is against same-code baselines only.}
 \label{tab:context}
-\begin{tabular}{@{}lccl@{}}
+\begin{tabular}{@{}lccp{4.5cm}@{}}
 \toprule
-Design & RMSE & Iterations & Notes \\
+Design & RMSE & Iter & Notes \\
 \midrule
-Void channel ($\rho\equiv1$, unconstrained) & $\approx0.007$ & 0 & diffusion only; violates $V^*$ constraint \\
-Uniform $\rho=V^*$ (no optimisation) & $0.450$ & 0 & poor: Brinkman suppresses flow \\
-Binary-thresholded optimum & $\rmseBinaryBrinkman$ & $\nIterPrimary$ & physical upper bound \\
-Short-run optimised ($\beta=16$) & $\rmseShortRun$ & 600 & 30 min \\
-\textbf{Primary optimised ($\beta=128$)} & $\mathbf{\rmseTopOpt}$ & $\nIterPrimary$ & \textbf{main result} \\
+Void ($\rho\equiv1$, unconstrained) & $\approx0.007$ & 0 & diffusion only; violates $V^*$ \\
+Uniform $\rho=V^*$ & $0.450$ & 0 & Brinkman suppresses flow \\
+Binary-thresholded & $\rmseBinaryBrinkman$ & $\nIterPrimary$ & physical upper bound \\
+Short-run ($\beta=16$) & $\rmseShortRun$ & 600 & 30 min \\
+\textbf{Primary ($\beta=128$)} & $\mathbf{\rmseTopOpt}$ & $\nIterPrimary$ & \textbf{main result} \\
 \bottomrule
 \end{tabular}
 \end{table}
