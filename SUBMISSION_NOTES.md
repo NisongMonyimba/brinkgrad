@@ -47,8 +47,8 @@ git archive --format=zip HEAD -o brinkgrad_v1.0.zip
 # Authors: Nisong Monyimba (Arizona State University)
 # License: MIT
 # Click 'Reserve DOI' BEFORE publishing
-# Copy the DOI (format: 10.5281/zenodo.20479523)
-bash submission_checklist.sh --set-doi 10.5281/zenodo.20479523
+# Copy the DOI (format: 10.5281/zenodo.20538833)
+bash submission_checklist.sh --set-doi 10.5281/zenodo.20538833
 ```
 
 ### ITEM 2: Professional GitHub URL (10 minutes)

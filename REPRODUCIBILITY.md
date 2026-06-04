@@ -30,7 +30,7 @@ All results are written to `results/` as JSON files.
 | Example scripts | 6 |
 
 ## Archived outputs
-- Zenodo DOI: [10.5281/zenodo.20479523](https://doi.org/10.5281/zenodo.20479523)
+- Zenodo DOI: [10.5281/zenodo.20538833](https://doi.org/10.5281/zenodo.20538833)
 - All result JSON files included in archive
 
 ## CI badge

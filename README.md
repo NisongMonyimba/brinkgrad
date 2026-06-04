@@ -1,6 +1,6 @@
 # brinkgrad
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20479523.svg)](https://doi.org/10.5281/zenodo.20479523)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20538833.svg)](https://doi.org/10.5281/zenodo.20538833)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0000--7558--8580-green)](https://orcid.org/0009-0000-7558-8580)
 [![CI](https://github.com/NisongMonyimba/brinkgrad/actions/workflows/ci.yml/badge.svg)](https://github.com/NisongMonyimba/brinkgrad/actions)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
@@ -41,7 +41,7 @@ docker run --rm -v ${PWD}:/root/brinkgrad \
 
 This single command pulls the official FEniCSx Docker image, installs `brinkgrad`, and executes the complete pipeline. All figures and result files are written directly to the repository tree. Runtime: ~1 hour, no GPU required.
 
-All results are permanently archived at Zenodo: **DOI: [10.5281/zenodo.20479523](https://doi.org/10.5281/zenodo.20479523)**
+All results are permanently archived at Zenodo: **DOI: [10.5281/zenodo.20538833](https://doi.org/10.5281/zenodo.20538833)**
 
 ---
 
@@ -243,9 +243,9 @@ brinkgrad/
   year      = {2026},
   publisher = {Zenodo},
   version   = {1.0.0},
-  doi       = {10.5281/zenodo.20479523},
+  doi       = {10.5281/zenodo.20538833},
   url       = {https://github.com/NisongMonyimba/brinkgrad},
-  note      = {Zenodo: 10.5281/zenodo.20479523}
+  note      = {Zenodo: 10.5281/zenodo.20538833}
 }
 ```
 
