@@ -169,9 +169,9 @@ Pure MMA (600 iter)      & $\rmsePureMMA$ & nlopt MMA & No  & stagnates at $J\ap
 Pure OC (600 iter)       & $0.0053^\dagger$ & OC bisect & Yes & 20$\times$5 only; see $\dagger$ \\
 Hybrid OC/MMA (600 iter) & $\rmseShortRun$ & OC+MMA   & Yes & similar to pure OC \\
 \bottomrule
-\multicolumn{5}{@{}l}{\footnotesize$\dagger$~The $20\times5$
-mesh has only 6 outlet nodes and under-resolves the outlet
-profile; this RMSE is not comparable to $80\times20$ results.}
+\multicolumn{5}{@{}p{11cm}}{\footnotesize$\dagger$~The
+$20\times5$ mesh (6 outlet nodes) under-resolves the outlet;
+RMSE not comparable to $80\times20$ results.}
 \end{tabular}
 \end{table}
 
@@ -300,7 +300,7 @@ Primary topology (Fig.~\ref{fig:topology}) &
          & \quad\texttt{-{}-target linear -{}-iter 1400} \\
 Convergence history (Fig.~\ref{fig:convergence}) &
 \texttt{python scripts/plot\_convergence.py} \\
-V* sweep (the volume fraction sweep ($V^*=0.5$ optimal)) &
+$V^*$ sweep &
 \texttt{python scripts/vstar\_sweep.py} \\
 Profile gallery &
 \texttt{python scripts/extra\_profiles.py} \\
