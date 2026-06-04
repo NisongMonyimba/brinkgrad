@@ -61,9 +61,11 @@ pure MMA throughout stagnates near the initial objective
 (RMSE~$=\rmsePureMMA$, Table~\ref{tab:mma_comparison}),
 because MMA cannot escape the uniform-density plateau
 without the larger OC move at $\beta=1$.
-Pure OC (600 iter) achieves RMSE~$=0.0053$, comparable
-to the hybrid schedule (RMSE~$=\rmseShortRun$),
-confirming that OC alone is sufficient for this problem.
+Pure OC (600 iter) achieves RMSE~$=0.0053^\dagger$ on the
+coarse $20\times5$ mesh ($\dagger$~only 6 outlet nodes;
+under-resolves the outlet profile, so this RMSE is not
+directly comparable to the $80\times20$ primary result).
+Qualitatively, OC alone is sufficient for this problem.
 Pure OC is the default configuration;
 the hybrid OC/MMA schedule is retained as an optional
 comparator for generalisation studies.
@@ -164,9 +166,12 @@ on a sensitivity sweep showing it maximises the OC update signal
 Schedule & RMSE & Method & Converges? & Notes \\
 \midrule
 Pure MMA (600 iter)      & $\rmsePureMMA$ & nlopt MMA & No  & stagnates at $J\approx J_0$ \\
-Pure OC (600 iter)       & $0.0053$        & OC bisect & Yes & comparable to hybrid \\
+Pure OC (600 iter)       & $0.0053^\dagger$ & OC bisect & Yes & 20$\times$5 only; see $\dagger$ \\
 Hybrid OC/MMA (600 iter) & $\rmseShortRun$ & OC+MMA   & Yes & similar to pure OC \\
 \bottomrule
+\multicolumn{5}{@{}l}{\footnotesize$\dagger$~The $20\times5$
+mesh has only 6 outlet nodes and under-resolves the outlet
+profile; this RMSE is not comparable to $80\times20$ results.}
 \end{tabular}
 \end{table}
 
@@ -286,12 +291,13 @@ command that generates it.
 \caption{Reproducibility map: each result and its generating command
          (run inside the Docker container).}
 \label{tab:reproduce}
-\begin{tabular}{@{}p{3.5cm}p{8cm}@{}}
+\begin{tabular}{@{}p{3.8cm}p{7.5cm}@{}}
 \toprule
 \textbf{Result} & \textbf{Command} \\
 \midrule
 Primary topology (Fig.~\ref{fig:topology}) &
-\texttt{python scripts/optimize.py -{}-target linear -{}-iter 1400} \\
+\texttt{python scripts/optimize.py} \\
+         & \quad\texttt{-{}-target linear -{}-iter 1400} \\
 Convergence history (Fig.~\ref{fig:convergence}) &
 \texttt{python scripts/plot\_convergence.py} \\
 V* sweep (the volume fraction sweep ($V^*=0.5$ optimal)) &
