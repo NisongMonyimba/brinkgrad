@@ -291,19 +291,18 @@ command that generates it.
 \caption{Reproducibility map: each result and its generating command
          (run inside the Docker container).}
 \label{tab:reproduce}
-\begin{tabular}{@{}p{3.8cm}p{7.5cm}@{}}
+\begin{tabular}{@{}p{3.5cm}p{7.0cm}@{}}
 \toprule
 \textbf{Result} & \textbf{Command} \\
 \midrule
-Primary topology (Fig.~\ref{fig:topology}) &
-\texttt{python scripts/optimize.py} \\
-         & \quad\texttt{-{}-target linear -{}-iter 1400} \\
-Convergence history (Fig.~\ref{fig:convergence}) &
-\texttt{python scripts/plot\_convergence.py} \\
+Primary topology &
+\texttt{optimize.py -{}-target linear} \\
+Convergence history &
+\texttt{plot\_convergence.py} \\
 $V^*$ sweep &
-\texttt{python scripts/vstar\_sweep.py} \\
+\texttt{vstar\_sweep.py} \\
 Profile gallery &
-\texttt{python scripts/extra\_profiles.py} \\
+\texttt{extra\_profiles.py} \\
 All results & \texttt{bash run\_all.sh} \\
 \bottomrule
 \end{tabular}
