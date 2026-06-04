@@ -49,3 +49,19 @@ def smooth_penalty(c_h, gamma=1e6, delta=1e-6):
            0.5*(np.sqrt((c-1)**2 + delta**2) + (c-1))**2)
     return float(gamma * phi.sum())
 
+# ── Scalar helper functions for unit testing ─────────────────────────────────
+def alpha_val(rho, q=0.01):
+    """Scalar alpha interpolation for testing. alpha_max must be set."""
+    return alpha_max * (1 - rho) / (1 + q * rho)
+
+def D_eff_val(rho, D_fluid=1e-9, D_solid_frac=0.1):
+    """Scalar D_eff interpolation for testing."""
+    return D_fluid * (D_solid_frac + (1 - D_solid_frac) * rho)
+
+def heaviside_val(x, beta=1.0, eta=0.5):
+    """Scalar/array Heaviside projection for testing."""
+    import numpy as np
+    x = np.asarray(x, dtype=float)
+    num = np.tanh(beta * eta) + np.tanh(beta * (x - eta))
+    den = np.tanh(beta * eta) + np.tanh(beta * (1 - eta))
+    return num / den
