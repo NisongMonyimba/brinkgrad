@@ -85,7 +85,7 @@ pure OC or pure MMA).
 Helmholtz PDE filter & Mesh-dependent checkerboard & Smooth, mesh-independent $\rho_f$ \\
 Heaviside projection ($\beta$-continuation) & Premature gray-zone lock-in & Drives $\bar\rho\to\{0,1\}$ gradually \\
 $\alpha_{\max}$ ramping & All-solid early stagnation & Avoids non-fluid local minima \\
-OC optimiser & Pure MMA stagnates at $J\approx J_0$ for 600 iter (RMSE~$=\rmsePureMMA$, Table~\ref{tab:mma_comparison}); pure OC and hybrid OC/MMA both converge & Validated by three-way comparison \\ 
+OC optimiser (default) & Pure OC achieves RMSE~$=0.0053$ (Table~\ref{tab:mma_comparison}); pure MMA stagnates; hybrid OC/MMA retained as optional & Validated by three-way comparison \\ 
 Sinusoidal initialisation & Bias toward uniform $\rho=V^*$ & Breaks symmetry, aids branching topology \\
 \bottomrule
 \end{tabular}
