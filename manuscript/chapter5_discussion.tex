@@ -133,16 +133,10 @@ by changing a single parameter (\texttt{target\_expr}).
 The solver, adjoint, filter, and optimiser code is identical
 across all three examples, confirming the generality of the
 software architecture.
-A full 1{,}400-iteration run on the step profile target
-($c^*=1$ for $y>L_y/2$, $80\times20$ mesh) achieves
-RMSE~$=0.0114$ compared to a void channel baseline of
-RMSE~$=0.0110$; the optimiser does not improve upon
-passive diffusion for this geometry and Pe regime,
-consistent with the linear target finding.
-This confirms that meaningful topology optimisation benefit
-for Brinkman--CD systems requires either higher Pe
-(stronger advection dominance), narrower channels,
-or targets with sharper spatial gradients.
+Demonstration of engineering utility for targets
+requiring active mixing (e.g.\ step or double-peak profiles)
+is identified as future work, requiring either higher Pe,
+narrower channels, or robust projection integration.
 
 \label{sec:target_choice}
 The linear gradient target $c^*(y)=y/L_y$ serves as a
@@ -297,7 +291,7 @@ with a physical geometry at this Pe.
 \toprule
 Design & RMSE & Iterations & Notes \\
 \midrule
-Void channel ($\rho\equiv1$) & $\approx0.007$ & 0 & passive diffusion baseline \\
+Void channel ($\rho\equiv1$, unconstrained) & $\approx0.007$ & 0 & diffusion only; violates $V^*$ constraint \\
 Uniform $\rho=V^*$ (no optimisation) & $0.450$ & 0 & poor: Brinkman suppresses flow \\
 Binary-thresholded optimum & $\rmseBinaryBrinkman$ & $\nIterPrimary$ & physical upper bound \\
 Short-run optimised ($\beta=16$) & $\rmseShortRun$ & 600 & 30 min \\

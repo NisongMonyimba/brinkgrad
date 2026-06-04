@@ -15,10 +15,10 @@ SUPG-stabilised forward and adjoint transport
 following standard practice~\cite{donea2003}
 at $\Pe\sim10^2$--$10^5$,
 density filtering and Heaviside projection,
-and an OC optimiser (with optional MMA) within a modular
+and a pure OC optimiser within a modular
 five-setting default configuration.
-Pure OC is the recommended default; Section~3 documents
-a three-way comparison showing pure OC, pure MMA, and hybrid.
+An optional hybrid OC/MMA schedule is documented
+in Section~3 for comparison.
 All constituent techniques are established;
 the contribution is their integration into a documented,
 tested, and reproducible software framework.
@@ -31,9 +31,8 @@ RMSE~$=\rmseTopOpt$ for the linear verification benchmark,
 confirming that the adjoint and optimiser execute correctly.
 These numerical values are verification outputs,
 not claims of optimal physical performance;
-a pure-MMA reference run (RMSE~$=\rmsePureMMA$) and
-pure-OC run (RMSE~$=0.005$) validate the
-optimiser implementations.
+a pure-MMA reference run (RMSE~$=\rmsePureMMA$)
+validates the optimiser implementation.
 
 The software comprises \swLOC{} lines of code across
 9 modules, \swTests{} automated tests executed on every

@@ -63,10 +63,10 @@ because MMA cannot escape the uniform-density plateau
 without the larger OC move at $\beta=1$.
 Pure OC (600 iter) achieves RMSE~$=0.0053$, comparable
 to the hybrid schedule (RMSE~$=\rmseShortRun$),
-confirming that OC alone is sufficient for this problem;
-the hybrid schedule is retained as the default
-configuration for generalisation to other problems
-the late-phase $\beta$-sharpening.
+confirming that OC alone is sufficient for this problem.
+Pure OC is the default configuration;
+the hybrid OC/MMA schedule is retained as an optional
+comparator for generalisation studies.
 The framework is fully modular: any component can be
 disabled by setting its parameter to the trivial value
 (e.g.\ $r_{\rm filter}\to0$, $\beta\equiv1$,
