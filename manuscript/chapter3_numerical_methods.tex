@@ -267,6 +267,24 @@ opt = GradientGeneratorOptimizer(
 opt.run(max_iter=600)
 print(f"RMSE = {opt.rmse:.4f}")
 \end{lstlisting}
+
+\paragraph{Reusability: changing the target profile.}
+Switching from a linear to a step profile requires changing
+one argument (\texttt{target\_expr}); all other code is identical:
+\begin{lstlisting}[language=Python,breaklines=true]
+import numpy as np
+from brinkgrad import GradientGeneratorOptimizer
+Ly = 500e-6
+step = lambda x: np.where(x[1] > Ly/2, 1.0, 0.0)  # step profile
+opt = GradientGeneratorOptimizer(
+    Lx=2000e-6, Ly=Ly, nx=80, ny=20,
+    target_expr=step,   # only this line changes vs linear_target.py
+    w_f=1e-3, w_c=50.0, V_star=0.5)
+opt.run(max_iter=600)
+\end{lstlisting}
+The solver, adjoint, filter, and optimiser are identical
+across all seven example scripts (\texttt{examples/}).
+
 The full $\nIterPrimary$-iteration primary result is reproduced by
 \texttt{bash run\_all.sh} inside the Docker container
 (Section~\ref{sec:reproducibility}).
