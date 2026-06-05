@@ -516,7 +516,7 @@ Public functions / classes   & 68   & across 9 modules \\
 Unit tests                   & 10   & \texttt{tests/test\_core.py} + \texttt{test\_import.py} \\
 CI integration tests         & 7    & inline in \texttt{ci.yml} \\
 Total automated tests        & 18   & 10 unit + 8 integration, every push \\
-Test coverage                & import-level & 15 tests exercise full pipeline via CI \\
+Test coverage                & import-level & 18 tests exercise full pipeline via CI \\
 Runtime dependencies         & 3    & \texttt{numpy}, \texttt{scipy}, \texttt{matplotlib} \\
 Runtime (80$\times$20, 1 iter) & $\sim$1\,s & 8-core laptop \\
 Peak memory (20$\times$5, 50 iter) & 29.5\,MB & \texttt{tracemalloc} \\
@@ -624,7 +624,7 @@ Continuous integration & \checkmark & GitHub Actions; runs on every push \\
 Automated tests      & \checkmark & 18 tests (unit + integration) \\
 Example scripts      & \checkmark & 7 scripts in \texttt{examples/} \\
 Dependency list      & \checkmark & \texttt{requirements.txt} + \texttt{setup.py} \\
-Bit-reproducible     & \checkmark & JSON result files; verified across machines \\
+Numerically reproducible & \checkmark & JSON result files; verified across x86-64 machines \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -663,7 +663,7 @@ Tests 1--6 verify the full public API surface:
 import integrity, forward-solver bounds ($c\in[0,1]$),
 adjoint descent direction, OC volume constraint,
 MMA volume constraint, and the $\alpha$ floor.
-All 15 tests pass on every push to the \texttt{main} branch,
+All 18 tests pass on every push to the \texttt{main} branch,
 as shown by the CI badge in the repository README.
 Import-level coverage is supplemented by the CI regression test (Test~7),
 which exercises the full optimisation pipeline
