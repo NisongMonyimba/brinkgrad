@@ -85,7 +85,38 @@ are natural next steps enabled by the modular architecture.
 
 Table~\ref{tab:comparison} (documented features)
 compares \texttt{brinkgrad} against established frameworks.
-Three design choices differentiate \texttt{brinkgrad}
+
+\paragraph{Why a dedicated framework?}
+Existing tools (dolfin-adjoint, cashocs) provide general adjoint
+infrastructure but do not supply a ready-to-run, documented
+implementation for the coupled Brinkman--convection-diffusion
+topology optimisation problem.
+\texttt{brinkgrad} addresses five specific needs that are
+not collectively met by any existing open-source package:
+\begin{enumerate}\itemsep2pt
+    \item \textbf{Coupled Brinkman--transport implementation.}
+          A pre-configured FEniCSx solver for the coupled
+          Brinkman--convection-diffusion system with
+          concentration-mismatch objective.
+    \item \textbf{Stabilised adjoint transport.}
+          Explicit SUPG stabilisation of the adjoint
+          transport equation at $\Pe\sim10^5$,
+          with numerical verification (Section~\ref{sec:supg_val}).
+    \item \textbf{Topology-optimisation workflow.}
+          OC optimiser with $\beta$-continuation,
+          Helmholtz filter, and Heaviside projection
+          integrated in a five-setting default configuration.
+    \item \textbf{Reproducible Docker environment.}
+          All results reproducible from a single command
+          inside a pinned \texttt{dolfinx/dolfinx:v0.7.3} image;
+          CI on every commit.
+    \item \textbf{Ready-to-run examples.}
+          Seven example scripts covering linear, step,
+          double-peak, and gallery targets;
+          target profile changed by one argument.
+\end{enumerate}
+
+Three design choices further differentiate \texttt{brinkgrad}
 from the closest alternatives.
 
 \paragraph{Versus dolfin-adjoint~\cite{farrell2013}.}
