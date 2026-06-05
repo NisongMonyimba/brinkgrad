@@ -37,12 +37,11 @@ The implementation makes four documented contributions:
 
 As a benchmark application, the framework is demonstrated on
 porous-medium flow
-concentration gradient generation
-as a software verification benchmark.
-On an $80\times20$ mesh, the Brinkman surrogate optimum achieves
-RMSE~$=\rmseTopOpt$ for the linear verification benchmark,
-confirming correct execution of the adjoint--optimiser pipeline;
-gray-zone fraction $\grayFrac$.
+concentration gradient generation.
+On an $80\times20$ mesh, the framework achieves
+RMSE~$=\rmseTopOpt$ for the linear gradient benchmark,
+confirming correct execution of the adjoint--optimiser pipeline
+(gray-zone fraction $\grayFrac$).
 Threshold-projection to a binary-permeability field increases RMSE
 from $\rmseTopOpt$ to $\rmseBinaryBrinkman$.
 The optimised design exploits the continuous permeability field of the

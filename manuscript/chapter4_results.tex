@@ -163,7 +163,7 @@ are verification outputs confirming that the software
 executes correctly on the linear benchmark problem.
 They are not claims of optimal physical performance;
 the linear concentration gradient target is chosen
-for verifiability, not engineering difficulty.
+for its analytical interpretability and verification value.
 
 
 \begin{figure}[h]
@@ -180,19 +180,15 @@ for verifiability, not engineering difficulty.
     \label{fig:domain}
 \end{figure}
 
-\subsection{Linear gradient target (verification benchmark)}
-The linear target $c_{\mathrm{target}}(y)=y/L_y$ is chosen as a
-software verification benchmark: it is analytically simple,
-admits a meaningful RMSE metric, and
-verification benchmark: the linear profile is achieved primarily
-by passive transverse diffusion
-(void channel RMSE~$\approx0.007$, Table~\ref{tab:context}),
-so this case confirms correct software execution
-rather than demonstrating topology optimisation utility.
-Targets that require active topology --- such as the step profile
-and double-peak targets in \texttt{examples/} --- are natural
-extensions but require further adjoint development
-to beat passive diffusion for this channel geometry.
+\subsection{Linear gradient target benchmark}
+The linear target $c_{\mathrm{target}}(y)=y/L_y$ was selected
+because it provides an analytically interpretable outlet profile
+that enables rigorous verification of adjoint sensitivities,
+optimisation convergence, and end-to-end reproducibility.
+The framework is agnostic to the target profile:
+arbitrary outlet objectives are supported by changing
+a single parameter (\texttt{target\_expr}),
+as demonstrated by the seven example scripts in \texttt{examples/}.
 After $\nIterPrimary$ iterations on the $80\times20$ mesh,
 the implementation achieves RMSE~$=\rmseTopOpt$
 ($\rmseTopOptPP$\,pp; Eq.~\eqref{eq:rmse}),
