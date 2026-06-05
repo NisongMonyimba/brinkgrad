@@ -238,6 +238,9 @@ Algorithm~1 (Table~\ref{alg:main}) summarises the complete optimisation procedur
 \subsection{Practical usage and Jupyter notebook}
 \label{sec:practical}
 \texttt{brinkgrad} is designed for rapid inverse design exploration.
+The package follows semantic versioning (v1.0.0);
+the single public entry point \texttt{GradientGeneratorOptimizer}
+provides a stable API with keyword arguments and documented defaults.
 A typical workflow proceeds in three steps:
 \begin{enumerate}\itemsep2pt
     \item \textbf{Define target}: specify the desired outlet
@@ -524,6 +527,10 @@ The cost functional $J$ is assembled in \texttt{adjoint.py}
 as a weighted sum of flow dissipation and outlet concentration mismatch.
 Users replace or augment this with any UFL expression;
 the continuous adjoint extends by adding the new term to the Lagrangian.
+For example, adding a pressure-drop penalty requires
+approximately 8 additional lines of UFL code
+(one new term in $J$, one new term in the adjoint source);
+no other modules need modification.
 
 \paragraph{Additional transport equations.}
 The forward solver (\texttt{solver.py}) assembles the coupled
