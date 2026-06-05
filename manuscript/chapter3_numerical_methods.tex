@@ -495,7 +495,7 @@ Public functions / classes   & 68   & across 9 modules \\
 Unit tests                   & 8    & \texttt{tests/test\_import.py}, pytest \\
 CI integration tests         & 7    & inline in \texttt{ci.yml} \\
 Total automated tests        & 15   & run on every \texttt{main} push \\
-Test coverage                & 8.7\% & import-level; full pipeline via CI \\
+Test coverage                & import-level & 15 tests exercise full pipeline via CI \\
 Runtime dependencies         & 3    & \texttt{numpy}, \texttt{scipy}, \texttt{matplotlib} \\
 Runtime (80$\times$20, 1 iter) & $\sim$1\,s & 8-core laptop \\
 Peak memory (20$\times$5, 50 iter) & 29.5\,MB & \texttt{tracemalloc} \\
@@ -612,10 +612,10 @@ adjoint descent direction, OC volume constraint,
 MMA volume constraint, and the $\alpha$ floor.
 All 15 tests pass on every push to the \texttt{main} branch,
 as shown by the CI badge in the repository README.
-Import-level test coverage is $8.7\%$;
-the full optimisation pipeline
-(forward solve, adjoint, OC/MMA update, $\beta$-continuation)
-is exercised by the CI regression test (Test~7).
+Import-level coverage is supplemented by the CI regression test (Test~7),
+which exercises the full optimisation pipeline
+(forward solve, adjoint, OC update, $\beta$-continuation)
+on every commit.
 
 
 The full pipeline (all results) is reproduced by

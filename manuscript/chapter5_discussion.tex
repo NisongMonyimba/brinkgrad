@@ -341,11 +341,53 @@ that the OC/MMA loop reduces the objective
 relative to the uniform initialisation.
 
 \paragraph{Reproducibility.}
-To our knowledge, \texttt{brinkgrad} is the first fully reproducible
+To the authors' knowledge, \texttt{brinkgrad} is the first fully reproducible
 open-source implementation of coupled Brinkman--convection-diffusion
 topology optimisation: all results in this paper are recoverable
 from a single Docker command, verified by continuous integration
 on every commit.
+
+\subsection{Lessons learned during implementation}
+\label{sec:lessons}
+
+Five implementation challenges arose during development
+that may benefit future developers of similar FEniCSx frameworks.
+
+\paragraph{Challenge 1: Adjoint SUPG at high Pe.}
+The adjoint transport equation has a reversed advection term
+$-\mathbf{u}\cdot\nabla\lambda$, requiring SUPG stabilisation
+in the upwind direction opposite to the forward equation.
+Omitting adjoint SUPG at $\Pe\sim10^5$ changes $\|\lambda\|$
+by $99.4\%$ (Section~\ref{sec:supg_val}), making stabilisation
+non-negotiable at high Pe.
+
+\paragraph{Challenge 2: Filter--projection sensitivity chain.}
+The Helmholtz filter and Heaviside projection introduce a
+sensitivity chain $\partial J/\partial\rho =
+(\partial J/\partial\bar{\rho})(\partial\bar{\rho}/\partial\tilde{\rho})
+(\partial\tilde{\rho}/\partial\rho)$ that is easily omitted.
+The $L^2$ Riesz representative implicitly drops the mass-matrix
+factor; for OC/MMA this is harmless (sign-based update) but
+would corrupt L-BFGS.
+
+\paragraph{Challenge 3: Volume-constrained OC updates.}
+The OC bisection for $\Lambda$ in Eq.~\eqref{eq:oc} requires
+tight bracketing to avoid oscillation; we found that initialising
+the bracket as $[10^{-9},10^9]$ and applying 50 bisection steps
+gives robust constraint satisfaction ($|V-V^*|<10^{-4}$).
+
+\paragraph{Challenge 4: Docker reproducibility for PDE software.}
+FEniCSx links to PETSc, BLAS, and MPI at compile time;
+numerical results can differ across library versions.
+Pinning to \texttt{dolfinx/dolfinx:v0.7.3} ensured
+bit-reproducible results across machines.
+
+\paragraph{Challenge 5: Continuous integration of PDE software.}
+Full-pipeline CI (1400 iterations) takes $\sim$2 hours;
+the CI suite therefore runs a 20-iteration regression test
+that completes in $<$60\,s and detects sign errors,
+filter bugs, and volume-constraint failures.
+
 
 \subsection{Limitations and future work}
 \label{sec:limitations}

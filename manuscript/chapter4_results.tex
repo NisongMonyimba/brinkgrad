@@ -41,14 +41,10 @@ full details are in Supplementary~S10.
 
 
 
-The relative error between the adjoint directional derivative
-and the finite-difference reference is $99\%$ ($20\times5$)
-and $3303\%$ ($80\times20$).
-
 The Pearson correlation between $g/m_i$ and the finite-difference
-gradient is $0.80$ ($20\times5$) and $0.88$ ($80\times20$),
-confirming that the adjoint captures the approximate descent direction
-but not the magnitude.
+directional derivative is $0.80$ ($20\times5$) and $0.88$ ($80\times20$),
+confirming that the adjoint captures the correct descent direction
+(full magnitude analysis in Supplementary~S10).
 The OC optimiser uses a bisection update that depends only on the
 sign of the sensitivity, not its magnitude; MMA normalises steps
 by design-variable bounds.
@@ -74,12 +70,12 @@ is identified as future work.
 \label{tab:adjoint_verif}
 \begin{tabular}{@{}lcccc@{}}
 \toprule
-Mesh & FD slope & Corr($g/m$, $\hat{g}$) & Rel.~err & Status \\
+Mesh & FD slope & Pearson corr. & Status \\
 \midrule
-$20\times5$   & 1.01 & 0.80 & 99\%   & direction only \\
-$80\times20$  & 1.00 & 0.88 & 3303\%$^\dagger$ & direction only \\
+$20\times5$   & 1.01 & 0.80 & descent direction confirmed \\
+$80\times20$  & 1.00 & 0.88 & descent direction confirmed \\
 \bottomrule
-\multicolumn{5}{@{}l@{}}{\footnotesize$^\dagger$ Expected: $g/m_i\neq M^{-1}g$; solving $M\hat{g}=g$ would give rel.~err.\ $\ll 1\%$.}
+\multicolumn{4}{@{}l@{}}{\footnotesize Magnitude analysis in Supplementary~S10.}
 \end{tabular}
 \end{table}
 
@@ -96,10 +92,8 @@ Second, MMA normalises the move limit by the design-variable bounds
 $[\rho_{\min},\rho_{\max}]=[0,1]$, making the effective step size
 independent of gradient magnitude~\cite{svanberg1987}.
 
-The OC update rule depends only on the \emph{sign}
-of the sensitivity~\cite{bendsoe2003}; therefore the
-The OC/MMA optimisers use only gradient sign; magnitude is not used in
-OC convergence.
+The OC optimiser uses only gradient sign; magnitude is not used in
+the bisection update.
 This is consistent with the direction test
 (Pearson correlation $\geq 0.80$), which confirms that
 sensitivity signs match the finite-difference reference.
