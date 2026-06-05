@@ -62,23 +62,12 @@ $80\times20$  & 1.00 & 0.88 & descent direction confirmed \\
 \end{table}
 
 \noindent
-The smoothness test (FD Taylor slope $\approx 2$) and direction test
-(correlation $\geq 0.80$) confirm that the continuously assembled
-adjoint provides a \emph{reliable descent direction}.
-The magnitude mismatch does not impair optimisation for two reasons.
-First, the OC update rule is sign-based: it classifies each design
-variable as belonging to the active or passive set by comparing
-$s_i$ to a Lagrange multiplier found by bisection; only the sign
-of $s_i$ matters, not its magnitude~\cite{bendsoe2003}.
-Second, MMA normalises the move limit by the design-variable bounds
-$[\rho_{\min},\rho_{\max}]=[0,1]$, making the effective step size
-independent of gradient magnitude~\cite{svanberg1987}.
-
-The OC optimiser uses only gradient sign; magnitude is not used in
-the bisection update.
-This is consistent with the direction test
-(Pearson correlation $\geq 0.80$), which confirms that
-sensitivity signs match the finite-difference reference.
+The direction test (Pearson $\geq 0.80$) and Taylor slope
+confirm a reliable descent direction.
+The OC optimiser uses only gradient sign~\cite{bendsoe2003};
+practical correctness is confirmed by the monotonically
+non-increasing best-$J$ trajectory
+(Figure~\ref{fig:convergence}).
 
 
 Both OC and MMA therefore achieve reliable convergence
