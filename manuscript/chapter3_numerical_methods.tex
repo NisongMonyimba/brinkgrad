@@ -294,6 +294,19 @@ The full $\nIterPrimary$-iteration primary result is reproduced by
 \label{sec:ci}
 The complete pipeline is released as \texttt{brinkgrad} (MIT licence) at
 \url{https://github.com/NisongMonyimba/brinkgrad}~\cite{micrograd2025zenodo}.
+
+\paragraph{Quick start.}
+All primary results are reproducible from three commands:
+\begin{lstlisting}[language=bash,breaklines=true]
+git clone https://github.com/NisongMonyimba/brinkgrad && cd brinkgrad
+docker run --rm -v ${PWD}:/root/brinkgrad dolfinx/dolfinx:v0.7.3 \
+  bash -c "cd /root/brinkgrad && pip install -e . --quiet && bash run_all.sh"
+# Expected: RMSE=0.058 after ~1 hour on 80x20 mesh (standard laptop)
+\end{lstlisting}
+To optimise a different target profile, change one argument:
+\texttt{target\_expr=lambda~x:~np.where(x[1]>250e-6,~1.0,~0.0)}
+(step profile; all other settings identical).
+
 The repository includes all FEM modules, post-processing tools,
 a Jupyter notebook (\texttt{notebooks/quickstart.ipynb}),
 a comprehensive test suite, and a continuous integration workflow using GitHub Actions~\cite{GitHubActions2024}
