@@ -34,9 +34,8 @@ complement~\cite{elman2014}; scalability results are in
 Supplementary Information~S1.
 
 \subsection{Optimisation algorithm}
-The design is updated using the hybrid OC/MMA configuration.
-In the topology-formation phase (iterations~0--299), the
-Optimality Criteria (OC) method~\cite{bendsoe2003} is used:
+The design is updated using the Optimality Criteria (OC)
+method~\cite{bendsoe2003} as the default:
 \begin{equation}
     \rho^{\mathrm{new}} = \max\!\bigl(\rho_{\min},\,
         \min(\rho_{\max},\,\rho^{\mathrm{old}} \cdot B^\eta)\bigr),
@@ -44,11 +43,10 @@ Optimality Criteria (OC) method~\cite{bendsoe2003} is used:
     \label{eq:oc}
 \end{equation}
 with damping exponent $\eta=0.5$ and move limit $0.15$.
-In the sharpening phase (iterations~300--599), the Method of Moving
-Asymptotes (MMA)~\cite{svanberg1987} is used with move limit $0.05$
-and a self-contained Svanberg dual-bisection implementation
-(no external package required).
-A convergence comparison is in not reported.
+An optional hybrid schedule (OC for iterations~0--299,
+MMA~\cite{svanberg1987} for iterations~300--599) is also
+implemented and documented in Table~\ref{tab:mma_comparison},
+but is not the default configuration.
 The volume constraint is enforced explicitly in both update rules
 via Lagrange multiplier bisection (OC) and dual bisection (MMA).
 
@@ -87,7 +85,7 @@ pure OC or pure MMA).
 Helmholtz PDE filter & Mesh-dependent checkerboard & Smooth, mesh-independent $\rho_f$ \\
 Heaviside projection ($\beta$-continuation) & Premature gray-zone lock-in & Drives $\bar\rho\to\{0,1\}$ gradually \\
 $\alpha_{\max}$ ramping & All-solid early stagnation & Avoids non-fluid local minima \\
-OC optimiser (default) & Pure OC achieves RMSE~$=0.0053$ (Table~\ref{tab:mma_comparison}); pure MMA stagnates; hybrid OC/MMA retained as optional & Validated by three-way comparison \\ 
+OC optimiser & Pure OC is the default; pure MMA stagnates (Table~\ref{tab:mma_comparison}); optional hybrid OC/MMA documented & Validated by three-way comparison \\ 
 Sinusoidal initialisation & Bias toward uniform $\rho=V^*$ & Breaks symmetry, aids branching topology \\
 \bottomrule
 \end{tabular}
@@ -155,10 +153,10 @@ on a sensitivity sweep showing it maximises the OC update signal
 
 \begin{table}[h]
 \centering\small
-\caption{Hybrid OC/MMA vs.\ pure MMA: 600-iteration comparison
-         on the $20\times5$ mesh, linear gradient target, 600 iterations.
-         Pure OC performs comparably to the hybrid schedule;
-         pure MMA stagnates near the initial objective.
+\caption{Optimiser comparison: 600-iteration run
+         on the $20\times5$ mesh, linear gradient target.
+         Pure OC is the default; hybrid OC/MMA is optional.
+         Pure MMA stagnates; both OC-based schedules converge.
          All results are software verification outputs.}
 \label{tab:mma_comparison}
 \begin{tabular}{@{}lcccc@{}}
@@ -211,17 +209,18 @@ Algorithm~1 (Table~\ref{alg:main}) summarises the complete optimisation procedur
 
 \begin{table}[h]
 \centering\small
-\caption{Algorithm~1: Hybrid OC/MMA optimisation loop with
-         $\beta$-continuation.
+\caption{Algorithm~1: Pure OC optimisation loop with
+         $\beta$-continuation (default configuration).
          Steps 2--8 repeat for $k=0,\ldots,N-1$
          where $N=\nIterPrimary$ for the primary result
-         (configurable; a 600-iteration run uses $N=600$).}
+         (configurable; a 600-iteration run uses $N=600$).
+         An optional MMA update is available; see Section~3.3.}
 \label{alg:main}
 \begin{tabular}{@{}cl@{}}
 \toprule
 \textbf{Step} & \textbf{Operation} \\
 \midrule
-1 & Initialise $\rho\leftarrow V^*$ (uniform); reset MMA state \\
+1 & Initialise $\rho\leftarrow V^*$ (sinusoidal perturbation; Eq.~\eqref{eq:sinusoidal_init}) \\
 \multicolumn{2}{@{}l}{\textbf{for} $k=0,1,\ldots,N-1$ \quad ($N=\nIterPrimary$ primary; configurable):} \\
 2 & Look up schedule: $(\beta_k,\,\text{method}_k,\,\alpha_{\max,k})\leftarrow$schedule$(k)$ \\
 3 & Helmholtz filter: $\rho_f\leftarrow$ filter$(\rho)$ \quad [Eq.~\eqref{eq:helmholtz}] \\
@@ -229,7 +228,7 @@ Algorithm~1 (Table~\ref{alg:main}) summarises the complete optimisation procedur
 5 & Forward solve: $(\mathbf{u},p,c)\leftarrow$ solve$(\bar\rho,\alpha_{\max,k})$ \quad [Eqs.~\eqref{eq:brinkman},\eqref{eq:convdiff}] \\
 6 & Adjoint solve: $(\mathbf{v},q,\lambda)\leftarrow$ adjoint$(\bar\rho,\mathbf{u},c)$ \quad [Section~\ref{sec:adjoint}] \\
 7 & Sensitivity: $s\leftarrow\mathrm{d}J/\mathrm{d}\bar\rho$ \\
-8 & Update: $\rho\leftarrow$OC$(\rho,s,V^*)$ if OC, else MMA$(\rho,s,V^*)$ \\
+8 & Update: $\rho\leftarrow$OC$(\rho,s,V^*)$ \quad [Eq.~\eqref{eq:oc}; MMA optional] \\
 9 & Track best $J$; store $\rho_{\rm best}$ \\
 \multicolumn{2}{@{}l}{\textbf{return} $\rho_{\rm best}$} \\
 \bottomrule
