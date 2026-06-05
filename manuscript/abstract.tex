@@ -7,14 +7,13 @@ installable package with full verification, CI,
 and one-command reproducibility.
 The package provides SUPG-stabilised forward and adjoint solvers,
 Helmholtz filter, Heaviside projection, and an OC optimiser
-within a modular five-setting default configuration,
+within a single reproducible default preset,
 implemented in 1{,}903 lines of documented Python across 9 modules.
-Binary-geometry designs require robust projection
-(\texttt{robust\_projection()} is implemented
-and demonstrated in \texttt{examples/}).
+Post-processing binary-geometry analysis is supported
+via \texttt{robust\_projection()} (see \texttt{examples/}).
 
-Gradient correctness is confirmed by a direction test
-(Pearson correlation $\geq 0.80$) and Taylor remainder slope $\approx1$.
+Gradient correctness is confirmed by adjoint direction
+and Taylor remainder tests (Section~4).
 The framework is validated by 18 automated tests (10 unit, 8 integration) executed on every commit
 via GitHub Actions inside a pinned
 \texttt{dolfinx/dolfinx:v0.7.3} Docker container.

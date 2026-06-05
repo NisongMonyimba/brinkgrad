@@ -106,7 +106,7 @@ not collectively met by any existing open-source package:
     \item \textbf{Topology-optimisation workflow.}
           OC optimiser with $\beta$-continuation,
           Helmholtz filter, and Heaviside projection
-          integrated in a five-setting default configuration.
+          integrated in a single reproducible default preset.
     \item \textbf{Reproducible Docker environment.}
           All results reproducible from a single command
           inside a pinned \texttt{dolfinx/dolfinx:v0.7.3} image;
@@ -403,7 +403,13 @@ filter bugs, and volume-constraint failures.
 \subsection{Current scope and future roadmap}
 \label{sec:limitations}
 \label{sec:known_limitations}
-Three documented limitations are identified.
+\texttt{brinkgrad} v1.0 targets 2D prototyping
+on structured meshes; users can supply any \texttt{dolfinx}
+mesh object via the API (\texttt{nx}, \texttt{ny} arguments
+or a custom \texttt{msh} object).
+No adaptive meshing is included; scalability is in the roadmap.
+
+Three documented scope boundaries are noted.
 \begin{itemize}
     \item \textbf{Gradient direction, not magnitude.}
           The continuous adjoint assembles the $L^2$ Riesz representative;
