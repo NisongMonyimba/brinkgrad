@@ -27,7 +27,7 @@ jobs:
             pytest 2>/dev/null || \
           pip install "setuptools==59.5.0" "nlopt==2.7.1" scipy matplotlib pytest
 
-      - name: Install micrograd
+      - name: Install brinkgrad
         run: |
           pip install -e . --no-deps --break-system-packages 2>/dev/null || \
           pip install -e . --no-deps
@@ -39,9 +39,9 @@ jobs:
         run: |
           python3 - << 'PY'
           import numpy as np
-          from micrograd import GradientGeneratorOptimizer
-          from micrograd.utilities import helmholtz_filter, heaviside_projection
-          from micrograd.solver import forward_solve
+          from brinkgrad import GradientGeneratorOptimizer
+          from brinkgrad.utilities import helmholtz_filter, heaviside_projection
+          from brinkgrad.solver import forward_solve
           # Use fixed hyperparams matching current pipeline
           opt = GradientGeneratorOptimizer(
               nx=20, ny=5,
@@ -62,11 +62,11 @@ jobs:
         run: |
           python3 - << 'PY'
           import numpy as np
-          from micrograd import GradientGeneratorOptimizer
-          from micrograd.utilities import helmholtz_filter, heaviside_projection
-          from micrograd.solver import forward_solve
-          from micrograd.adjoint import adjoint_and_sensitivity
-          import micrograd.utilities as _ut
+          from brinkgrad import GradientGeneratorOptimizer
+          from brinkgrad.utilities import helmholtz_filter, heaviside_projection
+          from brinkgrad.solver import forward_solve
+          from brinkgrad.adjoint import adjoint_and_sensitivity
+          import brinkgrad.utilities as _ut
           from dolfinx import fem
 
           opt = GradientGeneratorOptimizer(
@@ -87,10 +87,10 @@ jobs:
               heaviside_projection(rho_filt, rho_phys, 1)
               u_h, _, c_h = forward_solve(opt.msh, opt.boundary_data,
                                            rho_phys, P_in=1000.0)
-              J, grad = adjoint_and_sensitivity(
+              J, grad, _ = adjoint_and_sensitivity(
                   opt.msh, opt.boundary_data, rho_phys, u_h, c_h,
                   opt.target_expr, w_f=1e-3, w_c=5e1)
-              return J, grad.array.copy()
+              return J, grad.copy()
 
           J0, dJ = eval_J(rho0)
           print(f"J0={J0:.6e}  |grad|={np.linalg.norm(dJ):.3e}")
@@ -109,12 +109,12 @@ jobs:
         run: |
           python3 - << 'PY'
           import numpy as np
-          from micrograd import GradientGeneratorOptimizer
-          from micrograd.utilities import helmholtz_filter, heaviside_projection
-          from micrograd.solver import forward_solve
-          from micrograd.adjoint import adjoint_and_sensitivity
-          from micrograd.optimizer import oc_update
-          import micrograd.utilities as _ut
+          from brinkgrad import GradientGeneratorOptimizer
+          from brinkgrad.utilities import helmholtz_filter, heaviside_projection
+          from brinkgrad.solver import forward_solve
+          from brinkgrad.adjoint import adjoint_and_sensitivity
+          from brinkgrad.optimizer import oc_update
+          import brinkgrad.utilities as _ut
 
           opt = GradientGeneratorOptimizer(
               nx=20, ny=5,
@@ -127,7 +127,7 @@ jobs:
                                          opt.rho_phys, P_in=1000.0)
           c_h.x.array[:] = np.clip(c_h.x.array, 0, 1)
           c_h.x.scatter_forward()
-          J, sens = adjoint_and_sensitivity(
+          J, sens, _ = adjoint_and_sensitivity(
               opt.msh, opt.boundary_data, opt.rho_phys, u_h, c_h,
               opt.target_expr, w_f=1e-3, w_c=5e1)
           rho_new = oc_update(opt.rho.x.array, sens, opt.V_rho, 0.5, move=0.2)
@@ -143,12 +143,12 @@ jobs:
         run: |
           python3 - << 'PY'
           import numpy as np
-          from micrograd import GradientGeneratorOptimizer
-          from micrograd.utilities import helmholtz_filter, heaviside_projection
-          from micrograd.solver import forward_solve
-          from micrograd.adjoint import adjoint_and_sensitivity
-          from micrograd.optimizer import nlopt_mma_update, reset_mma_state
-          import micrograd.utilities as _ut
+          from brinkgrad import GradientGeneratorOptimizer
+          from brinkgrad.utilities import helmholtz_filter, heaviside_projection
+          from brinkgrad.solver import forward_solve
+          from brinkgrad.adjoint import adjoint_and_sensitivity
+          from brinkgrad.optimizer import nlopt_mma_update, reset_mma_state
+          import brinkgrad.utilities as _ut
 
           opt = GradientGeneratorOptimizer(
               nx=20, ny=5,
@@ -164,7 +164,7 @@ jobs:
                                              opt.rho_phys, P_in=1000.0)
               c_h.x.array[:] = np.clip(c_h.x.array, 0, 1)
               c_h.x.scatter_forward()
-              J, sens = adjoint_and_sensitivity(
+              J, sens, _ = adjoint_and_sensitivity(
                   opt.msh, opt.boundary_data, opt.rho_phys, u_h, c_h,
                   opt.target_expr, w_f=1e-3, w_c=5e1)
               rho_new = nlopt_mma_update(opt.rho.x.array, sens,
@@ -180,8 +180,8 @@ jobs:
         run: |
           python3 - << 'PY'
           import numpy as np
-          import micrograd.utilities as _ut
-          from micrograd.utilities import alpha
+          import brinkgrad.utilities as _ut
+          from brinkgrad.utilities import alpha
           import ufl
           # Verify alpha floor: even with alpha_min=0, alpha(r) >= 1e-4
           # We can't evaluate UFL symbolically, but we can check the expression
@@ -201,12 +201,12 @@ jobs:
         run: |
           python3 - << 'PY'
           import numpy as np
-          from micrograd import GradientGeneratorOptimizer
-          from micrograd.utilities import helmholtz_filter, heaviside_projection
-          from micrograd.solver import forward_solve
-          from micrograd.adjoint import adjoint_and_sensitivity
-          from micrograd.optimizer import oc_update, reset_mma_state
-          import micrograd.utilities as _ut
+          from brinkgrad import GradientGeneratorOptimizer
+          from brinkgrad.utilities import helmholtz_filter, heaviside_projection
+          from brinkgrad.solver import forward_solve
+          from brinkgrad.adjoint import adjoint_and_sensitivity
+          from brinkgrad.optimizer import oc_update, reset_mma_state
+          import brinkgrad.utilities as _ut
 
           opt = GradientGeneratorOptimizer(
               nx=20, ny=5,
@@ -223,7 +223,7 @@ jobs:
               c_h.x.array[:] = np.clip(c_h.x.array, 0, 1)
               c_h.x.scatter_forward()
               if not np.isfinite(c_h.x.array).all(): continue
-              J, sens = adjoint_and_sensitivity(
+              J, sens, _ = adjoint_and_sensitivity(
                   opt.msh, opt.boundary_data, opt.rho_phys, u_h, c_h,
                   opt.target_expr, w_f=1e-3, w_c=5e1)
               rho_new = oc_update(opt.rho.x.array, sens, opt.V_rho, 0.5, move=0.15)
