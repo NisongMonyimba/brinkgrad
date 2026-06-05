@@ -70,12 +70,9 @@ non-increasing best-$J$ trajectory
 (Figure~\ref{fig:convergence}).
 
 
-Both OC and MMA therefore achieve reliable convergence
-using the $L^2$ Riesz representative directly,
-as confirmed by the monotonically non-increasing best-$J$
-trajectory in Figure~\ref{fig:convergence}.
-Methods requiring accurate gradient magnitudes (e.g., L-BFGS)
-would require a discrete adjoint~\cite{farrell2013}.
+Methods requiring exact gradient magnitudes (e.g., L-BFGS)
+would use the Euclidean gradient $\hat{g}=M^{-1}g$
+(\texttt{adjoint.py}) or a discrete adjoint~\cite{farrell2013}.
 
 \subsection{Mesh sensitivity and user guidance}
 \label{sec:mesh_conv}
