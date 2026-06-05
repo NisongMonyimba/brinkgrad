@@ -27,8 +27,13 @@ Gradient descent direction is confirmed by a
 Pearson direction correlation $\geq0.80$
 between the assembled sensitivity and finite-difference gradients.
 On an $80\times20$ mesh the software produces
-RMSE~$=\rmseTopOpt$ for the linear gradient benchmark,
+RMSE~$=\rmseTopOpt$ for the linear gradient benchmark
+(an $\rmseImprovement\%$ reduction relative to the
+constrained uniform baseline RMSE~$=0.450$),
 confirming correct adjoint and optimiser execution.
+The unconstrained void channel ($\rho\equiv1$, $V=1.0>V^*$)
+achieves lower RMSE via passive diffusion
+but violates the volume constraint $V^*=0.5$.
 These numerical values are verification outputs,
 not claims of optimal physical performance;
 a pure-MMA reference run (RMSE~$=\rmsePureMMA$)

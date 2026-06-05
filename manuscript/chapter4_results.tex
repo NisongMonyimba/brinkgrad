@@ -160,6 +160,20 @@ The framework is agnostic to the target profile:
 arbitrary outlet objectives are supported by changing
 a single parameter (\texttt{target\_expr}),
 as demonstrated by the seven example scripts in \texttt{examples/}.
+
+\paragraph{Volume constraint and baseline.}
+The optimisation is subject to the volume constraint
+$V = \int\bar{\rho}\,\mathrm{d}\Omega / |\Omega| = V^* = 0.5$.
+The unconstrained void channel ($\rho\equiv1$, $V=1.0 > V^*$)
+achieves RMSE~$\approx0.007$ via passive transverse diffusion,
+but violates this constraint and is therefore not a valid
+comparator for the constrained optimisation problem.
+The correct constrained baseline is uniform $\rho=V^*=0.5$
+(RMSE~$=0.450$); relative to this baseline,
+the optimiser achieves an $\rmseImprovement\%$ reduction
+(RMSE~$0.450\to\rmseTopOpt$).
+The void channel is listed in Table~\ref{tab:context}
+for completeness with a constraint-violation note.
 After $\nIterPrimary$ iterations on the $80\times20$ mesh,
 the implementation achieves RMSE~$=\rmseTopOpt$
 ($\rmseTopOptPP$\,pp; Eq.~\eqref{eq:rmse}),
