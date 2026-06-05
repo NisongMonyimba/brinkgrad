@@ -1,27 +1,41 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
-title: "micrograd: topology optimisation of microfluidic concentration gradient generators"
-version: "1.0.0"
-date-released: "2026-05-28"
+title: "brinkgrad: An open-source FEniCSx framework for adjoint-based topology optimisation of coupled flow-transport in porous media"
+version: 1.0.0
+doi: 10.5281/zenodo.20538833
+date-released: "2025-06-01"
 license: MIT
-repository-code: "https://github.com/nisongmonyimba278-byte/micrograd"
-doi: "10.5281/zenodo.XXXXXXX"
+url: "https://github.com/NisongMonyimba/brinkgrad"
 authors:
   - family-names: Monyimba
     given-names: Nisong
-    affiliation: "Arizona State University"
-    email: nmonyimb@asu.edu
+    orcid: "https://orcid.org/0009-0000-7558-8580"
+    affiliation: "School of Biological and Health Systems Engineering, Arizona State University"
+  - family-names: Pizziconi
+    given-names: Vincent
+    affiliation: "School of Biological and Health Systems Engineering, Arizona State University"
+  - family-names: Coza
+    given-names: Aurel
+    affiliation: "School of Biological and Health Systems Engineering, Arizona State University"
+repository-code: "https://github.com/NisongMonyimba/brinkgrad"
 keywords:
-  - topology-optimisation
-  - microfluidics
+  - topology optimisation
   - FEniCSx
-  - adjoint-sensitivity
+  - Brinkman equations
+  - convection-diffusion
+  - adjoint method
+  - porous media
+  - open source
 preferred-citation:
   type: article
-  title: "Topology optimisation of microfluidic concentration gradient generators for arbitrary outlet profiles"
+  title: "brinkgrad: An open-source FEniCSx framework for adjoint-based topology optimisation of coupled flow-transport in porous media using Brinkman-convection-diffusion equations"
   authors:
     - family-names: Monyimba
       given-names: Nisong
-  year: 2026
-  journal: "in preparation"
+    - family-names: Pizziconi
+      given-names: Vincent
+    - family-names: Coza
+      given-names: Aurel
+  year: 2025
+  doi: 10.5281/zenodo.20538833

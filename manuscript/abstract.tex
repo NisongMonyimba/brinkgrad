@@ -1,52 +1,26 @@
-We present \texttt{brink\-grad}, an open-source FEniCSx framework
-for density-based topology optimisation of coupled
-Brinkman--convection-diffusion systems within the
-Brinkman--SIMP porous-medium surrogate.
+\texttt{brinkgrad} is an MIT-licensed open-source FEniCSx package
+implementing adjoint-based topology optimisation for coupled
+Brinkman--convection-diffusion systems in porous media.
+The package provides SUPG-stabilised forward and adjoint solvers,
+Helmholtz filter, Heaviside projection, and an OC optimiser
+within a modular five-setting default configuration,
+implemented in 1{,}903 lines of documented Python across 9 modules.
 Binary-geometry designs require robust projection
 (implemented in \texttt{robust\_projection()};
 integration into the optimisation loop is future work).
-No openly available, fully reproducible FEniCSx reference implementation
-for this coupled flow-transport system has been previously published.
 
-The framework integrates a continuous adjoint for a
-multi-objective cost functional coupling viscous dissipation
-and outlet concentration mismatch,
-SUPG-stabilised forward and adjoint transport
-following standard practice~\cite{donea2003}
-at $\Pe\sim10^2$--$10^5$,
-density filtering and Heaviside projection,
-and a pure OC optimiser within a modular
-five-setting default configuration.
-An optional hybrid OC/MMA schedule is documented
-in Section~3 for comparison.
-All constituent techniques are established;
-the contribution is their integration into a documented,
-tested, and reproducible software framework.
-
-Gradient descent direction is confirmed by a
-Pearson direction correlation $\geq0.80$
-between the assembled sensitivity and finite-difference gradients.
-On an $80\times20$ mesh the software produces
-RMSE~$=\rmseTopOpt$ for the linear gradient benchmark
-(an $\rmseImprovement\%$ reduction relative to the
-constrained uniform baseline RMSE~$=0.450$),
-confirming correct adjoint and optimiser execution.
-The unconstrained void channel ($\rho\equiv1$, $V=1.0>V^*$)
-achieves lower RMSE via passive diffusion
-but violates the volume constraint $V^*=0.5$.
-These numerical values are verification outputs,
-not claims of optimal physical performance;
-a pure-MMA reference run (RMSE~$=\rmsePureMMA$)
-validates the optimiser implementation.
-
-The software comprises \swLOC{} lines of code across
-9 modules, \swTests{} automated tests executed on every
-commit via GitHub Actions inside the official
-\texttt{dolfinx/dolfinx:v0.7.3} Docker container,
-and \swExamples{} example scripts covering
-different target profiles.
-The framework is released under the MIT licence
-with Docker-based reproducibility,
-continuous integration,
+Gradient correctness is confirmed by a direction test
+(Pearson correlation $\geq 0.80$) and Taylor remainder slope $\approx1$.
+The framework is validated by 18 automated tests executed on every commit
+via GitHub Actions inside a pinned
+\texttt{dolfinx/dolfinx:v0.7.3} Docker container.
+Seven executable example scripts demonstrate the framework
+across multiple target profiles;
+all results are reproducible from a single command.
+To the authors' knowledge, \texttt{brinkgrad} is the first
+openly available, fully reproducible FEniCSx reference implementation
+for this coupled flow-transport topology optimisation system.
+The framework is released under the MIT licence with
+Docker-based reproducibility, continuous integration,
 and permanent archival through Zenodo
 (DOI:~\href{https://doi.org/10.5281/zenodo.20538833}{10.5281/zenodo.20538833},~\cite{micrograd2025zenodo}).
