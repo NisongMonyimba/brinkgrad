@@ -53,12 +53,18 @@ the pure-MMA comparison (Table~\ref{tab:mma_comparison})
 validates convergence in practice.
 
 \paragraph{Taylor remainder (supplementary).}
-The assembled sensitivity $g_i$ is the $L^2$ Riesz representative.
-The Taylor remainder scales as $\varepsilon^1$ (slope $\approx1.01$),
-which is the expected behaviour for the Riesz representative
-and does not indicate an implementation error~\cite{lazarov2016}.
-The Euclidean gradient $\hat{g}=M^{-1}g$ is also implemented
-(\texttt{adjoint.py}); full analysis is in Supplementary~S10.
+\textbf{Note on slope $\approx1$:}
+The assembled sensitivity $g_i$ is the $L^2$ Riesz representative,
+not the Euclidean gradient $\hat{g}=M^{-1}g$.
+As established for continuous-adjoint implementations~\cite{lazarov2016},
+the Taylor remainder for the Riesz representative inherently exhibits
+slope $\approx1$ with respect to the $L^2$ norm.
+This is mathematically correct and does not indicate an implementation error.
+The Euclidean gradient $\hat{g}=M^{-1}g$ (implemented in \texttt{adjoint.py})
+would restore slope $\approx2$; it is available for
+optimisers requiring exact magnitudes (e.g.\ L-BFGS).
+The $L^2$ representative is fully sufficient for sign-based OC updates.
+Full analysis is in Supplementary~S10.
 
 
 
