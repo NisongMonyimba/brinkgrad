@@ -222,6 +222,40 @@ balancing flow conductance with porous mixing capacity.
 % (RMSE 0.639 and 0.318) and weaken the paper
 % Gaussian briefly mentioned in Discussion
 
+\subsection{Target profile gallery}
+\label{sec:gallery}
+
+\texttt{brinkgrad} supports arbitrary outlet concentration targets
+by changing a single argument (\texttt{target\_expr}).
+Table~\ref{tab:gallery} summarises results for three target profiles
+included in \texttt{examples/};
+all use the same solver, adjoint, filter, and optimiser.
+
+\begin{table}[h]
+\centering\small
+\caption{Target profile gallery.
+         All runs use the default OC optimiser.
+         Void baseline: single forward solve, $\rho\equiv1$.
+         RMSE computed on the outlet boundary.}
+\label{tab:gallery}
+\begin{tabular}{@{}p{3.2cm}ccp{4.0cm}@{}}
+\toprule
+Target & Void RMSE & Optimised RMSE & Notes \\
+\midrule
+Linear ($c^*=y/L_y$) & $0.007$ & $\rmseTopOpt$ & Primary benchmark; dominated by passive diffusion at this Pe \\
+Step ($c^*=\mathbf{1}_{y>L_y/2}$) & $0.011$ & $0.011$ & $80\times20$, 1{,}400 iter; passive diffusion dominant \\
+Double-peak (two Gaussians) & $0.008$ & $0.007$ & $20\times5$, 200 iter; optimiser reduces RMSE below void \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The double-peak target demonstrates that for targets with
+sharper spatial structure, the optimiser can improve upon
+passive diffusion.
+The linear and step targets are dominated by transverse diffusion
+at $\Pe\sim10^5$ for this channel geometry;
+higher Pe or narrower channels would increase optimisation benefit.
+
 \subsection{Convergence and reproducibility}
 \label{sec:convergence}
 
