@@ -1,6 +1,35 @@
 \section{Verification}
 \label{sec:verification}
 
+\begin{table}[h]
+\centering\small
+\caption{Five-layer validation summary for \texttt{brinkgrad}.}
+\label{tab:trust_pyramid}
+\begin{tabular}{@{}p{3.0cm}p{4.2cm}p{4.8cm}@{}}
+\toprule
+\textbf{Layer} & \textbf{Test} & \textbf{Result} \\
+\midrule
+Code health &
+18 automated tests &
+All pass on every CI push \\
+Gradient correctness &
+Taylor remainder + direction test &
+Pearson $\geq0.80$; slope $\approx1.0$ \\
+Pipeline integration &
+Mini-optimisation (20~iter) &
+$J$ decreases monotonically \\
+Mesh robustness &
+Multiple mesh sizes &
+Expected non-convex behaviour \\
+Benchmark problems &
+Linear, step, double-peak &
+RMSE $=\rmseTopOpt$, $0.011$, $0.007$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
 \subsection{Adjoint gradient verification}
 \label{sec:taylor_test}
 Gradient correctness is assessed through direction accuracy
