@@ -513,9 +513,9 @@ Tests (\texttt{tests/*.py})        & 35   & pytest unit tests \\
 \midrule
 \multicolumn{3}{@{}l}{\textit{Software quality}} \\
 Public functions / classes   & 68   & across 9 modules \\
-Unit tests                   & 8    & \texttt{tests/test\_import.py}, pytest \\
+Unit tests                   & 10   & \texttt{tests/test\_core.py} + \texttt{test\_import.py} \\
 CI integration tests         & 7    & inline in \texttt{ci.yml} \\
-Total automated tests        & 15   & run on every \texttt{main} push \\
+Total automated tests        & 18   & 10 unit + 8 integration, every push \\
 Test coverage                & import-level & 15 tests exercise full pipeline via CI \\
 Runtime dependencies         & 3    & \texttt{numpy}, \texttt{scipy}, \texttt{matplotlib} \\
 Runtime (80$\times$20, 1 iter) & $\sim$1\,s & 8-core laptop \\
@@ -646,8 +646,8 @@ The JSON result files in \texttt{results/} record the exact
 RMSE, gray-zone fraction, and convergence history for each run.
 Re-running \texttt{bash run\_all.sh} from a clean clone
 produces results matching the archived JSON files to
-floating-point precision, confirming bit-reproducibility
-within the pinned Docker environment.
+floating-point precision, confirming numerical reproducibility to floating-point precision
+within the pinned Docker environment on x86-64 hardware.
 
 \paragraph{Regression validation.}
 The CI pipeline (Section~\ref{sec:software_architecture})

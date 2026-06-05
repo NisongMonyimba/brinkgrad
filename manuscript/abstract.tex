@@ -6,12 +6,12 @@ Helmholtz filter, Heaviside projection, and an OC optimiser
 within a modular five-setting default configuration,
 implemented in 1{,}903 lines of documented Python across 9 modules.
 Binary-geometry designs require robust projection
-(implemented in \texttt{robust\_projection()};
-integration into the optimisation loop is future work).
+(\texttt{robust\_projection()} is implemented
+and demonstrated in \texttt{examples/}).
 
 Gradient correctness is confirmed by a direction test
 (Pearson correlation $\geq 0.80$) and Taylor remainder slope $\approx1$.
-The framework is validated by 18 automated tests executed on every commit
+The framework is validated by 18 automated tests (10 unit, 8 integration) executed on every commit
 via GitHub Actions inside a pinned
 \texttt{dolfinx/dolfinx:v0.7.3} Docker container.
 Seven executable example scripts demonstrate the framework
