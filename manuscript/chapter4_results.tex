@@ -61,18 +61,15 @@ $80\times20$  & 1.00 & 0.88 & descent direction confirmed \\
 \end{tabular}
 \end{table}
 
-\noindent
 The direction test (Pearson $\geq 0.80$) and Taylor slope
 confirm a reliable descent direction.
-The OC optimiser uses only gradient sign~\cite{bendsoe2003};
-practical correctness is confirmed by the monotonically
-non-increasing best-$J$ trajectory
+The OC optimiser depends only on gradient sign~\cite{bendsoe2003};
+practical correctness is further confirmed by the monotonically
+non-increasing objective trajectory
 (Figure~\ref{fig:convergence}).
-
-
-Methods requiring exact gradient magnitudes (e.g., L-BFGS)
-would use the Euclidean gradient $\hat{g}=M^{-1}g$
-(\texttt{adjoint.py}) or a discrete adjoint~\cite{farrell2013}.
+Methods requiring exact gradient magnitudes (e.g.\ L-BFGS)
+would use $\hat{g}=M^{-1}g$ (\texttt{adjoint.py})
+or a discrete adjoint~\cite{farrell2013}.
 
 \subsection{Mesh sensitivity and user guidance}
 \label{sec:mesh_conv}
