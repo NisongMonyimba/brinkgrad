@@ -41,12 +41,9 @@ On an $80\times20$ mesh, the framework achieves
 RMSE~$=\rmseTopOpt$ for the linear gradient benchmark,
 confirming correct execution of the adjoint--optimiser pipeline
 (gray-zone fraction $\grayFrac$).
-Threshold-projection to a binary-permeability field increases RMSE
-from $\rmseTopOpt$ to $\rmseBinaryBrinkman$.
-The optimised design exploits the continuous permeability field of the
-Brinkman model;
-\texttt{brinkgrad} demonstrates optimisation within the Brinkman--SIMP
-porous-medium model.
+\texttt{brinkgrad} optimises within the Brinkman--SIMP
+porous-medium model; gray-region behaviour is characteristic
+of density methods and is documented in Supplementary~S5.
 The three-field robust projection~\cite{wang2011} is implemented
 in \texttt{brinkgrad.manufacturability.robust\_projection()}
 and demonstrated in \texttt{examples/robust\_projection\_demo.py};

@@ -90,18 +90,11 @@ $L_x/U_c \approx 20\,\text{s}$.
 The ratio $t_{\mathrm{diff}}/t_{\mathrm{flow}} \approx 3000$
 confirms that diffusive leakage through solid regions is negligible in
 steady state, even for intermediate gray densities.
-This conclusion is verified quantitatively: re-solving the forward
-problem on the hard-thresholded permeability design ($\rho \in \{0,1\}$,
-$D = 0$ in solid) confirms that the porous optimum
-exploits gray-zone diffusion (Supplementary~S5).
-This gap is mechanistically consistent with a mixing objective
-(Section~\ref{sec:thresholding}): the gray Brinkman design exploits
-diffusive transport through intermediate-density elements that have
-no binary physical analogue.
-Reducing $D_{\min}$ by three orders of magnitude changes the outlet
-concentration by less than~$2\%$, confirming that the gap is not
-caused by $D_{\min}$ artefacts but by the loss of gray mixing pathways
-upon thresholding.
+The present release targets Brinkman--SIMP density optimisation
+and therefore inherits gray-region behaviour characteristic of
+density methods; quantitative analysis is in Supplementary~S5.
+Robust projection (\texttt{robust\_projection()}) is implemented
+and integration into the optimisation loop is planned.
 
 
 Dirichlet conditions fix the concentration at the inlets,
