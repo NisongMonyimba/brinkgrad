@@ -1,70 +1,59 @@
 \section{Conclusion}
 \label{sec:conclusion}
-
 We have presented \texttt{brinkgrad}, a complete open-source reference
 implementation integrating established techniques into a reproducible
-FEniCSx framework
-for density-based topology optimisation of coupled
+FEniCSx framework for density-based topology optimisation of coupled
 Brinkman--convection-diffusion systems.
-The implementation makes four documented contributions:
 
+The framework delivers five documented contributions:
 \begin{enumerate}
-    \item \textbf{Continuous adjoint implementation.}
-          A complete FEniCSx implementation of the continuous adjoint
-          for coupled Brinkman--convection-diffusion, following
-          standard Lagrangian methodology~\cite{borrvall2003},
-          with the momentum--concentration coupling $-\lambda\nabla c$
+    \item \textbf{Coupled Brinkman--transport implementation.}
+          A pre-configured FEniCSx solver for the coupled
+          Brinkman--convection-diffusion system with
+          concentration-mismatch objective and continuous adjoint,
+          including the coupling term $-\lambda\nabla c$
           and misfit-derived Dirichlet outlet condition.
-
-    \item \textbf{FEniCSx UFL implementation including SUPG.}
+    \item \textbf{SUPG-stabilised adjoint transport.}
           Standard SUPG~\cite{donea2003} applied to both forward
-          and adjoint transport equations, verified to reduce
-          sensitivity-field oscillations from $\sim0.4$ to
-          below $10^{-3}$ at $\Pe\sim10^2$--$10^5$.
-
+          and adjoint equations at $\Pe\sim10^2$--$10^5$,
+          verified numerically (Section~\ref{sec:supg_val}).
     \item \textbf{Documented default configuration.}
           Five modular settings with failure-mode motivation
           (Table~\ref{tab:continuation});
-          reduces gray fraction from $\grayShortRun$ to $\grayFrac$.
-          The hybrid OC/MMA split is validated by direct comparison
-          against pure MMA (Table~\ref{tab:mma_comparison}).
-
+          pure OC optimiser as default, validated by
+          three-way comparison (Table~\ref{tab:mma_comparison}).
+    \item \textbf{Software engineering package.}
+          Semantic versioning (v1.0.0),
+          18 automated tests, CI on every commit,
+          7 example scripts covering multiple target profiles,
+          and a structured reproducibility checklist
+          (Table~\ref{tab:repro_checklist}).
     \item \textbf{Open-source reproducible release.}
-          MIT licence, Docker, CI, and Zenodo archival;
-          all results reproducible from a single command
-          in approximately one hour on a standard laptop.
+          MIT licence, Docker, CI, and Zenodo archival
+          (DOI:~\href{https://doi.org/10.5281/zenodo.20538833}{10.5281/zenodo.20538833});
+          all results reproducible from a single command.
 \end{enumerate}
 
-As a benchmark application, the framework is demonstrated on
-concentration gradient generation in porous-medium flow.
 On an $80\times20$ mesh, the framework achieves
 RMSE~$=\rmseTopOpt$ for the linear gradient benchmark,
 confirming correct execution of the adjoint--optimiser pipeline
 (gray-zone fraction $\grayFrac$).
-\texttt{brinkgrad} optimises within the Brinkman--SIMP
-porous-medium model; gray-region behaviour is characteristic
-of density methods and is documented in Supplementary~S5.
-The three-field robust projection~\cite{wang2011} is implemented
-in \texttt{brinkgrad.manufacturability.robust\_projection()}
-and demonstrated in \texttt{examples/robust\_projection\_demo.py};
-integration into the optimisation loop is the primary future direction.
+The target profile gallery (Table~\ref{tab:gallery}) demonstrates
+that the framework operates across multiple outlet objectives
+by changing a single argument.
 
-\paragraph{Future work.}
-The principal open directions are:
-(i)~robust projection~\cite{wang2011} enforcing near-binary designs
-during optimisation --- the primary open direction;
-(ii)~a discrete adjoint for exact gradient magnitude;
+\paragraph{Future directions.}
+The framework is designed as a reusable foundation for future research
+on coupled flow-transport topology optimisation.
+Principal open directions are:
+(i)~robust projection~\cite{wang2011} integrated into the
+optimisation loop for near-binary designs;
+(ii)~a discrete adjoint for exact gradient magnitudes;
 (iii)~three-dimensional extension;
-(iv)~adaptive mesh refinement targeting the diffusion sublayer
-($\delta\approx 4\,\mu$m);
-(v)~experimental validation on a binary-projected design.
+(iv)~higher Péclet regimes where topology provides
+greater improvement over passive diffusion.
 
-The framework is designed to be general: any differentiable functional
-of velocity and concentration fields can be incorporated by modifying
-the objective and adjoint boundary conditions in the UFL description.
-This generality, combined with a computational cost of under one hour on a standard laptop
-(or under thirty minutes for the 600-iteration quick run)
-and full end-to-end reproducibility,
-makes \texttt{brinkgrad} a practical foundation for surrogate-based
-computational flow-transport optimisation and a reference implementation
-for coupled flow-transport adjoint methods in FEniCSx.
+\texttt{brinkgrad} provides a practical, documented, and
+reproducible reference implementation for coupled flow-transport
+adjoint-based topology optimisation in FEniCSx,
+and a foundation for the community to build upon.
