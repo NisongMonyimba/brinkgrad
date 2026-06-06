@@ -72,11 +72,11 @@ Heaviside projection~\cite{wang2011},
 OC~\cite{bendsoe2003}, MMA~\cite{svanberg1987}.
 The contribution is their \emph{integration} into a single,
 documented, tested, and reproducible FEniCSx framework
-for coupled flow-transport topology optimisation ---
+for coupled flow-transport topology optimisation:
 a combination that does not exist elsewhere in open-source form.
 
-The primary future extensions --- robust projection in the optimisation loop,
-discrete adjoint for gradient-based line search, and body-fitted NS validation ---
+The primary future extensions (robust projection in the optimisation loop,
+discrete adjoint for gradient-based line search, and body-fitted NS validation)
 are natural next steps enabled by the modular architecture.
 
 
@@ -291,8 +291,8 @@ the $80\times20$ result at $160\times40$.
 This is a well-documented property of non-convex density-based
 optimisation on non-uniform meshes~\cite{lazarov2016}.
 The $80\times20$ mesh is the validated primary configuration.
-A mesh-independent continuation schedule --- achieved by normalising
-the continuation parameters by the element size $h$ --- is
+A mesh-independent continuation schedule, achieved by normalising
+the continuation parameters by the element size $h$, is
 the primary methodological future direction.
 
 On coarse meshes ($20\times5$, $N_{\mathrm{out}}=6$) the outlet
@@ -368,7 +368,7 @@ not the SUPG method itself.
 
 \paragraph{Continuous adjoint vs.\ discrete adjoint vs.\ finite differences.}
 Finite-difference sensitivity requires $2N$ forward solves per iteration
-($N=1600$ gives $3200$ solves per step --- prohibitive).
+($N=1600$ gives $3200$ solves per step, which is prohibitive).
 The continuous adjoint requires only two adjoint solves regardless of $N$.
 The discrete adjoint via dolfin-adjoint~\cite{farrell2013} would provide
 exact gradient magnitudes automatically but was not used here for three reasons:

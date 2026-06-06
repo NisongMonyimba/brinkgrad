@@ -17,7 +17,7 @@ open-source literature on coupled flow-transport topology optimisation.
 
 \subsection*{Gaps addressed by this work}
 
-\emph{Gap~1 --- Open-source implementation of coupled
+\emph{Gap~1: Open-source implementation of coupled
 flow-transport topology optimisation.}
 Existing open-source topology optimisation codes for fluidic systems
 target pure flow~\cite{borrvall2003} or global scalar
@@ -31,7 +31,7 @@ The linear gradient benchmark is chosen for verifiability
 as a sanity check; the framework's primary contribution
 is the implementation methodology, not the benchmark RMSE.
 
-\emph{Gap~2 --- High-P\'{e}clet transport in FEniCSx TO.}
+\emph{Gap~2: High-P\'{e}clet transport in FEniCSx TO.}
 Existing FEniCSx topology optimisation
 implementations~\cite{dokken2023} operate at $\Pe\ll1$
 and do not require transport stabilisation.
@@ -40,10 +40,10 @@ SUPG stabilisation of both forward and adjoint equations
 is required~\cite{brooks1982,donea2003}; we document
 this standard technique in the FEniCSx UFL context.
 
-\emph{Gap~3 --- End-to-end reproducibility.}
-Topology optimisation results are sensitive to implementation choices ---
+\emph{Gap~3: End-to-end reproducibility.}
+Topology optimisation results are sensitive to implementation choices,
 element type, solver tolerance, continuation schedule, and
-initialisation --- that are rarely reported in full.
+initialisation, that are rarely reported in full.
 Published microfluidic topology optimisation results~\cite{na2022,feppon2024}
 are not accompanied by open-source code, making independent
 verification and extension difficult.
@@ -88,8 +88,8 @@ Open source (MIT)         & partial & {---}     & {---}       & \checkmark & \ch
 
 \subsection*{Contributions}
 
-All techniques used --- continuous adjoint, SUPG stabilisation,
-Brinkman--SIMP, Helmholtz filtering, Heaviside projection, OC, MMA ---
+All techniques used (continuous adjoint, SUPG stabilisation,
+Brinkman--SIMP, Helmholtz filtering, Heaviside projection, OC, MMA)
 are established methods from the literature.
 The contribution of this paper is their integration into a complete,
 documented, tested, and reproducible open-source FEniCSx framework
@@ -147,7 +147,7 @@ The contribution is not a new optimisation algorithm,
 not a record-breaking RMSE.
 The contribution is a documented, tested, and reproducible
 open-source implementation of adjoint-based topology optimisation
-for a coupled Brinkman--convection-diffusion system in FEniCSx ---
+for a coupled Brinkman--convection-diffusion system in FEniCSx;
 something that does not currently exist in the open-source literature.
 
 \paragraph{Scope and limitations.}

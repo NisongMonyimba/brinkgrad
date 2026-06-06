@@ -387,26 +387,26 @@ opt.run(max_iter=1400)
 The internal modules and their responsibilities are:
 
 \begin{itemize}\itemsep2pt
-    \item \texttt{solver.py} --- FEniCSx/UFL forward solver
+    \item \texttt{solver.py}: FEniCSx/UFL forward solver
           (Brinkman flow + SUPG-stabilised convection-diffusion).
-    \item \texttt{adjoint.py} --- continuous adjoint solver,
+    \item \texttt{adjoint.py}: continuous adjoint solver,
           sensitivity assembly $g_i=\int(\partial J/\partial\bar\rho)\psi_i\,\mathrm{d}x$,
           and Euclidean gradient via mass-system solve $M\hat{g}=g$.
-    \item \texttt{optimizer.py} --- OC bisection update and
+    \item \texttt{optimizer.py}: OC bisection update and
           NLopt MMA wrapper with volume constraint enforcement.
-    \item \texttt{utilities.py} --- Helmholtz PDE filter,
+    \item \texttt{utilities.py}: Helmholtz PDE filter,
           Heaviside projection, $\alpha(\bar\rho)$ interpolation,
           $D_{\mathrm{eff}}(\bar\rho)$, and shared physical constants.
-    \item \texttt{gradient\_optimizer.py} --- top-level
+    \item \texttt{gradient\_optimizer.py}: top-level
           \texttt{GradientGeneratorOptimizer} class orchestrating
           the full optimisation loop with the default configuration schedule.
-    \item \texttt{taylor\_test.py} --- gradient verification
+    \item \texttt{taylor\_test.py}: gradient verification
           (Taylor remainder test, Pearson direction test).
-    \item \texttt{postprocess.py} --- RMSE computation, gray-zone fraction,
+    \item \texttt{postprocess.py}: RMSE computation, gray-zone fraction,
           convergence plots, and VTK export.
-    \item \texttt{binary\_validation.py} --- threshold-projection
+    \item \texttt{binary\_validation.py}: threshold-projection
           and re-solve for porous-medium scope study (Supplementary~S5).
-    \item \texttt{mesh.py} --- structured triangular mesh construction
+    \item \texttt{mesh.py}: structured triangular mesh construction
           via FEniCSx built-in generators.
 \end{itemize}
 
@@ -448,7 +448,7 @@ eight tests covering the full API surface:
     \item \textbf{Test~2} (forward solver): concentration field
           finite, $c\in[0,1]$ after one forward solve.
     \item \textbf{Test~3} (adjoint direction): gradient descent
-          step reduces $J$ --- verifies sign correctness.
+          step reduces $J$, verifying sign correctness.
     \item \textbf{Test~4} (OC update): volume constraint
           $|V-V^*|<0.02$ enforced after one OC step.
     \item \textbf{Test~5} (MMA update): three MMA steps,
