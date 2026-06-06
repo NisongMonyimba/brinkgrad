@@ -1,4 +1,4 @@
-# micrograd/manufacturability.py (updated)
+# brinkgrad/manufacturability.py (updated)
 import numpy as np, matplotlib.pyplot as plt
 try:
     from scipy.ndimage import distance_transform_edt

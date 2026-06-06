@@ -1,4 +1,4 @@
-# micrograd/filter_sensitivity.py
+# brinkgrad/filter_sensitivity.py
 """
 Filter radius sensitivity study:
 Runs the topology optimisation on the same mesh with different r_filter values,

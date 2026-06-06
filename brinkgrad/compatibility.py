@@ -1,4 +1,4 @@
-# micrograd/compatibility.py
+# brinkgrad/compatibility.py
 """
 Graceful fallback for optional dependencies.
 Usage:

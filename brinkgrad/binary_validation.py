@@ -11,8 +11,8 @@ Compares RMSE and hydraulic resistance to assess porous-leakage error.
 """
 import numpy as np
 from dolfinx import fem
-from micrograd.solver import forward_solve
-import micrograd.utilities as _ut
+from brinkgrad.solver import forward_solve
+import brinkgrad.utilities as _ut
 
 
 def compute_outlet_rmse(c_h, msh, outlet_facets, Ly):
@@ -120,7 +120,7 @@ def run_binary_validation(opt, threshold=0.5, P_in=1000.0, verbose=True):
 
 if __name__ == "__main__":
     import json, pathlib
-    from micrograd import GradientGeneratorOptimizer
+    from brinkgrad import GradientGeneratorOptimizer
 
     print("Running 400-iteration optimisation + binary validation...")
     opt = GradientGeneratorOptimizer(

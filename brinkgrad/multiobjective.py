@@ -1,4 +1,4 @@
-# micrograd/multiobjective.py
+# brinkgrad/multiobjective.py
 """
 Multi‑objective Pareto analysis via weight‑ratio sweep.
 Sweeps the flow dissipation weight w_f while keeping the concentration mismatch

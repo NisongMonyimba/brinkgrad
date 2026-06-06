@@ -1,4 +1,4 @@
-# micrograd/convergence_study.py
+# brinkgrad/convergence_study.py
 """
 Mesh convergence study for the topology optimisation of microfluidic gradient generators.
 Runs the optimisation on coarse, medium, and fine meshes; compares objective values,

@@ -1,4 +1,4 @@
-# micrograd/optimizer.py
+# brinkgrad/optimizer.py
 """Design update routines: OC and Svanberg MMA (self-contained)."""
 import numpy as np
 from dolfinx import fem
