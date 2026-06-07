@@ -51,37 +51,41 @@ We address this by releasing the complete pipeline as an installable
 Python package with a Docker container and continuous-integration
 workflow that reproduces every result from a single command.
 
-Table~\ref{tab:comparison} compares documented features of \texttt{brinkgrad}
-against existing open-source frameworks.
+Table~\ref{tab:comparison} compares out-of-the-box workflow support
+across frameworks; all frameworks can in principle be extended.
 
 \begin{table}[h]
-\centering\scriptsize
-\caption{Feature comparison based on publicly documented capabilities
-         of open-source topology optimisation frameworks.
-         \checkmark~=~implemented and documented;
-         {---}~=~not reported in cited publications or public repositories.
-         Entries reflect capabilities at the time of writing;
-         unlisted features may exist but are not verified by the authors.}
+\centering\small
+\caption{Workflow comparison: what each framework provides out-of-the-box.
+         \checkmark~=~included in the distributed package;
+         custom~=~possible but requires user implementation;
+         partial~=~partially available.
+         No claim is made that unlisted capabilities are absent;
+         all frameworks can be extended by users.}
 \label{tab:comparison}
-\begin{tabular}{@{}p{2.3cm}p{1.05cm}p{1.05cm}p{1.05cm}p{1.05cm}p{1.05cm}p{1.05cm}@{}}
+\begin{tabular}{@{}p{4.2cm}p{2.0cm}p{1.8cm}p{2.2cm}@{}}
 \toprule
-\textbf{Feature} & BP03 & Na22 & Fe24 & d-adj & cashocs & \textbf{ours} \\
- & \cite{borrvall2003} & \cite{na2022} & \cite{feppon2024} & \cite{farrell2013} & \cite{blauth2023} & \\
+\textbf{Workflow capability} &
+\textbf{dolfin-adj.}~\cite{farrell2013} &
+\textbf{cashocs}~\cite{blauth2023} &
+\textbf{brinkgrad} \\
 \midrule
-\multicolumn{7}{@{}l}{\textit{Physics}} \\
-Coupled flow-transport    & {---} & \checkmark & \checkmark & {---} & {---} & \checkmark \\
-Conc.-mismatch objective  & {---} & \checkmark & {---}       & {---} & {---} & \checkmark \\
-SUPG adjoint stabilisation& {---} & {---}       & {---}       & {---} & {---} & \checkmark \\
-Continuous adjoint        & \checkmark & {---}  & \checkmark & {---} & \checkmark & \checkmark \\
-Discrete adjoint          & {---} & {---}       & {---}       & \checkmark & \checkmark & future \\
+\multicolumn{4}{@{}l}{\textit{Physics implementation}} \\
+Generic adjoint framework      & \checkmark & \checkmark & \checkmark \\
+Coupled Brinkman--CD solver    & custom      & custom      & \checkmark \\
+SUPG-stabilised adjoint        & custom      & custom      & \checkmark \\
+Concentration-mismatch obj.    & custom      & custom      & \checkmark \\
 \midrule
-\multicolumn{7}{@{}l}{\textit{Software engineering}} \\
-FEniCSx backend           & {---} & {---}       & {---}       & \checkmark & \checkmark & \checkmark \\
-Docker image (pinned)     & {---} & {---}       & {---}       & {---} & {---} & \checkmark \\
-CI / automated tests      & {---} & {---}       & {---}       & {---} & {---} & \checkmark \\
-Zenodo archival (DOI)     & {---} & {---}       & {---}       & {---} & {---} & \checkmark \\
-Jupyter examples          & {---} & {---}       & {---}       & {---} & \checkmark & \checkmark \\
-Open source (MIT)         & partial & {---}     & {---}       & \checkmark & \checkmark & \checkmark \\
+\multicolumn{4}{@{}l}{\textit{Ready-to-run resources}} \\
+Pre-configured benchmark       & partial     & partial     & \checkmark \\
+Example scripts (7+)           & partial     & \checkmark & \checkmark \\
+Jupyter tutorial notebook      & partial     & partial     & \checkmark \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Reproducibility infrastructure}} \\
+Pinned Docker image            & custom      & custom      & \checkmark \\
+CI regression tests            & custom      & custom      & \checkmark \\
+Zenodo DOI archive             & custom      & custom      & \checkmark \\
+Single-command reproduction    & custom      & custom      & \checkmark \\
 \bottomrule
 \end{tabular}
 \end{table}
