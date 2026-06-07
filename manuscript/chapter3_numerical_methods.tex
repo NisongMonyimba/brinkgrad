@@ -315,31 +315,8 @@ that executes the full pipeline on every commit inside the
 A Zenodo archive (DOI:~\href{https://doi.org/10.5281/zenodo.20538833}{10.5281/zenodo.20538833}, )
 provides a versioned snapshot.
 
-\paragraph{Reproducing specific results.}
-Table~\ref{tab:reproduce} maps each primary result to the
-command that generates it.
-
-\begin{table}[h]
-\centering\scriptsize
-\caption{Reproducibility map: each result and its generating command
-         (run inside the Docker container).}
-\label{tab:reproduce}
-\begin{tabular}{@{}p{0.3\textwidth}p{0.55\textwidth}@{}}
-\toprule
-\textbf{Result} & \textbf{Command} \\
-\midrule
-Primary topology &
-\texttt{optimize.py -{}-target linear} \\
-Convergence history &
-\texttt{plot\_convergence.py} \\
-$V^*$ sweep &
-\texttt{vstar\_sweep.py} \\
-Profile gallery &
-\texttt{extra\_profiles.py} \\
-All results & \texttt{bash run\_all.sh} \\
-\bottomrule
-\end{tabular}
-\end{table}
+All results are reproduced by \texttt{bash run\_all.sh}
+inside the Docker container (see \texttt{examples/} for individual scripts).
 
 
 \begin{figure}[htbp]
@@ -479,27 +456,11 @@ mini-optimisation, MMA reset).
 The CI badge reflects the current \texttt{main} branch status.
 
 \paragraph{Reproducibility infrastructure.}
-Four mechanisms ensure end-to-end reproducibility:
-
-\begin{enumerate}\itemsep2pt
-    \item \textbf{Docker.}
-          The official \texttt{dolfinx/dolfinx:v0.7.3} image
-          pins FEniCSx, PETSc, and all numerical dependencies.
-          Newer versions (v0.8.x+) are expected to be compatible.
-    \item \textbf{Single-command reproduction.}
-          \texttt{bash run\_all.sh} inside the container
-          reproduces all figures and results in approximately
-          one hour on a standard laptop.
-    \item \textbf{Zenodo archival.}
-          The repository is archived at
-          DOI:~\href{https://doi.org/10.5281/zenodo.20538833}%
-          {10.5281/zenodo.20538833}~\cite{micrograd2025zenodo},
-          providing a permanent, citable snapshot of the
-          exact version used for the results in this paper.
-    \item \textbf{Open-source licence.}
-          Released under the MIT licence at
-          \url{https://github.com/NisongMonyimba/brinkgrad}.
-\end{enumerate}
+Reproducibility is ensured via Docker (pinned \texttt{dolfinx:v0.7.3}),
+GitHub Actions CI on every commit, Zenodo archival
+(DOI:~\href{https://doi.org/10.5281/zenodo.20538833}{10.5281/zenodo.20538833}),
+and MIT open-source licence.
+The full checklist is in Table~\ref{tab:repro_checklist}.
 
 \paragraph{Software quality metrics.}
 Table~\ref{tab:sw_metrics} summarises the quantitative
@@ -659,7 +620,7 @@ The JSON result files in \texttt{results/} record the exact
 RMSE, gray-zone fraction, and convergence history for each run.
 Re-running \texttt{bash run\_all.sh} from a clean clone
 produces results matching the archived JSON files to
-floating-point precision, confirming numerical reproducibility to floating-point precision
+floating-point precision, confirming numerical reproducibility
 within the pinned Docker environment on x86-64 hardware.
 
 \paragraph{Regression validation.}
@@ -686,10 +647,5 @@ which exercises the full optimisation pipeline
 on every commit.
 
 
-The full pipeline (all results) is reproduced by
-(tested with DOLFINx~v0.7.3; newer versions v0.8.x+ are expected to work):
-\begin{lstlisting}[language=bash,breaklines=true]
-git clone https://github.com/NisongMonyimba/brinkgrad
-cd brinkgrad
-docker run --rm -v ${PWD}:/root/brinkgrad -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg dolfinx/dolfinx:v0.7.3 bash -c "cd /root/brinkgrad && bash run_all.sh"
-\end{lstlisting}
+The full pipeline is reproduced by \texttt{bash run\_all.sh}
+inside the Docker container (see Section~\ref{sec:reproducibility}).
