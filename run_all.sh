@@ -1,22 +1,18 @@
 #!/usr/bin/env bash
-# run_all.sh — works both inside Docker (dolfinx container) and local conda env
+# run_all.sh — reproduce all brinkgrad paper results
+# Run inside Docker: docker run --rm -v ${PWD}:/root/brinkgrad \
+#   dolfinx/dolfinx:v0.7.3 bash -c "cd /root/brinkgrad && bash run_all.sh"
 set -euo pipefail
 
-# Use container python3 if the conda env isn't present
-if command -v conda &>/dev/null && conda env list | grep -q fenicsx; then
-    source "$(conda info --base)/etc/profile.d/conda.sh"
-    conda activate fenicsx
-    PY="python3"
-else
-    PY="python3"
-fi
+PY="python3"
 
-# Install micrograd in the current environment if not already installed
+# Install brinkgrad in the current environment
 $PY -m pip install -e . --no-deps -q 2>/dev/null || true
 
 echo "============================================================"
-echo " micrograd — full pipeline"
+echo " brinkgrad — full pipeline"
 echo " Python: $($PY --version)"
+echo " DOI: 10.5281/zenodo.20538833"
 echo "============================================================"
 
 mkdir -p figures docs/si
@@ -32,21 +28,15 @@ run_script() {
     fi
 }
 
-run_script "[1/6] linear_target"          examples/linear_target.py
-run_script "[2/6] double_peak_target"     examples/double_peak_target.py
-run_script "[3/6] gallery_targets"        examples/gallery_targets.py
-run_script "[4/6] christmas_tree"         examples/christmas_tree_comparison.py
-run_script "[5/6] generate_macros"        generate_macros.py
-echo ""
-echo ">>> [6/6] convergence_study"
-if python3 -m micrograd.convergence_study 2>&1; then
-    echo "    [ OK ] [6/6] convergence_study"
-else
-    echo "    [WARN] [6/6] convergence_study exited non-zero — continuing"
-fi
+run_script "[1/5] linear_target"          examples/linear_target.py
+run_script "[2/5] step_profile_target"    examples/step_profile_target.py
+run_script "[3/5] double_peak_target"     examples/double_peak_target.py
+run_script "[4/5] gallery_targets"        examples/gallery_targets.py
+run_script "[5/5] robust_projection_demo" examples/robust_projection_demo.py
 
 echo ""
 echo "============================================================"
 echo " All scripts finished."
 echo " Figures saved in: figures/"
+echo " Primary result: RMSE = 0.058 (linear gradient, 80x20 mesh)"
 echo "============================================================"

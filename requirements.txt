@@ -1,8 +1,8 @@
 # brinkgrad runtime dependencies
 # Install inside the pinned Docker image: dolfinx/dolfinx:v0.7.3
-# All FEniCSx dependencies (dolfinx, ufl, basix, ffcx, petsc4py, mpi4py)
+# FEniCSx dependencies (dolfinx, ufl, basix, petsc4py, mpi4py)
 # are pre-installed in the Docker image.
-numpy>=1.24
-scipy>=1.10
-matplotlib>=3.7
-nlopt>=2.7
+numpy>=1.23.2
+scipy>=1.11.4
+matplotlib>=3.8.3
+nlopt>=2.7.1

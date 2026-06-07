@@ -9,7 +9,7 @@ def main():
     os.makedirs('figures', exist_ok=True)
     opt = GradientGeneratorOptimizer(Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
                                      target_expr=lambda x: np.sin(np.pi*x[1]/500e-6)**2,
-                                     w_f=1e-7, w_c=5e4, V_star=0.5)
+                                     w_f=1e-3, w_c=5e1, V_star=0.5)
     # rho initialised internally by optimizer
     rho_phys = opt.run(max_iter=400, beta_continuation=[1,2,4,8,16], move=0.2)
     c_h = opt.c_h; x = opt.msh.geometry.x

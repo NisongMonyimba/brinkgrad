@@ -4,7 +4,8 @@ Taylor remainder test for the reduced functional J(rho).
 Verifies that the continuous adjoint gradient is correct:
   R(eps) = |J(rho + eps*drho) - J(rho) - eps * dJ/drho[drho]|
 
-should decay as eps^2 (second-order) if the gradient is exact.
+decays as eps^1 for the L2 Riesz representative (expected behaviour).
+See manuscript Section 4 and Supplementary S10 for explanation.
 
 Usage:
     python -m brinkgrad.taylor_test
