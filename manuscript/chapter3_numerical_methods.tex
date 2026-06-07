@@ -296,27 +296,16 @@ The complete pipeline is released as \texttt{brinkgrad} (MIT licence) at
 \url{https://github.com/NisongMonyimba/brinkgrad}~\cite{micrograd2025zenodo}.
 
 \paragraph{Quick start.}
-All primary results are reproducible from three commands:
+All results are reproducible from a single command
+(full checklist: Table~\ref{tab:repro_checklist}):
 \begin{lstlisting}[language=bash,breaklines=true]
 git clone https://github.com/NisongMonyimba/brinkgrad && cd brinkgrad
 docker run --rm -v ${PWD}:/root/brinkgrad dolfinx/dolfinx:v0.7.3 \
   bash -c "cd /root/brinkgrad && pip install -e . --quiet && bash run_all.sh"
-# Expected: RMSE=0.058 after ~1 hour on 80x20 mesh (standard laptop)
 \end{lstlisting}
-To optimise a different target profile, change one argument:
-\texttt{target\_expr=lambda~x:~np.where(x[1]>250e-6,~1.0,~0.0)}
-(step profile; all other settings identical).
-
-The repository includes all FEM modules, post-processing tools,
-a Jupyter notebook (\texttt{notebooks/quickstart.ipynb}),
-a comprehensive test suite, and a continuous integration workflow using GitHub Actions~\cite{GitHubActions2024}
-that executes the full pipeline on every commit inside the
-\texttt{dolfinx/dolfinx:v0.7.3} Docker container.
-A Zenodo archive (DOI:~\href{https://doi.org/10.5281/zenodo.20538833}{10.5281/zenodo.20538833}, )
-provides a versioned snapshot.
-
-All results are reproduced by \texttt{bash run\_all.sh}
-inside the Docker container (see \texttt{examples/} for individual scripts).
+Expected: RMSE~$=0.058$ after $\approx$1~hour on an $80\times20$ mesh.
+Results are archived at Zenodo
+DOI:~\href{https://doi.org/10.5281/zenodo.20538833}{10.5281/zenodo.20538833}~\cite{micrograd2025zenodo}.
 
 
 \begin{figure}[htbp]
