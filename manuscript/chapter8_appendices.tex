@@ -1,3 +1,125 @@
+\subsection*{SA: Continuous adjoint derivation}
+\label{sec:supp_adjoint}
+
+This appendix gives the full continuous adjoint derivation
+for the coupled Brinkman--convection-diffusion system.
+
+
+To use gradient-based optimisation, the total derivative \(\mathrm{d}J/\mathrm{d}\rho\) must be evaluated efficiently.
+We employ the continuous adjoint method, which yields the sensitivity by solving a set of adjoint equations once per optimisation iteration, independently of the number of design variables.
+
+\subsubsection{Lagrangian and adjoint equations}
+Introduce the adjoint velocity \(\mathbf{v}\), adjoint pressure \(q\), and concentration adjoint \(\lambda\).
+The Lagrangian of the optimisation problem, after integrating by parts and assuming the boundary terms cancel with the adjoint boundary conditions, is
+\begin{equation}
+    \begin{aligned}
+        \mathcal{L} &= J_f + J_c \\
+        &\quad + \int_\Omega \bigl[ \mu\nabla\mathbf{u}:\nabla\mathbf{v} + \alpha(\rho)\,\mathbf{u}\cdot\mathbf{v} - p\,\nabla\cdot\mathbf{v} - q\,\nabla\cdot\mathbf{u} \bigr] \mathrm{d}\Omega \\
+        &\quad + \int_\Omega \bigl[ \lambda\,\mathbf{u}\cdot\nabla c + D(\rho)\,\nabla\lambda\cdot\nabla c \bigr] \mathrm{d}\Omega .
+    \end{aligned}
+    \label{eq:lagrangian}
+\end{equation}
+Taking the variation of \(\mathcal{L}\) with respect to the state variables \((\mathbf{u},p,c)\) and setting each variation to zero yields the adjoint equations.
+
+\paragraph{Flow adjoint.}
+Varying with respect to \(\mathbf{u}\) and \(p\) gives the adjoint Brinkman system
+\begin{subequations}
+\begin{align}
+    -\mu\nabla^2\mathbf{v} + \alpha(\rho)\,\mathbf{v} + \nabla q &= -\lambda\nabla c, \label{eq:adj_flow_mom}\\
+    \nabla\cdot\mathbf{v} &= 0. \label{eq:adj_flow_div}
+\end{align}
+\end{subequations}
+The right-hand side \(-\lambda\nabla c\) arises from the term \(\lambda\mathbf{u}\cdot\nabla c\) in the Lagrangian and couples the flow adjoint to the concentration adjoint.
+Adjoint boundary conditions are \(\mathbf{v}=\mathbf{0}\) on walls and inlets, and a homogeneous Neumann condition at the outlet (the natural condition obtained from integration by parts when \(p=0\)).
+
+\paragraph{Concentration adjoint.}
+Variation with respect to~\(c\) gives the adjoint convection--diffusion equation
+\begin{equation}
+    -\mathbf{u}\cdot\nabla\lambda - \nabla\cdot\bigl(D(\rho)\nabla\lambda\bigr) = 0 \quad\text{in } \Omega,
+    \label{eq:adj_conc}
+\end{equation}
+with Dirichlet conditions \(\lambda = 0\) on both inlets (where the forward concentration is fixed) and the boundary condition obtained from the outlet misfit term \(J_c\):
+\begin{equation}
+    \lambda = c_{\text{target}} - c \quad\text{on } \Gamma_{\text{out}}.
+    \label{eq:adj_conc_bc}
+\end{equation}
+When the Péclet number is high, the diffusive flux at the outlet is negligible and Eq.~\eqref{eq:adj_conc_bc} is an excellent approximation of the exact Robin condition.
+
+\subsubsection{Sensitivity expression}
+Finally, differentiating the Lagrangian with respect to \(\rho\) while holding the state and adjoint variables fixed yields the sensitivity:
+\begin{equation}
+    \boxed{\,
+    \frac{\mathrm{d}J}{\mathrm{d}\rho} = \int_\Omega
+        \left[ \frac{\partial\alpha}{\partial\rho}\,\mathbf{u}\cdot\mathbf{v}
+             + \frac{\partial D}{\partial\rho}\,\nabla c\cdot\nabla\lambda \right] \mathrm{d}\Omega
+    \,}.
+    \label{eq:sensitivity}
+\end{equation}
+The partial derivatives of the interpolation functions are
+\begin{align}
+    \frac{\partial\alpha}{\partial\rho} &= -(\alpha_{\max} - \alpha_{\min})\,\frac{2}{(1+\rho)^2},
+        \label{eq:dalpha} \\[4pt]
+    \frac{\partial D}{\partial\rho} &= p\,(D_{\text{fluid}} - D_{\min})\,\rho^{\,p-1}.
+        \label{eq:dD}
+\end{align}
+Equation~\eqref{eq:sensitivity} gives \(\partial J/\partial\bar{\rho}\), the sensitivity with respect to the \emph{physical} (projected) density.
+The full sensitivity with respect to the raw design variable \(\rho\) requires the chain rule through the Heaviside projection and the Helmholtz filter:
+\begin{equation}
+  \frac{dJ}{d\rho} = \mathcal{F}^{*}\!\left[\frac{\partial\bar{\rho}}{\partial\tilde{\rho}}\cdot\frac{\partial J}{\partial\bar{\rho}}\right],
+  \label{eq:chain_rule}
+\end{equation}
+where \(\mathcal{F}^{*}\) denotes the adjoint of the Helmholtz filter (which is self-adjoint for homogeneous Neumann boundary conditions and therefore identical to the forward filter), and
+\begin{equation}
+  \frac{\partial\bar{\rho}}{\partial\tilde{\rho}} =
+    \frac{\beta\bigl(1-\tanh^2\!\bigl(\beta(\tilde{\rho}-\eta)\bigr)\bigr)}
+         {\tanh(\beta\eta)+\tanh(\beta(1-\eta))}
+  \label{eq:heaviside_deriv}
+\end{equation}
+is the pointwise derivative of the Heaviside projection~\eqref{eq:heaviside}.
+Sensitivities are propagated through the filtering and projection operators
+as implemented in \texttt{adjoint.py};
+the chain rule~\eqref{eq:chain_rule} is the mathematically correct expression
+for the full $\mathrm{d}J/\mathrm{d}\rho$ sensitivity.
+
+The sensitivity~\eqref{eq:sensitivity} is evaluated by first solving the
+forward problem~\eqref{eq:brinkman}--\eqref{eq:convdiff} to obtain
+$(\mathbf{u},p,c)$, then solving the adjoint
+problems~\eqref{eq:adj_flow_mom}--\eqref{eq:adj_conc_bc} for
+$(\mathbf{v},q,\lambda)$, and finally assembling
+the volume integral~\eqref{eq:sensitivity}.
+
+
+\paragraph{Smooth differentiable penalty.}
+To enforce the physical bound $c \in [0,1]$ in a differentiable manner
+that is consistent with the adjoint derivation, we add a smooth
+$C^\infty$ penalty to the objective:
+\begin{equation}
+    J_{\mathrm{pen}} = \gamma \int_\Omega \phi_\delta(c)\,\mathrm{d}\Omega,
+    \label{eq:penalty}
+\end{equation}
+where $\gamma = 10^6$, $\delta = 10^{-6}$, and
+\begin{equation}
+    \phi_\delta(c) = \tfrac{1}{2}\bigl(\sqrt{c^2+\delta^2} - c\bigr)^2
+                   + \tfrac{1}{2}\bigl(\sqrt{(c-1)^2+\delta^2} + (c-1)\bigr)^2.
+    \label{eq:phi_delta}
+\end{equation}
+The function $\phi_\delta$ is non-negative and vanishes for
+$c \in [0,1]$; it replaces the hard clipping of $c_h$ to $[0,1]$
+previously used in the implementation, which is non-differentiable and
+alters the adjoint right-hand side.
+
+
+\paragraph{Adjoint formulation.}
+The present implementation uses the continuous adjoint,
+which makes the coupling term $-\lambda\nabla c$
+and the misfit-derived Dirichlet outlet condition
+$\lambda = c_{\rm target} - c$ on $\Gamma_{\rm out}$
+explicit in the UFL source.
+A discrete adjoint~\cite{farrell2013} providing exact gradient
+magnitudes is in the project roadmap.
+
+% SUPG stabilisation moved to Section 3 (numerical methods)
+
 \subsection*{S0: Getting Started Guide}
 \label{sec:s0}
 This section provides step-by-step instructions for reproducing
