@@ -212,7 +212,8 @@ narrower channels, or robust projection integration.
 \label{sec:target_choice}
 The linear gradient target $c^*(y)=y/L_y$ serves as a
 benchmark: the RMSE~$=\rmseTopOpt$ result
-confirms the implementation is functioning correctly.
+confirms that the optimisation loop produces a
+monotonically non-increasing objective.
 The direct comparison against pure MMA
 (Table~\ref{tab:mma_comparison}) validates the optimiser.
 More demanding benchmarks are natural future extensions
@@ -322,7 +323,8 @@ gives RMSE~$=0.450$; uniform Brinkman resistance suppresses
 channelling flow, making this a poor initialisation.
 The optimised design reduces RMSE to $\rmseTopOpt$
 ($\rmseImprovement\%$ improvement over the uniform baseline),
-confirming that the optimisation loop functions correctly.
+confirming that the OC loop reduces the objective
+relative to the uniform initialisation.
 Baseline details are in Table~\ref{tab:context}.
 The binary-thresholded design (RMSE~$=\rmseBinaryBrinkman$)
 provides an honest lower bound on what is achievable
@@ -384,9 +386,11 @@ without solving $M\hat{g}=g$, reducing implementation complexity.
 Discrete adjoint and L-BFGS optimisation are in the project roadmap.
 The uniform baseline gives RMSE~$\approx0.450$
 (Table~\ref{tab:context}).
-The optimised result (RMSE~$=\rmseTopOpt$) confirms
-that the OC loop reduces the objective
-relative to the uniform initialisation.
+The optimised result (RMSE~$=\rmseTopOpt$) is an
+application-level validation output;
+software correctness is established through gradient
+verification, regression testing, and reproducible execution
+(Sections~\ref{sec:taylor_test} and~\ref{sec:verification}).
 
 \paragraph{Reproducibility.}
 To the authors' knowledge, no openly documented FEniCSx implementation

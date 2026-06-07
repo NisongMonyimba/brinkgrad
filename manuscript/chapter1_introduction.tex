@@ -91,57 +91,46 @@ Single-command reproduction    & custom      & custom      & \checkmark \\
 
 \subsection*{Contributions}
 
-All techniques used (continuous adjoint, SUPG stabilisation,
-Brinkman--SIMP, Helmholtz filtering, Heaviside projection, OC, MMA)
-are established methods from the literature.
-The contribution of this paper is their integration into a complete,
-documented, tested, and reproducible open-source FEniCSx framework
-for coupled flow-transport topology optimisation.
-Specifically:
+The scientific ingredients employed in \texttt{brinkgrad} are
+established methods from the topology optimisation literature;
+the contribution of the present work is their integration into
+a reproducible, documented, and validated software package
+suitable for research and education.
 
 \begin{enumerate}
-    \item \textbf{Open-source implementation of coupled
-          Brinkman--convection-diffusion topology optimisation in FEniCSx.}
-          A complete, installable Python package implementing the
-          coupled forward problem, continuous adjoint
-          (including the coupling term $-\lambda\nabla c$
-          and misfit-derived Dirichlet outlet condition),
-          and sensitivity computation.
-          Existing frameworks (dolfin-adjoint~\cite{farrell2013},
-          cashocs~\cite{blauth2023}) provide general adjoint
-          capabilities but lack: (i)~a pre-configured implementation
-          of the coupled Brinkman--CD system with SUPG stabilisation
-          at $\Pe\sim10^2$--$10^5$; (ii)~a default configuration
-          with failure-mode documentation; (iii)~end-to-end
-          Docker/CI reproducibility; and (iv)~a concentration-mismatch
-          objective with explicit adjoint derivation
+    \item \textbf{Complete open-source implementation.}
+          A coupled Brinkman--convection-diffusion topology
+          optimisation framework in FEniCSx, including forward
+          and continuous-adjoint formulations, installable
+          as a Python package
           (Table~\ref{tab:comparison}, Section~\ref{sec:adjoint}).
 
-    \item \textbf{Documented implementation of stabilised
-          forward and adjoint transport at $\Pe\sim10^2$--$10^5$.}
-          The standard SUPG stabilisation~\cite{brooks1982,donea2003}
-          is applied consistently to both forward and adjoint
-          transport equations and verified by finite-difference
-          Pearson direction correlation $\geq 0.80$
-          confirming correct descent direction
-          (Section~\ref{sec:verification}).
+    \item \textbf{Consistent SUPG stabilisation.}
+          Standard SUPG~\cite{brooks1982,donea2003} applied to
+          both forward and adjoint transport equations for
+          convection-dominated regimes ($\Pe\sim10^2$--$10^5$),
+          with numerical verification
+          (Section~\ref{sec:supg_val}).
 
-    \item \textbf{Reproducible software architecture.}
-          Docker container, GitHub Actions CI on every commit,
-          Zenodo archival, pytest suite, and Jupyter notebook.
-          All results in this paper are reproducible from a single
-          command in approximately one hour on a standard laptop
-          (Section~\ref{sec:reproducibility}).
+    \item \textbf{Reproducible software infrastructure.}
+          Docker-based environments, continuous integration,
+          automated testing, versioned releases, and archival
+          through Zenodo
+          (Table~\ref{tab:repro_checklist},
+          Section~\ref{sec:reproducibility}).
 
-    \item \textbf{Verification and software-validation suite.}
-          Gradient verification (Taylor remainder, direction test),
-          mesh sensitivity study (four meshes),
-          binary gap quantification (Supplementary~S5),
-          and OC/MMA schedule verification
-          (pure-MMA output RMSE~$=\rmsePureMMA$
-          vs.\ hybrid RMSE~$=\rmseShortRun$,
-          confirming the default configuration functions as intended;
-          Table~\ref{tab:mma_comparison}).
+    \item \textbf{Verification suite.}
+          Gradient checks, regression tests, mesh sensitivity
+          studies, and executable benchmark examples
+          demonstrating framework generality across multiple
+          target profiles
+          (Figure~\ref{fig:gallery}, Table~\ref{tab:gallery}).
+
+    \item \textbf{Modular software architecture.}
+          Straightforward extension to alternative objectives,
+          transport models, optimisation strategies, and
+          inverse-design applications
+          (Section~\ref{sec:extensibility}).
 \end{enumerate}
 
 \paragraph{Nature of contribution.}
