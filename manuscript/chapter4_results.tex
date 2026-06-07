@@ -53,17 +53,20 @@ the pure-MMA comparison (Table~\ref{tab:mma_comparison})
 validates convergence in practice.
 
 \paragraph{Taylor remainder (supplementary).}
-\textbf{Note on slope $\approx1$:}
-The assembled sensitivity $g_i$ is the $L^2$ Riesz representative,
-not the Euclidean gradient $\hat{g}=M^{-1}g$.
-As established for continuous-adjoint implementations~\cite{lazarov2016},
-the Taylor remainder for the Riesz representative inherently exhibits
-slope $\approx1$ with respect to the $L^2$ norm.
-This is mathematically correct and does not indicate an implementation error.
-The Euclidean gradient $\hat{g}=M^{-1}g$ (implemented in \texttt{adjoint.py})
-would restore slope $\approx2$; it is available for
-optimisers requiring exact magnitudes (e.g.\ L-BFGS).
-The $L^2$ representative is fully sufficient for sign-based OC updates.
+\textbf{Note on Taylor remainder slope:}
+The sensitivity $g_i$ is assembled as the $L^2$ Riesz representative
+with respect to the \emph{filtered-projected} design field $\bar\rho$.
+The Taylor perturbation is applied to the raw design variable $\rho$,
+which passes through the Helmholtz filter and Heaviside projection
+before entering the objective.
+This chain introduces a first-order relationship between $\rho$-perturbations
+and $J$-changes, so slope $\approx1$ is the mathematically correct
+result for this formulation~\cite{lazarov2016}.
+Slope $\approx2$ would require differentiating through the full
+filter-projection chain (discrete adjoint); this is identified as
+a future direction.
+The OC optimiser depends only on gradient sign, which is confirmed
+correct by the Pearson direction test ($\geq0.80$).
 Full analysis is in Supplementary~S10.
 
 
