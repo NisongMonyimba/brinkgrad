@@ -55,20 +55,19 @@ Table~\ref{tab:comparison} compares out-of-the-box workflow support
 across frameworks; all frameworks can in principle be extended.
 
 \begin{table}[h]
-\centering\small
+\centering\scriptsize
 \caption{Workflow comparison: what each framework provides out-of-the-box.
-         \checkmark~=~included in the distributed package;
-         custom~=~possible but requires user implementation;
+         $\checkmark$~=~included; custom~=~user implementation required;
          partial~=~partially available.
-         No claim is made that unlisted capabilities are absent;
-         all frameworks can be extended by users.}
+         All frameworks can be extended; no capability absence is claimed.}
 \label{tab:comparison}
-\begin{tabular}{@{}p{4.0cm}p{1.9cm}p{1.7cm}p{2.1cm}@{}}
+\begin{tabular}{@{}p{3.8cm}p{2.0cm}p{1.8cm}p{2.1cm}@{}}
 \toprule
 \textbf{Workflow capability} &
-\textbf{dolfin-adj.}~\cite{farrell2013} &
-\textbf{cashocs}~\cite{blauth2023} &
+\textbf{dolfin-adj.} &
+\textbf{cashocs} &
 \textbf{brinkgrad} \\
+& \cite{farrell2013} & \cite{blauth2023} & \\
 \midrule
 \multicolumn{4}{@{}l}{\textit{Physics implementation}} \\
 Generic adjoint framework      & \checkmark & \checkmark & \checkmark \\
