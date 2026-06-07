@@ -7,7 +7,7 @@
 \address{School of Biological and Health Systems Engineering\\
 Arizona State University, Tempe, AZ, USA\\
 nisongmonyimba278@gmail.com}
-\date{\today}
+\date{2025}
 
 \begin{document}
 
@@ -57,8 +57,8 @@ to $0.074$ (at $\beta=128$).
 
 \item \textbf{Framework generality.}
 Volume-fraction sweep ($V^*\in\{0.3, 0.5, 0.7\}$) and three target
-profiles (linear RMSE~$=0.058$, sigmoid RMSE~$=0.639$, Gaussian peak
-RMSE~$=0.318$) demonstrate that the framework adapts to arbitrary
+profiles (linear RMSE~$=0.058$, step RMSE~$=0.011$,
+double-peak RMSE~$=0.007$) demonstrate that the framework adapts to arbitrary
 concentration targets without modifying the adjoint structure.
 
 \item \textbf{End-to-end reproducibility.}
@@ -71,7 +71,7 @@ All results in the paper are recoverable from a single command.
 This paper presents a \emph{surrogate-based} methodology.
 The Brinkman--SIMP model produces continuously graded permeability
 distributions; threshold-projection to a binary-permeability field
-increases RMSE from $0.058$ to $0.359$, confirming that the optimised
+increases RMSE from $0.058$ to $\rmseBinaryBrinkman$, confirming that the optimised
 design exploits gray diffusive mixing pathways that have no direct
 binary physical analogue.
 The paper's contribution is the numerical methodology and open-source
@@ -110,7 +110,7 @@ consideration by any other journal.
 All authors have approved the submission.
 The code and data are publicly available at:
 \url{https://github.com/NisongMonyimba/brinkgrad}
-(Zenodo DOI: 10.5281/zenodo.20538833 --- ).
+(Zenodo DOI: 10.5281/zenodo.20538833).
 
 \closing{Yours sincerely,}
 

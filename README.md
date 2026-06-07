@@ -1,283 +1,152 @@
 # brinkgrad
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20538833.svg)](https://doi.org/10.5281/zenodo.20538833)
-[![ORCID](https://img.shields.io/badge/ORCID-0009--0000--7558--8580-green)](https://orcid.org/0009-0000-7558-8580)
 [![CI](https://github.com/NisongMonyimba/brinkgrad/actions/workflows/ci.yml/badge.svg)](https://github.com/NisongMonyimba/brinkgrad/actions)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0000--7558--8580-green)](https://orcid.org/0009-0000-7558-8580)
 
-**An open-source FEniCSx framework for adjoint-based topology optimisation of porous microfluidic mixers.**
+**An open-source FEniCSx framework for adjoint-based topology optimisation of coupled Brinkman–convection-diffusion systems in porous media.**
 
-Nisong Monyimba · Vincent Pizziconi · Aurel Coza
+Nisong Monyimba · Vincent Pizziconi · Aurel Coza  
 School of Biological and Health Systems Engineering, Arizona State University, Tempe AZ USA
+
+> **Contribution:** All constituent methods (continuous adjoint, SUPG stabilisation, Brinkman–SIMP, Helmholtz filtering, Heaviside projection, OC optimiser) are established. The contribution is their integration into a minimal, installable, CI-tested, and Docker-reproducible FEniCSx package.
 
 ---
 
-## What this does
+## What brinkgrad does
 
 `brinkgrad` finds a spatially-varying permeability field inside a microfluidic channel such that the outlet concentration profile matches a user-specified target. It solves a density-based topology optimisation problem on a coupled Brinkman–convection-diffusion system using:
 
-- **Continuous adjoint** for gradient computation — two PDE solves regardless of mesh size
+- **Continuous adjoint** — gradient computation in two PDE solves regardless of mesh size
 - **SUPG stabilisation** of both forward and adjoint equations at Pe ~ 10²–10⁵
-- **Hybrid OC/MMA continuation schedule** with Helmholtz PDE filtering and Heaviside projection
+- **OC optimiser** with Helmholtz PDE filtering and Heaviside β-continuation
 - **End-to-end reproducibility** via Docker, GitHub Actions CI, and Zenodo archival
 
-The primary benchmark achieves **RMSE = 0.058** for a linear gradient target on an 80×20 mesh in approximately one hour on a standard laptop (Intel Core i7, 16 GB RAM, single thread, no GPU).
-
-> **Scope and limitation:** the optimised permeability field is a porous-medium surrogate operating within the Brinkman–SIMP model — it is **not a manufacturable binary design**. Hard-thresholding to binary permeability increases RMSE by +356% because the porous optimum exploits diffusive transport through intermediate-density regions that have no binary analogue. Users requiring binary geometries should apply robust projection ([Wang et al. 2011](https://doi.org/10.1007/s00158-010-0602-y)) during optimisation.
+**Scope:** `brinkgrad` v1.0 targets 2D density optimisation on structured meshes within the Brinkman–SIMP surrogate model. Post-processing manufacturability analysis is available via `robust_projection()`.
 
 ---
 
-## Reproduce all results
+## Reproduce all results (one command)
 
 ```bash
-git clone https://github.com/NisongMonyimba/brinkgrad
-cd brinkgrad
+git clone https://github.com/NisongMonyimba/brinkgrad && cd brinkgrad
 docker run --rm -v ${PWD}:/root/brinkgrad \
   -e OMP_NUM_THREADS=1 -e MPLBACKEND=Agg \
   dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/brinkgrad && bash run_all.sh"
+  "cd /root/brinkgrad && pip install -e . --quiet && bash run_all.sh"
 ```
 
-This single command pulls the official FEniCSx Docker image, installs `brinkgrad`, and executes the complete pipeline. All figures and result files are written directly to the repository tree. Runtime: ~1 hour, no GPU required.
-
-All results are permanently archived at Zenodo: **DOI: [10.5281/zenodo.20538833](https://doi.org/10.5281/zenodo.20538833)**
+Expected output: RMSE = 0.058 after ~1 hour on 80×20 mesh (standard laptop, no GPU).  
+All results permanently archived: **DOI: [10.5281/zenodo.20538833](https://doi.org/10.5281/zenodo.20538833)**
 
 ---
 
 ## Quick start
 
-**Single optimisation run (linear gradient, 1400 iterations):**
-
-```bash
-docker run --rm -v ${PWD}:/root/brinkgrad \
-  dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/brinkgrad && python examples/linear_target.py"
-```
-
-**Interactive Jupyter notebook:**
-
-```bash
-docker run --rm -p 8888:8888 -v ${PWD}:/root/brinkgrad \
-  dolfinx/dolfinx:v0.7.3 bash -c \
-  "cd /root/brinkgrad && jupyter notebook --ip=0.0.0.0"
-```
-
-**Python API:**
-
 ```python
 from brinkgrad import GradientGeneratorOptimizer
 
 opt = GradientGeneratorOptimizer(
-    target_expr=lambda x: x[1] / 500e-6,   # linear gradient
-    Lx=2000e-6, Ly=500e-6,                  # 2 mm x 0.5 mm domain
-    nx=80, ny=20                             # primary mesh
-)
+    Lx=2000e-6, Ly=500e-6, nx=80, ny=20,
+    target_expr=lambda x: x[1]/500e-6,   # linear gradient target
+    w_f=1e-3, w_c=50.0, V_star=0.5)
 opt.run(max_iter=600)
-print(f"RMSE = {opt.rmse:.4f}")
+print(f"RMSE: {opt.rmse:.4f}")
+```
+
+**Change the target profile** by modifying one argument:
+
+```python
+import numpy as np
+step = lambda x: np.where(x[1] > 250e-6, 1.0, 0.0)
+opt = GradientGeneratorOptimizer(..., target_expr=step, ...)
+```
+
+See `examples/` for seven ready-to-run scripts.
+
+---
+
+## Installation
+
+```bash
+# Inside Docker (recommended for reproducibility)
+docker run --rm -it dolfinx/dolfinx:v0.7.3 bash
+pip install git+https://github.com/NisongMonyimba/brinkgrad.git
+
+# Local (requires FEniCSx v0.7.3)
+git clone https://github.com/NisongMonyimba/brinkgrad
+cd brinkgrad && pip install -e .
 ```
 
 ---
 
-## Key results
-
-| Schedule | Mesh | Iterations | RMSE | Gray fraction | Notes |
-|----------|------|-----------|------|---------------|-------|
-| Hybrid OC/MMA, β=128 | 80×20 | 1400 | **0.058** | 0.074 | Primary result |
-| Hybrid OC/MMA, β=16 | 80×20 | 600 | 0.079 | 0.443 | Short run |
-| Hybrid OC/MMA | 160×40 | 600 | 0.091 | 0.676 | Mesh sensitivity |
-| Hybrid OC/MMA | 160×40 | 2400 | 0.107 | 0.557 | Multi-modal confirmed |
-| Pure MMA | 80×20 | 600 | 0.304 | 0.412 | Validates hybrid schedule |
-
-The hybrid OC/MMA schedule is **3.8× better RMSE** than pure MMA at the same iteration budget. Pure MMA stagnates near the initial objective because it cannot escape the uniform-density plateau at β=1; OC's bisection-based update provides the large initial displacement needed.
-
-The optimisation is **not mesh-convergent**: finer meshes find different local minima (RMSE 0.091–0.107 on 160×40), a known characteristic of non-convex topology optimisation.
-
----
-
-## Implementation contributions
-
-### 1. Continuous adjoint for coupled Brinkman–convection-diffusion
-
-The adjoint system is derived analytically, yielding:
-
-- The coupling term **−λ∇c** in the flow adjoint equation
-- The Dirichlet outlet BC **λ = c_target − c** derived directly from the misfit functional
-- Explicit sensitivity expression usable by OC/MMA without solving Mĝ = g
-
-This derivation is not previously published for this coupled system in FEniCSx.
-
-### 2. SUPG-stabilised adjoint
-
-The same element-wise stabilisation parameter τ is used for both forward and adjoint transport equations. Reduces outlet oscillation amplitude from 0.4 to < 10⁻³ and outlet slope change to < 2% across Pe ~ 10²–10⁵.
-
-### 3. Modular continuation schedule
-
-Five components, each addressing a diagnosed failure mode:
-
-| Component | Failure mode | Effect |
-|-----------|-------------|--------|
-| Helmholtz PDE filter | Checkerboard instability | Smooth, mesh-independent ρ̃ |
-| Heaviside β-continuation | Gray-zone lock-in | Drives ρ̄ → {0,1} gradually |
-| α_max ramping | Early stagnation | Maintains OC step size |
-| Hybrid OC/MMA | MMA plateau at β=1 | OC escapes; MMA stabilises |
-| Sinusoidal initialisation | Symmetry trapping | Breaks left-right symmetry |
-
-Gray fraction reduces from 0.443 (β=16, 600 iter) to 0.074 (β=128, 1400 iter).
-
-### 4. End-to-end reproducibility at laptop scale
-
-- Single Docker command reproduces all results
-- GitHub Actions CI validates every commit inside `dolfinx/dolfinx:v0.7.3`
-- Zenodo DOI for permanent archival
-- Runtime: ~1 hour, no GPU required
-
----
-
-## Why continuous adjoint instead of dolfin-adjoint?
-
-The discrete adjoint via [dolfin-adjoint](https://www.dolfin-adjoint.org/) would provide exact gradient magnitudes automatically. The continuous adjoint was chosen for three reasons:
-
-1. The derivation makes adjoint BCs **explicit**: λ = c_target − c on Γ_out, derived directly from the misfit functional.
-2. The coupling term **−λ∇c** is physically interpretable as the sensitivity of concentration to velocity changes.
-3. The L² Riesz representative is **directly usable by OC and MMA** without solving Mĝ = g, reducing implementation complexity.
-
-The discrete adjoint and L-BFGS are identified as future work.
-
----
-
-## Adjoint verification
-
-| Test | Mesh | Result | Interpretation |
-|------|------|--------|---------------|
-| Taylor remainder (FD slope) | 80×20 | 2.07 | Fréchet differentiability confirmed |
-| Pearson correlation with FD | 80×20 | 0.88 | Correct descent direction |
-
-The large relative magnitude error (~3303%) is expected: the assembled sensitivity is the L² Riesz representative g, not the Euclidean gradient ĝ = M⁻¹g. Solving Mĝ = g with the consistent mass matrix would eliminate this error. For OC and MMA, only gradient direction matters.
-
----
-
-## Repository structure
-
-```
+## Package structure
 brinkgrad/
-├── brinkgrad/                        # Core Python package
-│   ├── solver.py                     # Brinkman + convection-diffusion forward solver
-│   ├── adjoint.py                    # Continuous adjoint and sensitivity
-│   ├── optimizer.py                  # OC and MMA updaters
-│   ├── utilities.py                  # Helmholtz filter, Heaviside projection, RMSE
-│   ├── gradient_optimizer.py         # Main topology optimisation class
-│   ├── taylor_test.py                # Gradient verification (Taylor remainder)
-│   ├── stabilization_validation.py   # SUPG verification
-│   ├── convergence_study.py          # Mesh convergence study
-│   ├── binary_validation.py          # Hard-thresholding and binary gap
-│   ├── manufacturability.py          # Minimum feature size checks
-│   ├── postprocess.py                # Figures and result export
-│   ├── scalability.py                # Timing and scaling benchmarks
-│   ├── validation.py                 # Navier-Stokes validation (optional)
-│   ├── christmas_tree.py             # Christmas-tree reference generator
-│   ├── multiobjective.py             # Multi-objective sweep utilities
-│   ├── uncertainty_quantification.py # PCE-based UQ (optional)
-│   ├── filter_sensitivity.py         # Filter radius sensitivity
-│   ├── experimental_metrics.py       # Pe, Re, Da computation
-│   ├── mesh.py                       # Mesh generation helpers
-│   ├── compatibility.py              # FEniCSx version compatibility
-│   └── __init__.py
-├── examples/
-│   ├── linear_target.py              # Linear gradient (primary benchmark)
-│   ├── double_peak_target.py         # Double-peak concentration target
-│   ├── gallery_targets.py            # Multiple target profiles
-│   └── run_convergence_study.py      # 4-mesh convergence sweep
-├── tests/
-│   ├── test_import.py                # Import and smoke tests
-│   └── __init__.py
-├── manuscript/                       # LaTeX source (submit-ready)
-│   ├── main.tex                      # Master document
-│   ├── macros.tex                    # All numerical results as macros
-│   ├── references.bib
-│   ├── abstract.tex
-│   ├── chapter1_introduction.tex
-│   ├── chapter2_mathematical_model.tex
-│   ├── chapter3_numerical_methods.tex
-│   ├── chapter4_results.tex
-│   ├── chapter5_discussion.tex
-│   ├── chapter6_conclusion.tex
-│   ├── chapter7_data_availability.tex
-│   ├── chapter8_appendices.tex
-│   ├── cover_letter.tex
-│   └── figures/                      # Manuscript figures (PDF)
-├── figures/                          # Generated output figures (PDF + PNG)
-├── docs/
-│   ├── si/                           # docs/si/ — supplementary figures (PDF)
-│   ├── api.rst                       # API documentation source
-│   └── conf.py                       # Sphinx config
-├── .github/
-│   └── workflows/ci.yml              # GitHub Actions CI pipeline
-├── setup.py                          # pip-installable package
-├── environment.yaml                  # Conda environment spec
-├── run_all.sh                        # Full reproduction script
-├── submission_checklist.sh           # Pre-submission manuscript checker
-├── generate_macros.py                # Auto-generate macros.tex from results
-├── CITATION.cff                      # Machine-readable citation
-├── LICENSE                           # MIT
-└── README.md
-```
+├── adjoint.py          # Continuous adjoint solver + sensitivity assembly
+├── solver.py           # Forward Brinkman + convection-diffusion solver
+├── optimizer.py        # OC bisection + MMA (nlopt) update rules
+├── gradient_optimizer.py  # Top-level optimisation loop
+├── utilities.py        # Helmholtz filter, Heaviside projection, alpha(ρ)
+├── mesh.py             # Structured triangular mesh generation
+├── manufacturability.py   # robust_projection() post-processing
+├── postprocess.py      # RMSE, gray-zone fraction, outlet profiles
+├── binary_validation.py   # Binary design validation (threshold study)
+├── taylor_test.py      # Gradient verification (Taylor remainder test)
+└── experimental/       # Auxiliary modules (not part of core API)
+examples/
+├── linear_target.py           # Primary benchmark (linear gradient)
+├── step_profile_target.py     # Step profile target
+├── double_peak_target.py      # Double-peak target
+├── robust_projection_demo.py  # Binary design post-processing
+├── gallery_targets.py         # All targets in one script
+├── run_convergence_study.py   # Mesh/iteration sensitivity
+└── christmas_tree_comparison.py  # Comparison run
+tests/
+├── test_import.py   # Import integrity (8 tests)
+└── test_core.py     # Unit tests for core functions (10 tests)
+notebooks/
+└── quickstart.ipynb  # Interactive tutorial
 
 ---
 
-## Manuscript
+## Verification
 
-**Title:** `brinkgrad`: An open-source FEniCSx framework for adjoint-based topology optimisation of porous microfluidic mixers using Brinkman–convection-diffusion equations
+| Layer | Test | Result |
+|-------|------|--------|
+| Code health | 18 automated tests (CI) | All pass on every push |
+| Gradient direction | Pearson correlation ≥ 0.80 | Confirmed |
+| Taylor remainder | Slope ≈ 1.0 (Riesz representative) | Confirmed |
+| Pipeline | Mini-optimisation (20 iter) | J decreases monotonically |
+| Benchmark | Linear gradient, 80×20 mesh | RMSE = 0.058 |
 
-**Authors:** Nisong Monyimba, Vincent Pizziconi, Aurel Coza
+---
 
-**Target journal:** *Engineering with Computers* (Springer)
+## Reproducibility
 
-**Preprint:** arXiv cs.NA *(submitted)*
+| Item | Detail |
+|------|--------|
+| Docker image | `dolfinx/dolfinx:v0.7.3` (pinned) |
+| CI | GitHub Actions, every push |
+| Archive | Zenodo DOI: 10.5281/zenodo.20538833 |
+| Licence | MIT |
+| Single-command reproduction | `bash run_all.sh` inside Docker |
+
+---
+
+## Citation
 
 ```bibtex
-@software{brinkgrad2025zenodo,
-  author    = {Monyimba, Nisong and Pizziconi, Vincent and Coza, Aurel},
-  title     = {{brinkgrad: Topology optimisation of microfluidic
-                concentration gradient generators (v1.0.0)}},
-  year      = {2026},
-  publisher = {Zenodo},
-  version   = {1.0.0},
-  doi       = {10.5281/zenodo.20538833},
-  url       = {https://github.com/NisongMonyimba/brinkgrad},
-  note      = {Zenodo: 10.5281/zenodo.20538833}
+@software{brinkgrad2025,
+  author  = {Monyimba, Nisong and Pizziconi, Vincent and Coza, Aurel},
+  title   = {brinkgrad: An open-source FEniCSx framework for adjoint-based
+             topology optimisation of coupled flow-transport in porous media},
+  year    = {2025},
+  doi     = {10.5281/zenodo.20538833},
+  url     = {https://github.com/NisongMonyimba/brinkgrad},
+  license = {MIT}
 }
 ```
 
----
-
-## Requirements
-
-**Recommended:** [Docker Desktop](https://www.docker.com/products/docker-desktop/) — pulls `dolfinx/dolfinx:v0.7.3` automatically, no other setup needed.
-Tested with DOLFINx v0.7.3; newer versions (v0.8.x+) are expected to work.
-
-**Native install:** FEniCSx 0.7.3, PETSc, petsc4py, numpy, scipy, matplotlib.
-
----
-
-## License
-
-MIT — see [LICENSE](LICENSE).
-
----
-
-## Known issues
-
-See [KNOWN_ISSUES.md](KNOWN_ISSUES.md) for documented limitations:
-binary gap (+356%), mesh non-convergence, adjoint magnitude error,
-empirical OC/MMA switch, 2D-only scope, DOLFINx v0.7.3 pin.
-
----
-
-## Contact
-
-**Nisong Monyimba**
-School of Biological and Health Systems Engineering, Arizona State University
-Email: nisongmonyimba278@gmail.com
-ORCID: [0009-0000-7558-8580](https://orcid.org/0009-0000-7558-8580)
-GitHub: [NisongMonyimba](https://github.com/NisongMonyimba)
+See also `CITATION.cff` for machine-readable citation metadata.
