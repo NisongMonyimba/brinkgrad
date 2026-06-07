@@ -529,7 +529,7 @@ Public functions / classes   & 68   & across 9 modules \\
 Unit tests                   & 10   & \texttt{tests/test\_core.py} + \texttt{test\_import.py} \\
 CI integration tests         & 7    & inline in \texttt{ci.yml} \\
 Total automated tests        & 18   & 10 unit + 8 integration, every push \\
-Test coverage                & import-level & 18 tests exercise full pipeline via CI \\
+Test coverage                & 52\% utilities; full pipeline via CI regression test \\
 Runtime dependencies         & 3    & \texttt{numpy}, \texttt{scipy}, \texttt{matplotlib} \\
 Runtime (80$\times$20, 1 iter) & $\sim$1\,s & 8-core laptop \\
 Peak memory (20$\times$5, 50 iter) & 29.5\,MB & \texttt{tracemalloc} \\
@@ -678,7 +678,9 @@ adjoint descent direction, OC volume constraint,
 MMA volume constraint, and the $\alpha$ floor.
 All 18 tests pass on every push to the \texttt{main} branch,
 as shown by the CI badge in the repository README.
-Import-level coverage is supplemented by the CI regression test (Test~7),
+Pure-Python utility coverage is $52\%$ (\texttt{utilities.py});
+FEniCSx-dependent modules (solver, adjoint, optimiser) are
+validated via the CI regression test (Test~7),
 which exercises the full optimisation pipeline
 (forward solve, adjoint, OC update, $\beta$-continuation)
 on every commit.

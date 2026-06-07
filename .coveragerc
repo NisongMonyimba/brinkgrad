@@ -1,0 +1,17 @@
+[run]
+source = brinkgrad
+omit =
+    brinkgrad/christmas_tree.py
+    brinkgrad/experimental_metrics.py
+    brinkgrad/filter_sensitivity.py
+    brinkgrad/multiobjective.py
+    brinkgrad/scalability.py
+    brinkgrad/taylor_test.py
+    brinkgrad/uncertainty_quantification.py
+    brinkgrad/convergence_study.py
+    brinkgrad/stabilization_validation.py
+    brinkgrad/validation.py
+    brinkgrad/validation_3d.py
+    brinkgrad/compatibility.py
+    brinkgrad/binary_validation.py
+    brinkgrad/postprocess.py
