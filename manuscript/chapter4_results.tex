@@ -282,9 +282,20 @@ balancing flow conductance with porous mixing capacity.
 
 \texttt{brinkgrad} supports arbitrary outlet concentration targets
 by changing a single argument (\texttt{target\_expr}).
-Table~\ref{tab:gallery} summarises results for three target profiles
-included in \texttt{examples/};
-all use the same solver, adjoint, filter, and optimiser.
+Figure~\ref{fig:gallery} shows the outlet concentration profiles
+for three targets; Table~\ref{tab:gallery} summarises the RMSE.
+All examples use the same solver, adjoint, filter, and optimiser.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{figures/gallery_profiles.pdf}
+\caption{Outlet concentration profiles for three target functions
+         (red dashed: target $c^*$; blue solid: optimised $c$).
+         All runs use the default OC optimiser and volume constraint $V^*=0.5$.
+         The framework is agnostic to the target profile;
+         only \texttt{target\_expr} changes between examples.}
+\label{fig:gallery}
+\end{figure}
 
 \begin{table}[h]
 \centering\small
