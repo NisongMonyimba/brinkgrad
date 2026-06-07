@@ -1,102 +1,29 @@
 API Reference
 =============
 
-.. automodule:: micrograd
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Core
+----
 
-.. automodule:: micrograd.mesh
+.. automodule:: brinkgrad.gradient_optimizer
    :members:
-   :undoc-members:
-   :show-inheritance:
 
-.. automodule:: micrograd.solver
+.. automodule:: brinkgrad.solver
    :members:
-   :undoc-members:
-   :show-inheritance:
 
-.. automodule:: micrograd.adjoint
+.. automodule:: brinkgrad.adjoint
    :members:
-   :undoc-members:
-   :show-inheritance:
 
-.. automodule:: micrograd.optimizer
+.. automodule:: brinkgrad.optimizer
    :members:
-   :undoc-members:
-   :show-inheritance:
 
-.. automodule:: micrograd.utilities
+.. automodule:: brinkgrad.utilities
    :members:
-   :undoc-members:
-   :show-inheritance:
 
-.. automodule:: micrograd.postprocess
+.. automodule:: brinkgrad.mesh
    :members:
-   :undoc-members:
-   :show-inheritance:
 
-.. automodule:: micrograd.gradient_optimizer
+.. automodule:: brinkgrad.manufacturability
    :members:
-   :undoc-members:
-   :show-inheritance:
 
-.. automodule:: micrograd.validation
+.. automodule:: brinkgrad.postprocess
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.validation_3d
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.experimental_metrics
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.manufacturability
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.compatibility
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.scalability
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.convergence_study
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.filter_sensitivity
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.stabilization_validation
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.uncertainty_quantification
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.multiobjective
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-.. automodule:: micrograd.christmas_tree
-   :members:
-   :undoc-members:
-   :show-inheritance:
