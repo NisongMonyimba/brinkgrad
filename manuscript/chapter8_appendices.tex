@@ -307,3 +307,44 @@ $D_{\min}$ is negligible; the binary gap is a property of the
 topology, not a numerical artefact.
 Body-fitted Navier--Stokes validation on a purpose-designed binary
 multi-channel manifold is deferred to future work.
+
+\subsection*{SB: Anticipated reviewer questions}
+\label{sec:for_reviewers}
+
+\begin{table}[h]
+\centering\small
+\caption{Anticipated reviewer concerns and brief responses.}
+\label{tab:for_reviewers}
+\begin{tabular}{@{}p{3.5cm}p{8.7cm}@{}}
+\toprule
+\textbf{Concern} & \textbf{Response} \\
+\midrule
+Is this novel? &
+To the authors' knowledge, no openly documented FEniCSx implementation
+combining coupled Brinkman--CD, SUPG-stabilised adjoint,
+CI verification, and Docker reproducibility has been reported
+(Table~\ref{tab:comparison}). \\[4pt]
+Why not dolfin-adjoint? &
+dolfin-adjoint requires custom user implementation of coupled physics,
+SUPG at high Pe, and Docker reproducibility;
+\texttt{brinkgrad} provides all three out-of-the-box
+(Table~\ref{tab:comparison}). \\[4pt]
+Is the adjoint correct? &
+Direction test (Pearson $\geq0.80$) and Taylor slope $\approx1$
+(Section~\ref{sec:taylor_test}); practical convergence in
+Table~\ref{tab:mma_comparison}. \\[4pt]
+Is it reproducible? &
+Docker~+~CI~+~Zenodo~+~\texttt{bash run\_all.sh};
+numerically reproducible within the pinned environment
+(Table~\ref{tab:repro_checklist}). \\[4pt]
+What is the runtime? &
+$\approx$1~hour for 1{,}400 iterations on $80\times20$ mesh;
+$\approx$30~min for 600~iterations (RMSE~$=\rmseShortRun$). \\[4pt]
+Can I extend it? &
+New objective: $\sim$8 lines of UFL (Section~\ref{sec:extensibility}).
+New target: one argument change (Section~\ref{sec:practical}). \\[4pt]
+Why 2D only? &
+Microfluidic devices are typically 2D; 3D is in the roadmap. \\
+\bottomrule
+\end{tabular}
+\end{table}
