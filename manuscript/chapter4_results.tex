@@ -199,10 +199,16 @@ the optimiser achieves an $\rmseImprovement\%$ reduction
 relative to the volume-constrained baseline.
 The void channel is listed in Table~\ref{tab:context}
 for completeness with a constraint-violation note.
-After $\nIterPrimary$ iterations on the $80\times20$ mesh,
-the implementation achieves RMSE~$=\rmseTopOpt$
-($\rmseTopOptPP$\,pp; Eq.~\eqref{eq:rmse})
-and hydraulic resistance $\hydResTopOpt$\,Pa$\cdot$s/m$^2$.
+Three heuristic baselines (all satisfying $V^*=0.5$) were evaluated
+with a single forward solve (no optimisation):
+uniform $\rho=0.5$ (RMSE~$=\rmseHeuristic$),
+a 3-channel manifold with two horizontal walls (RMSE~$=\rmseThreeCh$),
+and a sinusoidal-wall pattern (RMSE~$=0.421$).
+The optimiser reduces RMSE to $\rmseTopOpt$ after $\nIterPrimary$
+iterations --- an 81\% improvement over the best heuristic.
+This confirms that the adjoint-based optimiser adds genuine value
+beyond simple geometric heuristics.
+Hydraulic resistance: $\hydResTopOpt$\,Pa$\cdot$s/m$^2$.
 A 600-iteration run yields RMSE~$=\rmseShortRun$ in under 30 minutes.
 
 \begin{figure}[t]
