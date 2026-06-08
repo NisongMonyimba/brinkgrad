@@ -89,24 +89,11 @@ $(\mathbf{v},q,\lambda)$, and finally assembling
 the volume integral~\eqref{eq:sensitivity}.
 
 
-\paragraph{Smooth differentiable penalty.}
-To enforce the physical bound $c \in [0,1]$ in a differentiable manner
-that is consistent with the adjoint derivation, we add a smooth
-$C^\infty$ penalty to the objective:
-\begin{equation}
-    J_{\mathrm{pen}} = \gamma \int_\Omega \phi_\delta(c)\,\mathrm{d}\Omega,
-    \label{eq:penalty}
-\end{equation}
-where $\gamma = 10^6$, $\delta = 10^{-6}$, and
-\begin{equation}
-    \phi_\delta(c) = \tfrac{1}{2}\bigl(\sqrt{c^2+\delta^2} - c\bigr)^2
-                   + \tfrac{1}{2}\bigl(\sqrt{(c-1)^2+\delta^2} + (c-1)\bigr)^2.
-    \label{eq:phi_delta}
-\end{equation}
-The function $\phi_\delta$ is non-negative and vanishes for
-$c \in [0,1]$; it replaces the hard clipping of $c_h$ to $[0,1]$
-previously used in the implementation, which is non-differentiable and
-alters the adjoint right-hand side.
+\paragraph{Concentration bounds.}
+The adjoint outlet condition $\lambda = c_{\mathrm{target}} - c$
+is assembled using the raw solver output $c_h$.
+In the operating regime studied, $c_h \in [0,1]$ naturally;
+no penalty is required.
 
 
 \paragraph{Adjoint formulation.}
