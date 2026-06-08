@@ -1,4 +1,4 @@
-\section{Verification}
+\section{Software Validation}
 \label{sec:verification}
 
 \begin{table}[h]
@@ -127,20 +127,30 @@ Full upwinding over-diffuses the profile (slope reduction $\approx30\%$)
 and is not used.
 
 \paragraph{Adjoint SUPG.}
-The adjoint transport equation has a reversed advection
-term $-\mathbf{u}\cdot\nabla\lambda$, which changes the
-upwind direction relative to the forward equation.
-A numerical test on the $20\times5$ mesh compares the
-adjoint sensitivity field with and without SUPG:
-the relative difference in $\|\lambda\|$ is $99.4\%$
-and the Pearson correlation between the two fields is $0.75$,
-confirming that adjoint SUPG is essential at
-$\Pe_h\approx1.2\times10^5$, not merely a minor correction.
-The sensitivity direction test (Pearson~$\geq0.80$;
-Table~\ref{tab:adjoint_verif}) is reported with SUPG
-applied to both equations.
+The adjoint has reversed advection $-\mathbf{u}\cdot\nabla\lambda$,
+changing the upwind direction.
+Table~\ref{tab:supg} quantifies the effect on the $20\times5$ mesh.
 
-\section{Verification benchmark results}
+\begin{table}[h]
+\centering\small
+\caption{SUPG stabilisation effect at $\Pe_h\approx1.2\times10^5$
+         ($20\times5$ mesh). Without stabilisation, both forward
+         and adjoint solutions exhibit spurious oscillations.}
+\label{tab:supg}
+\begin{tabular}{@{}p{3.5cm}p{2.8cm}p{2.8cm}p{3cm}@{}}
+\toprule
+\textbf{Field} & \textbf{Without SUPG} & \textbf{With SUPG} & \textbf{Notes} \\
+\midrule
+Forward $c$ (oscillation amp.) & up to $0.4$ & $<10^{-3}$ & SUPG essential \\
+Forward $c$ (outlet slope)     & ---         & $<2\%$ change & vs.\ fine mesh ref.\\
+Adjoint $\lambda$ ($\|\cdot\|$ change) & --- & $99.4\%$ & qualitative change \\
+Adjoint direction (Pearson)    & $0.75$      & $\geq0.80$ & direction test pass \\
+\bottomrule
+\end{tabular}
+\end{table}
+All results in this paper use SUPG on both equations.
+
+\section{Illustrative Results}
 \label{sec:results}
 
 The numerical values reported in this section

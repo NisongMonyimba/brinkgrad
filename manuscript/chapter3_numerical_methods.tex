@@ -1,4 +1,4 @@
-\section{Numerical Implementation}
+\section{Software Architecture and Implementation}
 \label{sec:methods}
 
 \subsection{Finite element discretisation}
@@ -293,7 +293,7 @@ The complete pipeline is released as \texttt{brinkgrad} (MIT licence) at
 
 \paragraph{Quick start.}
 All results are reproducible from a single command
-(full checklist: Table~\ref{tab:repro_checklist}):
+(\texttt{make reproduce}; full checklist: Table~\ref{tab:repro_checklist}):
 \begin{lstlisting}[language=bash,breaklines=true]
 git clone https://github.com/NisongMonyimba/brinkgrad && cd brinkgrad
 docker run --rm -v ${PWD}:/root/brinkgrad dolfinx/dolfinx:v0.7.3 \
