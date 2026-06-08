@@ -114,12 +114,11 @@ non-zero sensitivity from the first iteration:
   \label{eq:sinusoidal_init}
 \end{equation}
 
-\paragraph{Smooth concentration penalty.}
-Rather than clipping $c_h$ to $[0,1]$ (a non-differentiable operation
-that corrupts the adjoint right-hand side), we add the smooth penalty
-$J_{\mathrm{pen}}$ (Eq.~\eqref{eq:penalty}) to the objective.
-This $C^\infty$, vanishes for $c \in [0,1]$, and contributes a
-consistent term to the sensitivity.
+\paragraph{Concentration bounds.}
+The adjoint outlet condition $\lambda = c_{\mathrm{target}} - c$
+is assembled using the raw solver output $c_h$.
+In practice $c_h \in [0,1]$ for the operating regime studied;
+the full smooth penalty derivation is in Supplementary~SA for completeness.
 
 \paragraph{Heaviside sharpening.}
 The projection parameter $\beta$ (Eq.~\eqref{eq:heaviside}) is increased
