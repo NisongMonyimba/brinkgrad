@@ -475,7 +475,9 @@ Public functions / classes   & 68   & across 9 modules \\
 Unit tests                   & 10   & \texttt{tests/test\_core.py} + \texttt{test\_import.py} \\
 CI integration tests         & 7    & inline in \texttt{ci.yml} \\
 Total automated tests        & 18   & 10 unit + 8 integration, every push \\
-Test coverage                & 52\%   & utilities.py; FEniCSx modules via CI pipeline \\
+Coverage (\texttt{utilities.py})  & 52\%   & pure-Python; measured locally \\
+Coverage (FEniCSx modules)        & CI     & solver, adjoint, optimiser validated\\
+                                  &        & via 8 integration tests on every push \\
 Runtime dependencies         & 3    & \texttt{numpy}, \texttt{scipy}, \texttt{matplotlib} \\
 Runtime (80$\times$20, 1 iter) & $\sim$1\,s & 8-core laptop \\
 Peak memory (20$\times$5, 50 iter) & 29.5\,MB & \texttt{tracemalloc} \\
