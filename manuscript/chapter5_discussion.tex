@@ -364,6 +364,13 @@ filter bugs, and volume-constraint failures.
 \label{sec:roadmap}
 \label{sec:limitations}
 \label{sec:known_limitations}
+\texttt{brinkgrad} v1.0 targets 2D structured meshes.
+Microfluidic devices are typically fabricated as planar structures,
+making 2D optimisation physically appropriate for the target application.
+Three-dimensional extension is in the project roadmap;
+the modular architecture (separate solver, adjoint, optimiser)
+supports this without structural changes.
+
 \texttt{brinkgrad} v1.0 targets 2D prototyping
 on structured meshes; users can supply any \texttt{dolfinx}
 mesh object via the API (\texttt{nx}, \texttt{ny} arguments
