@@ -141,10 +141,10 @@ Table~\ref{tab:supg} quantifies the effect on the $20\times5$ mesh.
 \toprule
 \textbf{Field} & \textbf{Without SUPG} & \textbf{With SUPG} & \textbf{Notes} \\
 \midrule
-Forward $c$ (oscillation amp.) & up to $0.4$ & $<10^{-3}$ & SUPG essential \\
-Forward $c$ (outlet slope)     & ---         & $<2\%$ change & vs.\ fine mesh ref.\\
-Adjoint $\lambda$ ($\|\cdot\|$ change) & --- & $99.4\%$ & qualitative change \\
-Adjoint direction (Pearson)    & $0.75$      & $\geq0.80$ & direction test pass \\
+Forward $c$ (oscillation amp.) & up to $0.4$  & $<10^{-3}$   & SUPG essential \\
+Forward $c$ (outlet slope err) & $\sim30\%$ & $<2\%$      & vs.\ fine-mesh ref.\\
+Adjoint $\|\lambda\|_{L^2}$  & baseline    & $+99.4\%$   & qualitative change \\
+Adjoint direction (Pearson)    & $0.75$       & $\geq0.80$  & direction test pass \\
 \bottomrule
 \end{tabular}
 \end{table}
