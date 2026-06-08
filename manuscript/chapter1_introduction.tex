@@ -12,46 +12,41 @@ Microfluidic systems provide a natural benchmark application because the
 small length scales of soft-lithography devices make manual re-design
 expensive and simulation-driven optimisation increasingly accessible~\cite{whitesides2006}.
 
-Despite growing interest, several computational gaps remain in the
-open-source literature on coupled flow-transport topology optimisation.
+A reusable framework for coupled flow-transport topology optimisation
+in FEniCSx must satisfy five requirements:
 
-\subsection*{Gaps addressed by this work}
+\subsection*{Software requirements}
 
-\emph{Gap~1: Open-source implementation of coupled
-flow-transport topology optimisation.}
-Existing open-source topology optimisation codes for fluidic systems
-target pure flow~\cite{borrvall2003} or global scalar
-mixing~\cite{na2022}.
-FEniCSx-based frameworks exist for structural problems~\cite{dokken2023}
-and Stokes flow~\cite{lazarov2016}, but a documented, tested,
-and reproducible open-source implementation for the coupled
-Brinkman--convection-diffusion system with a boundary
-concentration-mismatch objective has not been published.
-The linear gradient benchmark is chosen for verifiability:
-it has a known target, a measurable RMSE, and is reproducible
-from a single command.
+\textbf{R1.~Coupled physics.}
+Solve Brinkman flow and convection-diffusion transport simultaneously
+with a concentration-mismatch objective.
+Existing FEniCSx codes target pure flow~\cite{borrvall2003}
+or structural problems~\cite{dokken2023};
+coupled flow-transport requires additional implementation effort.
 
-\emph{Gap~2: High-P\'{e}clet transport in FEniCSx TO.}
-Existing FEniCSx topology optimisation
-implementations~\cite{dokken2023} operate at $\Pe\ll1$
-and do not require transport stabilisation.
-At microfluidic P\'{e}clet numbers ($\Pe\sim10^2$--$10^5$),
-SUPG stabilisation of both forward and adjoint equations
-is required~\cite{brooks1982,donea2003}; we document
-this standard technique in the FEniCSx UFL context.
+\textbf{R2.~High-P\'{e}clet stability.}
+Stabilise both forward and adjoint transport at
+$\Pe\sim10^2$--$10^5$ (microfluidic operating regime).
+Existing FEniCSx topology optimisation~\cite{dokken2023}
+operates at $\Pe\ll1$ and does not require stabilisation.
 
-\emph{Gap~3: End-to-end reproducibility.}
-Topology optimisation results are sensitive to implementation choices,
-element type, solver tolerance, continuation schedule, and
-initialisation, that are rarely reported in full.
+\textbf{R3.~Adjoint sensitivity.}
+Compute $\mathrm{d}J/\mathrm{d}\rho$ in two PDE solves
+per iteration, independently of the number of design variables.
+
+\textbf{R4.~End-to-end reproducibility.}
+Provide Docker, CI, and versioned archival so that every result
+is reproducible from a single command.
 Published microfluidic topology optimisation results~\cite{na2022,feppon2024}
-are not accompanied by open-source code, making independent
-verification and extension difficult.
-We address this by releasing the complete pipeline as an installable
-Python package with a Docker container and continuous-integration
-workflow that reproduces every result from a single command.
+are not accompanied by open-source code.
 
-Table~\ref{tab:comparison} compares out-of-the-box workflow support
+\textbf{R5.~Extensibility.}
+Allow users to change objectives, targets, and constraints
+with minimal code changes.
+
+Table~\ref{tab:comparison} compares existing frameworks against these requirements;
+\texttt{brinkgrad} is designed to meet all five out-of-the-box.
+
 across frameworks; all frameworks can in principle be extended.
 
 \begin{table}[h]
