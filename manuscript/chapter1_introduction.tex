@@ -27,9 +27,9 @@ and Stokes flow~\cite{lazarov2016}, but a documented, tested,
 and reproducible open-source implementation for the coupled
 Brinkman--convection-diffusion system with a boundary
 concentration-mismatch objective has not been published.
-The linear gradient benchmark is chosen for verifiability
-as a sanity check; the framework's primary contribution
-is the implementation methodology, not the benchmark RMSE.
+The linear gradient benchmark is chosen for verifiability:
+it has a known target, a measurable RMSE, and is reproducible
+from a single command.
 
 \emph{Gap~2: High-P\'{e}clet transport in FEniCSx TO.}
 Existing FEniCSx topology optimisation
@@ -135,12 +135,12 @@ suitable for research and education.
 
 \paragraph{Nature of contribution.}
 This paper is a \emph{software implementation paper}.
-The contribution is not a new optimisation algorithm,
-not a record-breaking RMSE.
+The contribution is a documented, tested, and reproducible
+open-source implementation.
 The contribution is a documented, tested, and reproducible
 open-source implementation of adjoint-based topology optimisation
-for a coupled Brinkman--convection-diffusion system in FEniCSx;
-something that does not currently exist in the open-source literature.
+for a coupled Brinkman--convection-diffusion system in FEniCSx
+(Table~\ref{tab:comparison}).
 
 \paragraph{Scope and limitations.}
 \texttt{brinkgrad}\footnote{The package is named \texttt{brinkgrad}
