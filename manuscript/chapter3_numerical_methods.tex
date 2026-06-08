@@ -129,11 +129,7 @@ through the sequence
 \]
 with 80 iterations per level (iterations 0--159 at $\beta=1$,
 160--239 at $\beta=2$, and so on).
-The gray-zone fraction at $\beta=\betaMax$ (primary result) is $\grayFrac$;
-an extended 1400-iteration run with $\beta\in\{32,64,96,128\}$ further
-reduces the gray-zone fraction to $\grayFrac$
-(see Section~\ref{sec:thresholding})
-(Section~\ref{sec:thresholding}).
+Gray-zone fraction and thresholding results are in Supplementary~S5.
 
 \paragraph{Brinkman penalty ramping.}
 $\alpha_{\max}$ is ramped logarithmically from $\alphaMaxStart$ to
@@ -393,7 +389,7 @@ Engineering with Computers software paper format:
     \item \textbf{Reproducibility by design.}
           All randomness is seeded; all hyperparameters are
           exposed as arguments with defaults matching the
-          published results; all outputs (RMSE, gray fraction,
+          published results; all outputs (RMSE,
           convergence history) are written to \texttt{results/}
           as JSON for programmatic access.
 

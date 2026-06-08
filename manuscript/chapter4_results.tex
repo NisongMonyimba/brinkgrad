@@ -230,16 +230,11 @@ A 600-iteration run yields RMSE~$=\rmseShortRun$ in under 30 minutes.
 
 \subsection{Porous-medium scope}
 \label{sec:thresholding}
-The primary run uses $\nIterPrimary$ iterations
-with $\beta$-continuation to $\beta=\betaMax$,
-giving gray-zone fraction $\grayFrac$ and fluid volume $\fluidVol$.
-A shorter 600-iteration run gives RMSE~$=\rmseShortRun$
-(gray fraction $\grayShortRun$).
 \texttt{brinkgrad} targets Brinkman--SIMP density optimisation
-and inherits gray-region behaviour characteristic of density methods;
-a thresholding study is in Supplementary~S5.
-Robust projection (\texttt{robust\_projection()}) is implemented
-and its integration into the optimisation loop is planned.
+and inherits intermediate-density behaviour characteristic of
+density methods (see Section~\ref{sec:mathematical_model}).
+Thresholding and binary gap results are in Supplementary~S5.
+
 
 % V* sweep condensed — full data in Supplementary
 \paragraph{Volume fraction.}

@@ -286,7 +286,7 @@ The optimised design reduces RMSE to $\rmseTopOpt$
 confirming that the OC loop reduces the objective
 relative to the uniform initialisation.
 Baseline details are in Table~\ref{tab:context}.
-The binary-thresholded design (RMSE~$=\rmseBinaryBrinkman$)
+Thresholded geometries are evaluated in Supplementary~S5.
 provides an honest lower bound on what is achievable
 with a physical geometry at this Pe.
 
@@ -304,7 +304,7 @@ Design & RMSE & Iter & Notes \\
 \midrule
 Void ($\rho\equiv1$, $V=1.0$) & $\approx0.007$ & 0 & violates $V^*=0.5$; not a valid baseline \\
 Uniform $\rho=V^*$ & $0.450$ & 0 & Brinkman suppresses flow \\
-Binary-thresholded & $\rmseBinaryBrinkman$ & $\nIterPrimary$ & physical upper bound \\
+Thresholded design & Supplementary~S5 & --- & see Supplementary~S5 \\
 Short-run ($\beta=16$) & $\rmseShortRun$ & 600 & 30 min \\
 \textbf{Primary ($\beta=128$)} & $\mathbf{\rmseTopOpt}$ & $\nIterPrimary$ & \textbf{main result} \\
 \bottomrule
@@ -428,7 +428,7 @@ Three documented scope boundaries are noted.
           behaviour~\cite{lazarov2016}.
           The three-field robust projection~\cite{wang2011}
           is implemented in \texttt{robust\_projection()}
-          and achieves binary fraction $\robustBinaryFrac$
+          (full results in Supplementary~S5)
           (\texttt{examples/robust\_projection\_demo.py}).
 
     \item \textbf{Mesh sensitivity.}
