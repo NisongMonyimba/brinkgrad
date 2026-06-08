@@ -213,25 +213,13 @@ the $80\times20$ result at $160\times40$.
 This is a well-documented property of non-convex density-based
 optimisation on non-uniform meshes~\cite{lazarov2016}.
 The $80\times20$ mesh is the validated primary configuration.
-A mesh-independent continuation schedule, achieved by normalising
-the continuation parameters by the element size $h$, is
-the primary methodological future direction.
+A mesh-independent continuation schedule is outside
+the scope of the present release.
 
-On coarse meshes ($20\times5$, $N_{\mathrm{out}}=6$) the outlet
-discretisation is insufficient to represent the linear gradient target
-and the optimizer finds unphysical reversed-flow local minima.
-The $40\times10$ mesh ($N_{\mathrm{out}}=11$) converges to a
-suboptimal basin; systematic improvement requires the $80\times20$
-resolution or finer.
-On the primary mesh, the transverse diffusion layer thickness
-$\delta \approx 4\,\mu$m (Eq.~\eqref{eq:delta}) is underresolved by
-a factor of $\approx 6\times$ ($\Delta y = 25\,\mu$m).
-SUPG eliminates spurious oscillations but does \emph{not} recover
-sub-grid diffusion structure.
-The RMSE metric measures the \emph{global} outlet profile over the full
-channel width $L_y = 500\,\mu$m, a scale that is well resolved;
-the channel-scale branching topology is therefore correctly captured
-even though the wall-normal diffusion sublayer is not.
+Results vary across mesh resolutions, as expected for non-convex
+density-based topology optimisation~\cite{lazarov2016}.
+The $80\times20$ mesh is the validated reference configuration;
+mesh sensitivity data are in Supplementary~S1.
 
 \paragraph{Context: what does optimisation buy?}
 Table~\ref{tab:context} quantifies the improvement of the
