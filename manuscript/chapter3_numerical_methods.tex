@@ -502,21 +502,19 @@ Open-source licence          & MIT  & \href{https://github.com/NisongMonyimba/br
 \centering\small
 \caption{Mesh scaling for the linear gradient benchmark
          (600 iterations, $\beta$-continuation to $\beta=16$,
-         single thread, 8-core laptop, Ubuntu 22.04).
-         Runtime scales approximately linearly with mesh DOFs.}
+         single thread, 8-core laptop, Ubuntu~22.04).
+         DOFs = velocity + pressure + concentration;
+         runtime scales near-linearly with DOFs.}
 \label{tab:scaling}
-\begin{tabular}{@{}lrrrl@{}}
+\begin{tabular}{@{}lrrrp{2.8cm}@{}}
 \toprule
 \textbf{Mesh} & \textbf{DOFs} & \textbf{Time (s)} & \textbf{RMSE} & \textbf{Notes} \\
 \midrule
-$20\times5$   &   600  &  $\sim$30   & 0.079 & quick test \\
-$40\times10$  & 2{,}400 & $\sim$240  & 0.068 & \\
-$80\times20$  & 9{,}600 & $\sim$1800 & 0.058 & primary result \\
+$20\times5$   &    600 & $\sim$30   & 0.079 & quick test \\
+$40\times10$  &  2{,}400 & $\sim$240  & 0.068 & \\
+$80\times20$  &  9{,}600 & $\sim$1800 & 0.058 & primary result \\
 $160\times40$ & 38{,}400 & $\sim$7200 & 0.091 & high-resolution \\
 \bottomrule
-\multicolumn{5}{@{}l}{\footnotesize
-  DOFs = velocity (2$\times$mesh nodes) + pressure + concentration.
-  Runtime $\propto$ DOFs$^{1.1}$ (near-linear; dominated by PETSc solves).}
 \end{tabular}
 \end{table}
 
