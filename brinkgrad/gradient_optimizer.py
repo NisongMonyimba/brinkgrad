@@ -13,7 +13,7 @@ from .adjoint import adjoint_and_sensitivity
 from .optimizer import oc_update, mma_update, MMAUpdater, nlopt_mma_update, reset_mma_state
 from .utilities import helmholtz_filter, heaviside_projection, alpha
 from . import utilities as _ut  # for alpha_max continuation
-from .compatibility import fallback_to_oc
+from .experimental.compatibility import fallback_to_oc
 
 class GradientGeneratorOptimizer:
     def __init__(self, Lx=2000e-6, Ly=500e-6, nx=80, ny=20,

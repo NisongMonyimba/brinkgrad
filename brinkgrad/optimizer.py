@@ -9,7 +9,7 @@ try:
 except ImportError:
     from dolfinx.fem import assemble_vector as _assemble_vector
 import ufl
-from .compatibility import check_mma_available
+from .experimental.compatibility import check_mma_available
 
 
 # ─── OC update ────────────────────────────────────────────────────────────────
