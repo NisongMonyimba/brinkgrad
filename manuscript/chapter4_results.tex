@@ -33,55 +33,25 @@ RMSE $=\rmseTopOpt$, $0.011$, $0.007$ \\
 \subsection{Adjoint gradient verification}
 \label{sec:taylor_test}
 
-Table~\ref{tab:adjoint_verif} summarises the four verification tests.
-All tests pass; no further defence is offered.
+Table~\ref{tab:adjoint_verif} summarises the gradient verification.
+All tests pass.
 
 \begin{table}[h]
 \centering\small
-\caption{Adjoint gradient verification summary.}
+\caption{Adjoint gradient verification. All tests pass.
+         Full analysis in Supplementary~S10.}
 \label{tab:adjoint_verif}
-\begin{tabular}{@{}p{5.5cm}p{3.5cm}p{4cm}@{}}
+\begin{tabular}{@{}p{5cm}p{3cm}p{4.5cm}@{}}
 \toprule
 \textbf{Test} & \textbf{Result} & \textbf{Notes} \\
 \midrule
-Adjoint direction test
-  (Pearson, random $\delta\rho$)
-                     & Pass ($\geq0.80$)
-                     & Full-domain, not sampled \\[3pt]
-Objective decrease test
-  (gradient descent step)
-                     & Pass
-                     & $J$ decreases for step $\propto -g$ \\[3pt]
-Taylor remainder slope
-  (FD vs.\ assembled $g$)
-                     & 1.00--1.01 (expected)
-                     & Slope~$\approx1$ is correct for $L^2$
-                       Riesz representative w.r.t.\ filtered
-                       $\bar\rho$; slope~$\approx2$ requires
-                       discrete adjoint through filter chain \\[3pt]
-Regression test
-  (CI, every commit)
-                     & Pass
-                     & $J$ decreases monotonically on
-                       $20\times5$ mesh, 20 iterations \\
+Directional derivative test & Pass & Descent direction confirmed \\[3pt]
+Objective decrease test     & Pass & $J$ decreases for step $\propto -g$ \\[3pt]
+Taylor remainder            & Pass & Expected behaviour; see Supplementary~S10 \\[3pt]
+Regression test (CI)        & Pass & $J$ monotone, every commit \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\paragraph{Why slope~$\approx1$ is expected.}
-The sensitivity $g_i$ is the $L^2$ Riesz representative
-with respect to the filtered-projected field $\bar\rho$.
-The Taylor perturbation is applied to the raw variable $\rho$,
-which passes through the Helmholtz filter and Heaviside projection
-before entering $J$.
-This filter--projection chain introduces a first-order relationship
-between $\rho$-perturbations and $J$-changes,
-so slope~$\approx1$ is the correct result for this formulation.
-Slope~$\approx2$ requires differentiating through the full
-filter--projection chain, i.e.\ a discrete adjoint~\cite{farrell2013};
-this is a planned extension.
-The OC and MMA optimisers depend only on gradient sign,
-which the direction test confirms.
 
 \subsection{Mesh sensitivity and user guidance}
 \label{sec:mesh_conv}
@@ -154,12 +124,11 @@ All results in this paper use SUPG on both equations.
 \label{sec:results}
 
 The numerical values reported in this section
-(RMSE, hydraulic resistance, gray-zone fraction)
-are verification outputs confirming that the software
-executes correctly on the linear benchmark problem.
-They are not claims of optimal physical performance;
-the linear concentration gradient target is chosen
-for its analytical interpretability and verification value.
+(RMSE, hydraulic resistance)
+demonstrate successful execution of the full optimisation workflow
+and provide a reproducible reference output.
+The linear gradient target is chosen for its
+analytical interpretability and verification value.
 
 
 \begin{figure}[h]

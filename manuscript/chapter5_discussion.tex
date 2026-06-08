@@ -70,7 +70,8 @@ infrastructure but do not supply a ready-to-run, documented
 implementation for the coupled Brinkman--convection-diffusion
 topology optimisation problem.
 \texttt{brinkgrad} addresses five specific needs that are
-not collectively met by any existing open-source package:
+not collectively provided in a documented, tested,
+and containerised workflow known to the authors:
 \begin{enumerate}\itemsep2pt
     \item \textbf{Coupled Brinkman--transport implementation.}
           A pre-configured FEniCSx solver for the coupled
@@ -103,7 +104,7 @@ tape.
 \texttt{brinkgrad} instead derives and implements the continuous
 adjoint manually, making the adjoint boundary conditions and
 coupling terms explicit in the UFL source.
-This is pedagogically clearer for coupled flow-transport systems
+This is representing a different design choice for coupled flow-transport systems
 and avoids the overhead of tape recording for the specific
 Brinkman--convection-diffusion problem.
 dolfin-adjoint does not provide a documented, containerised
@@ -301,7 +302,7 @@ derived directly from the misfit functional);
 physically interpretable as the sensitivity of concentration to velocity;
 and (iii)~the $L^2$ Riesz representative is directly usable by OC/MMA
 without solving $M\hat{g}=g$, reducing implementation complexity.
-Discrete adjoint and L-BFGS optimisation are in the project roadmap.
+Discrete adjoint and L-BFGS optimisation are outside the scope of the present release.
 The uniform baseline gives RMSE~$\approx0.450$
 (Table~\ref{tab:context}).
 The optimised result (RMSE~$=\rmseTopOpt$) is an
@@ -367,7 +368,7 @@ filter bugs, and volume-constraint failures.
 \texttt{brinkgrad} v1.0 targets 2D structured meshes.
 Microfluidic devices are typically fabricated as planar structures,
 making 2D optimisation physically appropriate for the target application.
-Three-dimensional extension is in the project roadmap;
+Three-dimensional extension is outside the scope of the present release;
 the modular architecture (separate solver, adjoint, optimiser)
 supports this without structural changes.
 
