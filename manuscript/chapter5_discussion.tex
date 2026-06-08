@@ -85,9 +85,8 @@ not collectively met by any existing open-source package:
           Helmholtz filter, and Heaviside projection
           integrated in a single reproducible default preset.
     \item \textbf{Reproducible Docker environment.}
-          All results reproducible from a single command
-          inside a pinned \texttt{dolfinx/dolfinx:v0.7.3} image;
-          CI on every commit.
+          Pinned \texttt{dolfinx/dolfinx:v0.7.3} image;
+          CI on every commit (Table~\ref{tab:repro_checklist}).
     \item \textbf{Ready-to-run examples.}
           Seven example scripts covering linear, step,
           double-peak, and gallery targets;
@@ -155,7 +154,8 @@ as a post-processing manufacturability analysis tool;
 see \texttt{examples/robust\_projection\_demo.py}.
 
 The primary $\nIterPrimary$-iteration optimisation on the $80\times20$ mesh
-completes in approximately one hour on a standard laptop
+completes in approximately $\sim$2~hours on a standard laptop
+(Table~\ref{tab:scaling})
 (Intel Core~i7, 16\,GB RAM, single thread, no GPU required).
 A 600-iteration run completes in under thirty minutes with
 RMSE~$=\rmseShortRun$.
