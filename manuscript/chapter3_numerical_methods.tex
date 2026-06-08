@@ -518,6 +518,26 @@ $160\times40$ & 38{,}400 & $\sim$7200 & 0.091 & high-resolution \\
 \end{tabular}
 \end{table}
 
+\subsection{Error handling and diagnostics}
+\label{sec:error_handling}
+
+\texttt{brinkgrad} implements defensive checks at three levels:
+
+\begin{enumerate}\itemsep2pt
+    \item \textbf{Input validation.}
+          \texttt{target\_expr} is evaluated at mesh vertices
+          on initialisation; values outside $[0,1]$ or \texttt{NaN}
+          raise a \texttt{ValueError} with a diagnostic message.
+    \item \textbf{Solver diagnostics.}
+          If the MUMPS direct solver reports a non-positive-definite
+          matrix (degenerate Brinkman system), a \texttt{RuntimeWarning}
+          is issued and the iteration is skipped.
+    \item \textbf{OC bisection.}
+          If the Lagrange multiplier bracket does not contain a root
+          after 100 iterations, the optimiser returns the closest
+          feasible design and logs a \texttt{ConvergenceWarning}.
+\end{enumerate}
+
 \subsection{Extensibility}
 \label{sec:extensibility}
 

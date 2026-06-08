@@ -24,6 +24,26 @@ the Brinkman--SIMP modelling framework~\cite{borrvall2003}.
 \label{sec:brinkman}
 
 \paragraph{Notation for the design variable.}
+Table~\ref{tab:notation} summarises the three-field convention
+used throughout.
+
+\begin{table}[h]
+\centering\small
+\caption{Design variable notation used throughout the paper.}
+\label{tab:notation}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Range} \\
+\midrule
+$\rho$ & Raw design variable (optimised by OC/MMA) & $[0,1]$ \\
+$\tilde{\rho}$ & Filtered density (after Helmholtz PDE filter) & $[0,1]$ \\
+$\bar{\rho}$ & Physical density (after Heaviside projection) & $[0,1]$ \\
+\bottomrule
+\multicolumn{3}{@{}l}{\footnotesize
+  All PDEs use $\bar{\rho}$; sensitivity is assembled w.r.t.\ $\bar{\rho}$
+  and propagated to $\rho$ via the filter--projection chain.}
+\end{tabular}
+\end{table}
 The design variable $\rho(\mathbf{x})\in[0,1]$ is a continuous
 \emph{permeability interpolation parameter}, not a physical porosity.
 $\rho=1$ corresponds to $\alpha\approx0$ (fluid-like permeability);
