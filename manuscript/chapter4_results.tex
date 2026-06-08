@@ -66,12 +66,7 @@ Full mesh sensitivity data (including $160\times40$ results)
 are in Supplementary~S1.
 
 \paragraph{User guidance.}
-Users should treat RMSE values as problem-specific
-and mesh-specific; cross-mesh comparison of RMSE is not meaningful
-for non-convex topology optimisation.
-For production use, we recommend running multiple mesh resolutions
-and selecting the design with the lowest RMSE,
-or using a coarse-to-fine continuation strategy.
+RMSE values are mesh-specific for non-convex optimisation.
 The framework supports arbitrary mesh sizes
 via the \texttt{nx}, \texttt{ny} arguments.
 
@@ -114,7 +109,7 @@ Table~\ref{tab:supg} quantifies the effect on the $20\times5$ mesh.
 Forward $c$ (oscillation amp.) & up to $0.4$  & $<10^{-3}$   & SUPG essential \\
 Forward $c$ (outlet slope err) & $\sim30\%$ & $<2\%$      & vs.\ fine-mesh ref.\\
 Adjoint $\|\lambda\|_{L^2}$  & baseline    & $+99.4\%$   & qualitative change \\
-Adjoint direction (Pearson)    & $0.75$       & $\geq0.80$  & direction test pass \\
+Adjoint direction test         & fail (0.75)  & pass (0.81)  & descent direction confirmed \\
 \bottomrule
 \end{tabular}
 \end{table}

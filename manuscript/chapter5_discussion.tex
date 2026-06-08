@@ -105,7 +105,8 @@ tape.
 adjoint manually, making the adjoint boundary conditions and
 coupling terms explicit in the UFL source.
 This is representing a different design choice for coupled flow-transport systems
-and avoids the overhead of tape recording for the specific
+and represents a different implementation strategy based on
+an explicitly assembled continuous adjoint for the specific
 Brinkman--convection-diffusion problem.
 dolfin-adjoint does not provide a documented, containerised
 workflow for this coupled system.
@@ -139,7 +140,9 @@ solver, adjoint, and optimiser code.
 
 \subsection{Scope and computational cost}
 This paper presents a surrogate-based optimisation framework;
-the contribution is the continuous adjoint derivation, SUPG-stabilised
+the contribution is the open-source implementation, software architecture,
+validation suite, and reproducibility infrastructure for
+SUPG-stabilised
 implementation, configuration settings, and reproducibility infrastructure,
 not a directly physically realisable device design.
 The Brinkman--SIMP model produces continuously graded permeability
@@ -371,7 +374,7 @@ Three documented scope boundaries are noted.
     \item \textbf{Gradient direction, not magnitude.}
           The continuous adjoint assembles the $L^2$ Riesz representative;
           OC and MMA depend only on gradient direction
-          (Pearson corr.\ $\geq 0.80$; Table~\ref{tab:adjoint_verif}).
+          (Table~\ref{tab:adjoint_verif}).
           The Euclidean gradient $\hat{g}=M^{-1}g$ is implemented
           in \texttt{adjoint.py}; a discrete adjoint~\cite{farrell2013}
           enabling L-BFGS is the primary algorithmic future direction.
