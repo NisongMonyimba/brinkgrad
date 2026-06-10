@@ -138,16 +138,13 @@ Table~\ref{tab:gallery}); all three examples use identical
 solver, adjoint, and optimiser code.
 
 \subsection{Scope and computational cost}
-This paper presents a surrogate-based optimisation framework;
-The contribution of this work is the open-source implementation,
-software architecture, validation suite, and reproducibility infrastructure
-for coupled Brinkman--convection-diffusion topology optimisation in FEniCSx.
-The paper does not claim a new optimisation algorithm
+This work presents an open-source FEniCSx implementation of
+adjoint-based topology optimisation for coupled
+Brinkman--convection-diffusion systems.
+The contribution is the software architecture, validation suite,
+and reproducibility infrastructure,
+rather than a new optimisation algorithm
 or a directly manufacturable device design.
-SUPG stabilisation applies to both forward and adjoint transport;
-the contribution is the
-implementation, configuration settings, and reproducibility infrastructure,
-not a directly physically realisable device design.
 The Brinkman--SIMP model produces continuously graded permeability
 distributions that exploit diffusive mixing through intermediate-density
 porous regions; this is a well-established modelling choice in
