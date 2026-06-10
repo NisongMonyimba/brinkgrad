@@ -166,10 +166,9 @@ completes in approximately $\sim$2~hours on a standard laptop
 (Intel Core~i7, 16\,GB RAM, single thread, no GPU required).
 A 600-iteration run completes in under thirty minutes with
 RMSE~$=\rmseShortRun$.
-This is competitive with the state of the art: finite-difference
-sensitivity methods require $\mathcal{O}(N)$ forward solves per
-iteration (prohibitive at $N=1600$), while the continuous adjoint
-requires only two adjoint solves regardless of $N$,
+The adjoint formulation reduces sensitivity-computation cost
+from $\mathcal{O}(N)$ forward solves (finite differences)
+to a constant number of adjoint solves per iteration,
 See Table~\ref{tab:scaling} for mesh-resolved runtimes.
 
 \paragraph{Computational cost breakdown.}
@@ -267,7 +266,7 @@ Short-run ($\beta=16$) & $\rmseShortRun$ & 600 & 30 min \\
 Table~\ref{tab:comparison} (Section~\ref{sec:introduction}) compares
 the architectural features of \texttt{brinkgrad} against existing
 open-source frameworks.
-We highlight three specific advantages.
+We highlight three distinguishing design choices.
 
 \paragraph{SUPG stabilisation.}
 SUPG for adjoint equations is standard~\cite{donea2003,giles2000}.
