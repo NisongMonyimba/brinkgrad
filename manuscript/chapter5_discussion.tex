@@ -281,26 +281,17 @@ The implementation contribution here is the FEniCSx UFL
 formulation for this specific coupled system at high Pe,
 not the SUPG method itself.
 
-\paragraph{Continuous adjoint vs.\ discrete adjoint vs.\ finite differences.}
-Finite-difference sensitivity requires $2N$ forward solves per iteration
-($N=1600$ gives $3200$ solves per step, which is prohibitive).
-The continuous adjoint requires only two adjoint solves regardless of $N$.
-The discrete adjoint via dolfin-adjoint~\cite{farrell2013} would provide
-exact gradient magnitudes automatically but was not used here for three reasons:
-(i)~the continuous derivation makes adjoint boundary conditions explicit
-($\lambda=c_{\rm target}-c$ on $\Gamma_{\rm out}$,
-derived directly from the misfit functional);
-(ii)~the coupling term $-\lambda\nabla c$ in the flow adjoint is
-physically interpretable as the sensitivity of concentration to velocity;
-and (iii)~the $L^2$ Riesz representative is directly usable by OC/MMA
-without solving $M\hat{g}=g$, reducing implementation complexity.
-Discrete adjoint and L-BFGS optimisation are outside the scope of the present release.
-The uniform baseline gives RMSE~$\approx0.450$
-(Table~\ref{tab:context}).
+\paragraph{Adjoint implementation choice.}
+\texttt{brinkgrad} uses the continuous adjoint,
+which requires two PDE solves per iteration regardless of the number
+of design variables.
+This represents a different implementation strategy from
+automatic differentiation via dolfin-adjoint~\cite{farrell2013};
+both approaches are valid.
 The optimised result (RMSE~$=\rmseTopOpt$) is an
 application-level validation output;
 software correctness is established through gradient
-verification, regression testing, and reproducible execution
+verification and regression testing
 (Sections~\ref{sec:taylor_test} and~\ref{sec:verification}).
 
 \paragraph{Reproducibility.}
