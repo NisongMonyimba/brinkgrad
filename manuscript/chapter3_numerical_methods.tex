@@ -667,12 +667,13 @@ adjoint descent direction, OC volume constraint,
 MMA volume constraint, and the $\alpha$ floor.
 All 18 tests pass on every push to the \texttt{main} branch,
 as shown by the CI badge in the repository README.
-Pure-Python utility coverage is $52\%$ (\texttt{utilities.py});
-FEniCSx-dependent modules (solver, adjoint, optimiser) are
-validated via the CI regression test (Test~7),
-which exercises the full optimisation pipeline
-(forward solve, adjoint, OC update, $\beta$-continuation)
+Unit coverage of \texttt{utilities.py} (pure-Python helper module)
+is $52\%$; this figure does not reflect coverage of the
+FEniCSx-dependent modules (solver, adjoint, optimiser),
+which are validated via the integration regression test (Test~7)
 on every commit.
+For PDE software, integration tests provide stronger validation
+than unit coverage metrics~\cite{farrell2013}.
 
 
 The full pipeline is reproduced by \texttt{bash run\_all.sh}
