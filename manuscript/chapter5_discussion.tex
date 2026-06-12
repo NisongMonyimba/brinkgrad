@@ -118,6 +118,10 @@ Brinkman--convection-diffusion benchmark was identified
 at the time of writing.
 \texttt{brinkgrad} provides a ready-to-run implementation
 with a pinned Docker environment, 18 automated tests, and Zenodo archival.
+The intention is not to replace general optimisation frameworks
+such as dolfin-adjoint or cashocs, but to provide a reproducible
+reference implementation for a specific coupled
+Brinkman--convection-diffusion topology-optimisation workflow.
 
 \paragraph{Versus MATLAB 88-line and top88 codes.}
 Classical MATLAB topology optimisation codes~\cite{andreassen2011}
@@ -353,11 +357,9 @@ Three-dimensional extension is outside the scope of the present release;
 the modular architecture (separate solver, adjoint, optimiser)
 supports this without structural changes.
 
-\texttt{brinkgrad} v1.0 targets 2D prototyping
-on structured meshes; users can supply any \texttt{dolfinx}
-mesh object via the API (\texttt{nx}, \texttt{ny} arguments
-or a custom \texttt{msh} object).
-No adaptive meshing is included; scalability is in the roadmap.
+Users can supply any \texttt{dolfinx} mesh object via the API;
+adaptive meshing and large-scale unstructured meshes are outside
+the scope of the present release.
 
 Three documented scope boundaries are noted.
 \begin{itemize}
@@ -366,8 +368,10 @@ Three documented scope boundaries are noted.
           OC and MMA depend only on gradient direction
           (Table~\ref{tab:adjoint_verif}).
           The Euclidean gradient $\hat{g}=M^{-1}g$ is implemented
-          in \texttt{adjoint.py}; a discrete adjoint~\cite{farrell2013}
-          enabling L-BFGS is the primary algorithmic future direction.
+          in \texttt{adjoint.py}.
+          Alternative optimisation strategies such as
+          discrete-adjoint/L-BFGS workflows are outside
+          the scope of the current release.
 
     \item \textbf{Porous-medium model.}
           \texttt{brinkgrad} implements Brinkman--SIMP~\cite{borrvall2003},
