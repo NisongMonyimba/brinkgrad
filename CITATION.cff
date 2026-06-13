@@ -4,7 +4,7 @@ type: software
 title: "brinkgrad: An open-source FEniCSx framework for adjoint-based topology optimisation of coupled flow-transport in porous media"
 version: 1.0.0
 doi: 10.5281/zenodo.20538833
-date-released: "2025-06-01"
+date-released: "2026-06-01"
 license: MIT
 url: "https://github.com/NisongMonyimba/brinkgrad"
 authors:
@@ -37,5 +37,5 @@ preferred-citation:
       given-names: Vincent
     - family-names: Coza
       given-names: Aurel
-  year: 2025
+  year: 2026
   doi: 10.5281/zenodo.20538833

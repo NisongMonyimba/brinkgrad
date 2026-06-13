@@ -138,11 +138,11 @@ notebooks/
 ## Citation
 
 ```bibtex
-@software{brinkgrad2025,
+@software{brinkgrad2026,
   author  = {Monyimba, Nisong and Pizziconi, Vincent and Coza, Aurel},
   title   = {brinkgrad: An open-source FEniCSx framework for adjoint-based
              topology optimisation of coupled flow-transport in porous media},
-  year    = {2025},
+  year    = {2026},
   doi     = {10.5281/zenodo.20538833},
   url     = {https://github.com/NisongMonyimba/brinkgrad},
   license = {MIT}
