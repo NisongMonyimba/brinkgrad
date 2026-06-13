@@ -209,23 +209,12 @@ parameter to its trivial value.
 
 \subsection{Mesh resolution and optimizer sensitivity}
 \label{sec:mesh_limitation}
-The $160\times40$ mesh yields RMSE~$=\rmseHiRes$ (600 iterations)
-and RMSE~$=\rmseHiResScaled$ ($\nIterHiRes$ iterations),
-compared to the $80\times20$ result (RMSE~$=\rmseTopOpt$).
-As expected for non-convex topology optimisation,
-different discretisations converge to different local optima;
-increasing the iteration budget does not recover
-the $80\times20$ result at $160\times40$.
-This is a well-documented property of non-convex density-based
-optimisation on non-uniform meshes~\cite{lazarov2016}.
-The $80\times20$ mesh is the validated primary configuration.
-A mesh-independent continuation schedule is outside
-the scope of the present release.
-
-Results vary across mesh resolutions, as expected for non-convex
-density-based topology optimisation~\cite{lazarov2016}.
+As expected for non-convex topology optimisation~\cite{lazarov2016},
+different mesh resolutions converge to different local optima;
+the $160\times40$ mesh yields RMSE~$=\rmseHiRes$--$\rmseHiResScaled$
+rather than recovering the $80\times20$ result.
 The $80\times20$ mesh is the validated reference configuration;
-mesh sensitivity data are in Supplementary~S1.
+full mesh sensitivity data are in Supplementary~S1.
 
 \paragraph{Context: what does optimisation buy?}
 Table~\ref{tab:context} quantifies the improvement of the
