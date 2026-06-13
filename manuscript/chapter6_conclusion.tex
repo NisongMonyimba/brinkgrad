@@ -6,34 +6,14 @@ in FEniCSx, including validated adjoint sensitivities,
 automated testing, containerised execution,
 and openly archived releases.
 
-The framework delivers five documented contributions:
-\begin{enumerate}
-    \item \textbf{Coupled Brinkman--transport implementation.}
-          A pre-configured FEniCSx solver for the coupled
-          Brinkman--convection-diffusion system with
-          concentration-mismatch objective and continuous adjoint,
-          including the coupling term $-\lambda\nabla c$
-          and misfit-derived Dirichlet outlet condition.
-    \item \textbf{SUPG-stabilised adjoint transport.}
-          Standard SUPG~\cite{donea2003} applied to both forward
-          and adjoint equations at $\Pe\sim10^2$--$10^5$,
-          verified numerically (Section~\ref{sec:supg_val}).
-    \item \textbf{Documented default configuration.}
-          Five documented parameters with failure-mode motivation
-          (Table~\ref{tab:continuation});
-          pure OC optimiser as default, validated by
-          three-way comparison (Table~\ref{tab:mma_comparison}).
-    \item \textbf{Software engineering package.}
-          Semantic versioning (v1.0.0),
-          18 automated tests, CI on every commit,
-          7 example scripts covering multiple target profiles,
-          and a structured reproducibility checklist
-          (Table~\ref{tab:repro_checklist}).
-    \item \textbf{Open-source reproducible release.}
-          MIT licence, Zenodo archival
-          (DOI:~\href{https://doi.org/10.5281/zenodo.20538833}{10.5281/zenodo.20538833}),
-          and reproducibility checklist (Table~\ref{tab:repro_checklist}).
-\end{enumerate}
+The framework combines coupled Brinkman--transport physics,
+SUPG-stabilised continuous adjoint optimisation,
+software validation and default configuration,
+reproducibility infrastructure,
+and openly archived releases
+within a single FEniCSx implementation
+(Tables~\ref{tab:adjoint_verif},~\ref{tab:repro_checklist};
+DOI:~\href{https://doi.org/10.5281/zenodo.20538833}{10.5281/zenodo.20538833}).
 
 On an $80\times20$ mesh, the framework achieves
 RMSE~$=\rmseTopOpt$ for the linear gradient benchmark,
@@ -53,6 +33,11 @@ optimisation loop;
 (ii)~unstructured mesh support and larger-scale computations;
 (iii)~higher Pe regimes where advective manipulation
 provides greater benefit over passive diffusion.
+
+Beyond the specific benchmark considered here,
+\texttt{brinkgrad} is intended as a reusable reference implementation
+for researchers developing related PDE-constrained optimisation
+workflows in FEniCSx.
 
 \texttt{brinkgrad} provides a practical, documented, and
 reproducible reference implementation for coupled flow-transport
