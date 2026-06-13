@@ -167,6 +167,9 @@ completes in approximately $\sim$2~hours on a standard laptop
 (Intel Core~i7, 16\,GB RAM, single thread, no GPU required).
 A 600-iteration run completes in under thirty minutes with
 RMSE~$=\rmseShortRun$.
+The primary benchmark corresponds to the fully converged
+$\nIterPrimary$-iteration run (RMSE~$=\rmseTopOpt$);
+the 600-iteration result is reported only as a practical runtime reference.
 The adjoint formulation reduces sensitivity-computation cost
 from $\mathcal{O}(N)$ forward solves (finite differences)
 to a constant number of adjoint solves per iteration,
