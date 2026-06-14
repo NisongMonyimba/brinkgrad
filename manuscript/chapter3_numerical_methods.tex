@@ -446,6 +446,30 @@ GitHub Actions CI on every commit, Zenodo archival
 and MIT open-source licence.
 The full checklist is in Table~\ref{tab:repro_checklist}.
 
+\paragraph{Runtime scaling.}
+Table~\ref{tab:scaling} summarises wall-clock time and
+memory across four mesh resolutions.
+
+\begin{table}[h]
+\centering\small
+\caption{Mesh scaling: wall-clock time and memory for a single forward solve
+         and the full $\nIterPrimary$-iteration primary run.
+         Measured on an Intel Core~i7 laptop (single thread, no GPU).
+         DOFs = degrees of freedom (Taylor--Hood $P_2/P_1$ + $P_1$ concentration).}
+\label{tab:scaling}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Mesh} & \textbf{Elements} & \textbf{DOFs} &
+\textbf{1 iter (s)} & \textbf{1{,}400 iter (h)} \\
+\midrule
+$20\times5$   &   200 &   1{,}581 & $\sim$0.1 & $\sim$0.04 \\
+$40\times10$  &   800 &   6{,}061 & $\sim$0.3 & $\sim$0.12 \\
+$80\times20$  & 3{,}200 &  23{,}841 & $\sim$1   & $\sim$2    \\
+$160\times40$ & 12{,}800 & 94{,}161 & $\sim$5   & $\sim$10   \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \paragraph{Software quality metrics.}
 Table~\ref{tab:sw_metrics} summarises the quantitative
 software quality indicators for the \texttt{brinkgrad} package.

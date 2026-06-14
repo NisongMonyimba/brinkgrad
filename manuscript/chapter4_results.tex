@@ -55,6 +55,31 @@ Regression test (CI)        & Pass & $J$ monotone, every commit \\
 
 \subsection{Mesh sensitivity and user guidance}
 \label{sec:mesh_conv}
+\begin{table}[h]
+\centering\small
+\caption{Mesh convergence study: outlet RMSE for the linear gradient benchmark
+         at two iteration budgets.
+         Different meshes converge to different local optima,
+         as expected for non-convex density-based topology optimisation.
+         The $80\times20$ mesh is the primary benchmark configuration.}
+\label{tab:mesh_conv}
+\begin{tabular}{@{}lrrrl@{}}
+\toprule
+\textbf{Mesh} & \textbf{Elements} & \textbf{600-iter RMSE} &
+\textbf{Primary RMSE} & \textbf{Notes} \\
+\midrule
+$20\times5$   &   200 & ---   & 0.005 & Under-resolved outlet ($N_{\rm out}=6$) \\
+$40\times10$  &   800 & ---   & 0.064 & Suboptimal basin \\
+$80\times20$  & 3{,}200 & $\rmseShortRun$ & $\rmseTopOpt$ & Primary benchmark \\
+$160\times40$ & 12{,}800 & $\rmseHiRes$ & $\rmseHiResScaled$ & Different local minimum \\
+\bottomrule
+\multicolumn{5}{@{}l}{\footnotesize
+  Primary RMSE: $\nIterPrimary$ iterations, $\beta_{\max}=\betaMax$.
+  Full data in Supplementary~S1.}
+\end{tabular}
+\end{table}
+
+
 As expected for non-convex density-based topology
 optimisation~\cite{lazarov2016}, different mesh resolutions
 converge to different local optima with different RMSE values.
