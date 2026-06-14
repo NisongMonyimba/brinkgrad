@@ -102,22 +102,26 @@ over algorithmic novelty.
 
 \subsection*{Intended contribution}
 
-This paper is a software implementation and reproducibility contribution.
-The optimisation formulation, Brinkman--SIMP interpolation,
-Helmholtz filtering, Heaviside projection, and adjoint methodology
-are established techniques~\cite{borrvall2003,lazarov2016,wang2011,
-brooks1982,othmer2008}.
-The novelty lies in their integration into a documented, tested,
-containerised, and openly distributed FEniCSx framework
-for coupled flow--transport topology optimisation.
+\texttt{brinkgrad} is an open-source FEniCSx framework
+for topology optimisation of coupled Brinkman--convection-diffusion
+systems targeting concentration-gradient generation
+in microfluidic channels.
+The framework contributes SUPG-stabilised adjoint sensitivity
+for coupled flow-transport at high P\'{e}clet numbers,
+integrated CI-based verification, and single-command Docker
+reproducibility --- capabilities not collectively provided
+in any documented open-source FEniCSx topology optimisation package
+known to the authors (Table~\ref{tab:comparison}).
 
 \subsection*{Contributions}
 
-The scientific ingredients employed in \texttt{brinkgrad} are
-established methods from the topology optimisation literature;
-the contribution of the present work is their integration into
-a reproducible, documented, and validated software package
-suitable for research and education.
+\texttt{brinkgrad} provides the first openly documented,
+CI-verified, and Docker-reproducible FEniCSx implementation
+of coupled Brinkman--convection-diffusion topology optimisation
+with SUPG-stabilised adjoint transport.
+The package is suitable for research, education, and
+as a reusable baseline for related PDE-constrained
+optimisation workflows.
 
 \begin{enumerate}
     \item \textbf{Complete open-source implementation.}

@@ -11,7 +11,7 @@
 Nisong Monyimba · Vincent Pizziconi · Aurel Coza  
 School of Biological and Health Systems Engineering, Arizona State University, Tempe AZ USA
 
-> **Contribution:** All constituent methods (continuous adjoint, SUPG stabilisation, Brinkman–SIMP, Helmholtz filtering, Heaviside projection, OC optimiser) are established. The contribution is their integration into a minimal, installable, CI-tested, and Docker-reproducible FEniCSx package.
+> **Contribution:** `brinkgrad` provides an openly documented, CI-verified, and Docker-reproducible FEniCSx framework for topology optimisation of coupled Brinkman–convection-diffusion systems with SUPG-stabilised adjoint transport at high Péclet numbers — capabilities not collectively available in any prior open-source FEniCSx topology optimisation package.
 
 ---
 

@@ -1,10 +1,12 @@
-\texttt{brinkgrad} is an MIT-licensed open-source FEniCSx package
-implementing adjoint-based topology optimisation for coupled
-Brinkman--convection-diffusion systems in porous media.
-All constituent methods are standard;
-the contribution is their integration into a minimal,
-installable package with full verification, CI,
-and one-command reproducibility.
+\texttt{brinkgrad} is an MIT-licensed open-source FEniCSx framework
+for topology optimisation of coupled Brinkman--convection-diffusion
+systems, targeting concentration-gradient generation
+in microfluidic channels.
+The framework provides SUPG-stabilised adjoint sensitivity analysis
+for coupled flow-transport at high P\'{e}clet numbers
+($\Pe\sim10^2$--$10^5$), integrated with Helmholtz filtering,
+Heaviside projection, and OC/MMA optimisation
+in a single installable, CI-tested, and Docker-reproducible package.
 The package provides SUPG-stabilised forward and adjoint solvers,
 Helmholtz filter, Heaviside projection, and an OC optimiser
 within a single reproducible default preset,
