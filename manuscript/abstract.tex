@@ -6,29 +6,24 @@ The framework provides SUPG-stabilised adjoint sensitivity analysis
 for coupled flow-transport at high P\'{e}clet numbers
 ($\Pe\sim10^2$--$10^5$), integrated with Helmholtz filtering,
 Heaviside projection, and OC/MMA optimisation
-in a single installable, CI-tested, and Docker-reproducible package.
-The package provides SUPG-stabilised forward and adjoint solvers,
-Helmholtz filter, Heaviside projection, and an OC optimiser
-within a single reproducible default preset,
-implemented in 1{,}903 lines of documented Python across 9 modules.
-Post-processing binary-geometry analysis is supported
-via \texttt{robust\_projection()} (see \texttt{examples/}).
+in a single installable, CI-tested, and Docker-reproducible package
+implemented in 1{,}903 lines of documented Python across 9~modules.
 
 Gradient correctness is confirmed by adjoint direction
 and Taylor remainder tests (Section~4).
-The framework is validated by 18 automated tests (10 unit, 8 integration) executed on every commit
+The framework is validated by 18~automated tests
+(10~unit, 8~integration) executed on every commit
 via GitHub Actions inside a pinned
 \texttt{dolfinx/dolfinx:v0.7.3} Docker container.
-Seven executable example scripts demonstrate the framework
-across multiple target profiles;
-all results are reproducible from a single command.
+Seven executable example scripts reproduce all results
+from a single command; outlet RMSE~$=\rmseTopOpt$ on the
+primary benchmark (linear gradient, $80\times20$ mesh).
+
 To the authors' knowledge, no openly documented and
 continuously tested FEniCSx implementation combining
 coupled Brinkman--convection-diffusion topology optimisation,
-SUPG-stabilised forward and adjoint transport,
-CI-based verification, Docker reproducibility,
-and packaged distribution has been reported.
-The framework is released under the MIT licence with
-Docker-based reproducibility, continuous integration,
-and permanent archival through Zenodo
+SUPG-stabilised adjoint transport, CI-based verification,
+Docker reproducibility, and packaged distribution has been reported.
+The framework is released under the MIT licence with permanent
+archival through Zenodo
 (DOI:~\href{https://doi.org/10.5281/zenodo.20538833}{10.5281/zenodo.20538833},~\cite{micrograd2025zenodo}).

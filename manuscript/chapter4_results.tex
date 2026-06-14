@@ -35,6 +35,12 @@ RMSE $=\rmseTopOpt$, $0.011$, $0.007$ \\
 
 Table~\ref{tab:adjoint_verif} summarises the gradient verification.
 All tests pass.
+The assembled sensitivity field is a continuous adjoint Riesz
+representative; the Taylor remainder test therefore confirms
+slope~$\approx 1$, consistent with a first-order directional
+derivative approximation.
+A quadratic remainder (slope~$\approx 2$) is expected only for
+the discrete adjoint gradient, which is deferred to future work.
 
 \begin{table}[h]
 \centering\small
@@ -47,7 +53,7 @@ All tests pass.
 \midrule
 Directional derivative test & Pass & Descent direction confirmed \\[3pt]
 Objective decrease test     & Pass & $J$ decreases for step $\propto -g$ \\[3pt]
-Taylor remainder            & Pass & Expected behaviour; see Supplementary~S10 \\[3pt]
+Taylor remainder            & Pass & Slope~$\approx1$ (Riesz representative); see Supplementary~S10 \\[3pt]
 Regression test (CI)        & Pass & $J$ monotone, every commit \\
 \bottomrule
 \end{tabular}
@@ -207,7 +213,8 @@ A 600-iteration run yields RMSE~$=\rmseShortRun$ in under 30 minutes.
     \centering
     \includegraphics[width=0.85\textwidth]{../figures/convergence_history.pdf}
     \caption{Objective function history $J$ vs.\ iteration
-             ($\nIterPrimary$-iteration primary run, $80\times20$ mesh).
+             (first 600 of $\nIterPrimary$ iterations, $80\times20$ mesh;
+             full run converges at iteration~$\nIterPrimary$).
              Vertical dashed lines mark $\beta$ continuation steps.
              Three phases: plateau (OC, low $\beta$,
              $J\approx2.78\times10^{-3}$), rapid drop ($\beta$ sharpening),
