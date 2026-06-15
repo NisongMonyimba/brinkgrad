@@ -314,7 +314,7 @@ sensitivity chain $\partial J/\partial\rho =
 (\partial\tilde{\rho}/\partial\rho)$ that is easily omitted.
 The $L^2$ Riesz representative implicitly drops the mass-matrix
 factor; for OC/MMA this is harmless (sign-based update) but
-would corrupt L-BFGS.
+would require additional treatment for optimisation methods that rely on gradient magnitudes rather than gradient directions.
 
 \paragraph{Challenge 3: Volume-constrained OC updates.}
 The OC bisection for $\Lambda$ in Eq.~\eqref{eq:oc} requires
@@ -334,6 +334,8 @@ the CI suite therefore runs a 20-iteration regression test
 that completes in $<$60\,s and detects sign errors,
 filter bugs, and volume-constraint failures.
 
+
+Collectively, these implementation lessons illustrate the practical engineering effort required to transform a research formulation into a reproducible software package.
 
 \subsection{Current scope and future roadmap}
 \label{sec:roadmap}
