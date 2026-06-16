@@ -11,7 +11,7 @@
 Nisong Monyimba · Vincent Pizziconi · Aurel Coza  
 School of Biological and Health Systems Engineering, Arizona State University, Tempe AZ USA
 
-> **Contribution:** `brinkgrad` provides an openly documented, CI-verified, and Docker-reproducible FEniCSx framework for topology optimisation of coupled Brinkman–convection-diffusion systems with SUPG-stabilised adjoint transport at high Péclet numbers — capabilities not collectively available in any prior open-source FEniCSx topology optimisation package.
+> **Contribution:** `brinkgrad` provides an openly documented, CI-verified, and Docker-reproducible FEniCSx framework for coupled Brinkman–convection–diffusion topology optimisation with SUPG-stabilised adjoint transport.
 
 ---
 
@@ -116,8 +116,7 @@ notebooks/
 | Layer | Test | Result |
 |-------|------|--------|
 | Code health | 18 automated tests (CI) | All pass on every push |
-| Gradient direction | Pearson correlation ≥ 0.80 | Confirmed |
-| Taylor remainder | Slope ≈ 1.0 (Riesz representative) | Confirmed |
+| Taylor remainder | Slope ≈ 1.0 (Riesz representative) | Pass |
 | Pipeline | Mini-optimisation (20 iter) | J decreases monotonically |
 | Benchmark | Linear gradient, 80×20 mesh | RMSE = 0.058 |
 
