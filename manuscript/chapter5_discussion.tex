@@ -262,7 +262,7 @@ We highlight three distinguishing design choices.
 \paragraph{SUPG stabilisation.}
 SUPG for adjoint equations is standard~\cite{donea2003,giles2000}.
 We apply it to both equations using the same element-wise parameter,
-which is the correct implementation~\cite{brooks1982}.
+which is consistent with standard formulations~\cite{brooks1982}.
 Na et al.~\cite{na2022} and Feppon et al.~\cite{feppon2024}
 do not report transport stabilisation; at $\Pe\sim10^3$
 this may produce spurious sensitivity-field oscillations
